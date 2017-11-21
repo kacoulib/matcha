@@ -1,25 +1,25 @@
-const express		= require('express'),
-		app			= express(),
-		mongoClient	= require('mongodb').MongoClient,
-		bodyParser	= require('body-parser'),
-		dotenv		= require('dotenv').config();
+'use strict'
+
+const express			= require('express'),
+		app				= express(),
+		admin			= express(),
+		db				= require('./Models/db'),
+		cookieParser	= require('cookie-parser'),
+		dotenv			= require('dotenv').config(),
+		bodyParser		= require('body-parser'),
+		auth 			= require('./Middleware/auth.js');
 
 
-app.use(bodyParser.urlencoded({extended: true}))
-
-mongoClient.connect('mongodb://'+process.env.DB_USER+':'+process.env.DB_PASS+'@ds157833.mlab.com:57833/matcha', (err, db) => 
+db.connect(() => 
 {
-	if (err)
-		return (console.log(err));
-	console.log('connected to db')
-})
+	[app, admin].forEach((route) => 
+	{
+		route.use(cookieParser());
+		route.use(bodyParser.urlencoded({extended: true}));
+	})
 
-app.get('/test', (req, res) =>
-{
-	console.log(req.body)
-	console.log(res.body)
+	app.use('/', auth.isUserAuth, require('./routes/index.js'));
+	admin.use('/admin', auth.isAdminAuth, require('./routes/admin/index.js'));
 })
 
 app.listen(3000, () => console.log('listening 3000'))
-console.log('ok...');
-console.log(process.env.DB_USER);
