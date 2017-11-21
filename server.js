@@ -7,7 +7,7 @@ const express			= require('express'),
 		cookieParser	= require('cookie-parser'),
 		dotenv			= require('dotenv').config(),
 		bodyParser		= require('body-parser'),
-		auth 			= require('./Middleware/auth.js');
+		auth 			= require('./Middlewares/auth.js');
 
 
 db.connect(() => 
