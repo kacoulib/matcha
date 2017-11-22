@@ -2,6 +2,7 @@
 let	mongoose		= require('mongoose'),
 	elasticSearch 	= require('elasticsearch'),
 	Schema			= mongoose.Schema,
+	ObjectId 		= mongoose.Schemas.Types.ObjectId,
 	userSchema,
 	User;
 
@@ -19,11 +20,11 @@ userSchema 	= new Schema(
 			enum: ['male', 'female'],
 			required: true
 		},
-		adress:
-		{
+		adresses:
+		[{
 			type : String,
 			required : true
-		},
+		}],
 		orientation:
 		{
 			type : String,
@@ -47,10 +48,10 @@ userSchema 	= new Schema(
 
 	public : 
 	{
-		tags: [String],
+		tags: [ObjectId],
 		score: Number,
-		viewers: [String],
-		likers: [String]
+		viewers: [ObjectId],
+		likers: [ObjectId]
 	}
 });
 
