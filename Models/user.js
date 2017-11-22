@@ -50,8 +50,8 @@ userSchema 	= new Schema(
 	{
 		tags: [ObjectId],
 		score: Number,
-		viewers: [ObjectId],
-		likers: [ObjectId]
+		viewers: [String],
+		likers: [String]
 	}
 });
 
@@ -85,4 +85,6 @@ exports.update	= (user) =>
 }
 
 exports.delete	= (user_id) =>
-{}
+{
+	User.findOne({})
+}
