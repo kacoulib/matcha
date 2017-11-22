@@ -49,7 +49,6 @@ userSchema 	= new Schema(
 	public : 
 	{
 		tags: [ObjectId],
-		score: Number,
 		viewers: [String],
 		likers: [String]
 	}
