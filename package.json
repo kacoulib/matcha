@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/karim1412/matcha#readme",
   "dependencies": {
+    "assert": "^1.4.1",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",

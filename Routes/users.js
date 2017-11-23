@@ -33,9 +33,10 @@ app.get('/login', (req, res) =>
 {
 	res.send('user logout');
 })
-.get('/subscribe', (req, res) =>
+.post('/subscribe', (req, res) =>
 {
-	db.create();
+	db.create(req.body);
+	// console.log(req.body)
 	res.send('user subscribe');
 })
 

@@ -2,66 +2,82 @@
 let	mongoose		= require('mongoose'),
 	elasticSearch 	= require('elasticsearch'),
 	Schema			= mongoose.Schema,
-	ObjectId 		= mongoose.Schemas.Types.ObjectId,
+	ObjectId 		= Schema.Types.ObjectId,
 	userSchema,
 	User;
 
 // Schema
 userSchema 	= new Schema(
 {
-	personal :
+	first_name:
 	{
-		first_name: { type: String, lowercase: true, trim: true , required: true },
-		last_name: { type: String, lowercase: true, trim: true , required: true },
-		age: { type : Number, min : 18, max : 110, required: true },
-		sex:
-		{
-			type : String,
-			enum: ['male', 'female'],
-			required: true
-		},
-		adresses:
-		[{
-			type : String,
-			required : true
-		}],
-		orientation:
-		{
-			type : String,
-			enum: ['heterosexual', 'bisexual', 'homosexual'],
-			required: true
-		},
-		bio: String,
-		email:
-		{
-			type : String,
-			required: true,
-			validate: (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
-		},
-		pictures:
-		{
-			type :[String],
-			validate : (pics) => pics.length < 5
-		},
-		profil_picture: String,
+		type: String,
+		lowercase: true,
+		trim: true,
+		required: true,
+		validate: (str) => str.indexOf('$') < 0
 	},
-
-	public : 
+	last_name:
 	{
-		tags: [ObjectId],
-		viewers: [String],
-		likers: [String]
-	}
+		type: String,
+		lowercase: true,
+		trim: true,
+		required: true,
+		validate: (str) => str.indexOf('$') < 0
+	},
+	age:
+	{
+		type : Number,
+		min : 18,
+		max : 110,
+		required: true 
+	},
+	sex:
+	{
+		type : String,
+		enum: ['male', 'female'],
+		required: true
+	},
+	adresses:
+	[{
+		type : String,
+		required : true
+	}],
+	orientation:
+	{
+		type : String,
+		enum: ['heterosexual', 'bisexual', 'homosexual'],
+		required: true
+	},
+	bio: String,
+	email:
+	{
+		type : String,
+		required: true,
+		unique: true,
+		validate: (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
+	},
+	pictures:
+	{
+		type :[String],
+		validate : (pics) => pics.length < 5
+	},
+	profil_picture: String,
+	tags: [ObjectId],
+	viewers: [String],
+	likers: [String]
 });
 
-User		= mongoose.model('user', userSchema);
+User		= mongoose.model('User', userSchema);
 
 
 // Api
-exports.create	= (user) =>
+exports.create	= (userData) =>
 {
-	let	newUser	= new User(user);
+	let	newUser	= new User(userData);
 
+	console.log(error.errors['name'].message);
+	// console.log(userData);
 	newUser.save((err) =>
 	{
 		if (err)
@@ -72,9 +88,9 @@ exports.create	= (user) =>
 exports.find	= (search_terms) =>
 {}
 
-exports.update	= (user) =>
+exports.update	= (userData) =>
 {
-	let	newUser	= new User(user);
+	let	newUser	= new User(userData);
 
 	newUser.save((err) =>
 	{
