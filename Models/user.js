@@ -76,7 +76,6 @@ exports.create	= (userData) =>
 {
 	let	newUser	= new User(userData);
 
-	console.log(error.errors['name'].message);
 	// console.log(userData);
 	newUser.save((err) =>
 	{
