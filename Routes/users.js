@@ -1,14 +1,13 @@
 'use strict'
 
 let 	app				= require('express').Router(),
-		db				= require('../Models/user.js'),
-		user;
+		userDb			= require('../Models/user.js');
 
 
 // Profile
 app.get(['/', '/me'], (req, res) =>
 {
-	// user = db.find({id : req.session.user.id});
+	// user = userDb.find({id : req.session.user.id});
 	res.send('home swith home');
 })
 .post(['/', '/me'], (req, res) =>
@@ -35,9 +34,9 @@ app.get('/login', (req, res) =>
 })
 .post('/subscribe', (req, res) =>
 {
-	db.create(req.body);
+	userDb.create(req.body);
 	// console.log(req.body)
-	res.send('user subscribe');
+	res.send(req.body);
 })
 
 
