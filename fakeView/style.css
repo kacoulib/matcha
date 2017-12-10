@@ -1,0 +1,22 @@
+li
+{
+  display: inline-block;
+}
+
+#message
+{
+  border-radius: 100%;
+  padding: 15px;
+  background: pink;
+  color: white;
+  border: 1px solid pink;
+  cursor: pointer;
+}
+
+form
+{
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}

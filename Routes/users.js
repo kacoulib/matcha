@@ -9,10 +9,18 @@ let 	app				= require('express').Router(),
 app.get(['/', '/me'], (req, res) =>
 {
 	// user = db.find({id : req.session.user.id});
-	res.send('home swith home');
+	// res.jsonp(JSON.stringify({'user' : 'user subscribe'}))
+
+	res.send('home sweet home');
+})
+.post('/test', (req, res) =>
+{
+	console.log(req.body)
+	res.send('home test');
 })
 .post(['/', '/me'], (req, res) =>
 {
+	console.log(req.body)
 	res.send('home swith home');
 })
 .put(['/', '/me'], (req, res) =>
@@ -27,6 +35,7 @@ app.get(['/', '/me'], (req, res) =>
 // Login
 app.get('/login', (req, res) =>
 {
+	console.log(req)
 	res.send('user login');
 })
 .get('/logout', (req, res) =>
@@ -35,9 +44,11 @@ app.get('/login', (req, res) =>
 })
 .post('/subscribe', (req, res) =>
 {
-	db.create(req.body);
-	// console.log(req.body)
-	res.send('user subscribe');
+	console.log(req.body)
+	let data = db.create(req.body);
+	if (!data)
+		data = 'user subscribe';
+	res.send(data);
 })
 
 

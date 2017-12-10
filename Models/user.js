@@ -32,7 +32,7 @@ userSchema 	= new Schema(
 		max : 110,
 		required: true 
 	},
-	sex:
+	gender:
 	{
 		type : String,
 		enum: ['male', 'female'],
@@ -79,8 +79,13 @@ exports.create	= (userData) =>
 	// console.log(userData);
 	newUser.save((err) =>
 	{
+		assert.equal(error.errors['name'].message,
+        'Path `name` is required.');
 		if (err)
-			throw err;
+		{
+			throw err.errors['name'];
+			return (err);
+		}
 	})
 }
 
