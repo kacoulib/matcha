@@ -10,4 +10,3 @@ module.exports.connect = function (callback)
 	
 	callback(mongoose.connection);
 }
-

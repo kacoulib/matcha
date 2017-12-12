@@ -1,13 +1,17 @@
 'use strict'
 
-const express			= require('express'),
+const	express			= require('express'),
+		session			= require('express-session'),
 		app				= express(),
 		admin			= express(),
 		db				= require('./Models/db'),
 		cookieParser	= require('cookie-parser'),
 		dotenv			= require('dotenv').config(),
 		bodyParser		= require('body-parser'),
-		auth 			= require('./Middlewares/auth.js');
+		passport		= require('passport'),
+		// localStrategy 	= require('passport-local').Strategy,
+		server			= require('http').createServer(app),
+		socket			= require('socket.io')(server);
 
 
 db.connect(() => 
@@ -23,11 +27,33 @@ db.connect(() =>
 			next();
 		});
 		route.use(cookieParser());
+		// route.use(session({
+		// 	secret: '42-matcha secret SESSID',
+		// 	resave: false,
+		// 	saveUninitialized: true,
+		// 	cookie: { secure: true }
+		// }));
 		route.use(bodyParser.urlencoded({extended: true}));
-	})
+		// route.use(passport.initialize());
+		// route.use(passport.session());
 
-	app.use('/', auth.isUserAuth, require('./routes/index.js'));
-	admin.use('/admin', auth.isAdminAuth, require('./routes/admin/index.js'));
+	})
+	app.use('/', require('./routes/index.js'));
+	// Passport
+	require('./Middlewares/auth.js')(passport);
+
 })
 
-app.listen(3000, () => console.log('listening 3000'))
+socket.on('connection', function(data)
+{
+	// Sending message after bein connect
+	socket.emit('message', {message: 'ok'})
+
+	socket.on('newMessage', function(data)
+	{
+		console.log('messageSended')
+	})
+
+	console.log('connected')
+});
+server.listen(3000, () => console.log('listening 3000'))

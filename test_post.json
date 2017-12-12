@@ -1,0 +1,13 @@
+{
+	"personal":
+	{
+		"first_name": "toto",
+		"last_name": "tata",
+		"age": 20,
+		"sex": "male",
+		"adresses": ["paris"],
+		"orientation": "heterosexual",
+		"email": "test@test.test",
+		"pictures": ["bg.js"]
+	}
+}

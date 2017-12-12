@@ -1,10 +1,8 @@
 'use strict'
 let	mongoose		= require('mongoose'),
-	elasticSearch 	= require('elasticsearch'),
 	Schema			= mongoose.Schema,
 	ObjectId 		= Schema.Types.ObjectId,
-	userSchema,
-	User;
+	userSchema;
 
 // Schema
 userSchema 	= new Schema(
@@ -62,48 +60,18 @@ userSchema 	= new Schema(
 		type :[String],
 		validate : (pics) => pics.length < 5
 	},
+	status:
+	{
+		type : [String], 
+		required : true,
+		enum: ['active', 'locked'],
+		default: 'active'
+	},
 	profil_picture: String,
 	tags: [ObjectId],
 	viewers: [String],
 	likers: [String]
 });
 
-User		= mongoose.model('User', userSchema);
 
-
-// Api
-exports.create	= (userData) =>
-{
-	let	newUser	= new User(userData);
-
-	// console.log(userData);
-	newUser.save((err) =>
-	{
-		assert.equal(error.errors['name'].message,
-        'Path `name` is required.');
-		if (err)
-		{
-			throw err.errors['name'];
-			return (err);
-		}
-	})
-}
-
-exports.find	= (search_terms) =>
-{}
-
-exports.update	= (userData) =>
-{
-	let	newUser	= new User(userData);
-
-	newUser.save((err) =>
-	{
-		if (err)
-			throw err;
-	})
-}
-
-exports.delete	= (user_id) =>
-{
-	User.findOne({})
-}
+exports.User = mongoose.model('User', userSchema);

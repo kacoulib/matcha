@@ -13,7 +13,12 @@ li
   cursor: pointer;
 }
 
-form
+#user_list li
+{
+  display: block;
+}
+
+#chat_form
 {
   position: fixed;
   bottom: 0;
