@@ -1,41 +1,59 @@
-let db				= require('../Models/user.js'),
-	localStrategy	= require('passport-local').Strategy;
-	User			= db.User;
-
+let 
+	User			= require('../Models/user.js'),
+	localStrategy	= require('passport-local').Strategy,
+	saltRounds		= 10;
 
 
 module.exports = function (passport)
 {
-    // Serialize the user for the session
-    passport.serializeUser(function(user, done) {
+	// =========================================================================
+    // passport session setup ==================================================
+    // =========================================================================
+    passport.serializeUser(function(user, done)
+    {
         done(null, user.id);
     });
-    console.log('haha')
-    // Deserialize the user
-    passport.deserializeUser(function(id, done) {
+
+    passport.deserializeUser(function(id, done)
+    {
         User.findById(id, function(err, user) {
             done(err, user);
         });
     });
 
-	passport.use(new localStrategy(
+console.log('haha')
+
+    // =========================================================================
+    // LOCAL LOGIN =============================================================
+    // =========================================================================
+	passport.use('local-signup', new localStrategy(
 	{
-		passReqToCallback : true
+		usernameField: 'email',
+		passwordField: 'password'
+        // passReqToCallback : true 
 	},
-	function(req, username, password, done)
+	function(email, password, next)
 	{
-		console.log(password)
-		User.findOne({ username: username }, function(err, user)
+			console.log("---------------")
+			// console.log(req)
+		User.findOne({ 'email': email }, function(err, user)
 		{
+				console.log('0')
 			if (err)
-				return done(err);
+				return next(err);
+
+				console.log('1')
 			if (!user)
-				return done(null, false, { message: 'Incorrect username.' });
+				return next(null, false, { message: 'Incorrect email.' });
+				console.log('2')
+				
+				console.log('password= '+password)
 			if (!user.validPassword(password))
-				return done(null, false, { message: 'Incorrect password.' });
-			return done(null, user);
+				return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+			else
+				return done(null, user);
+			// console.log(email +' '+ password)
 		});
-	}
-));
+	}));
 
 }

@@ -4,46 +4,51 @@ const	express			= require('express'),
 		session			= require('express-session'),
 		app				= express(),
 		admin			= express(),
-		db				= require('./Models/db'),
 		cookieParser	= require('cookie-parser'),
-		dotenv			= require('dotenv').config(),
 		bodyParser		= require('body-parser'),
+		mongoose		= require('mongoose'),
 		passport		= require('passport'),
-		// localStrategy 	= require('passport-local').Strategy,
 		server			= require('http').createServer(app),
-		socket			= require('socket.io')(server);
+		socket			= require('socket.io')(server),
+		database		= require('./Models/database.js');
 
 
-db.connect(() => 
-{
-	[app, admin].forEach((route) => 
-	{
-		route.use((req, res,next)=>
-		{
+// configuration ===============================================================
 
-			res.setHeader('Access-Control-Allow-Origin',  'http://localhost:8080');
-			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-			next();
-		});
-		route.use(cookieParser());
-		// route.use(session({
-		// 	secret: '42-matcha secret SESSID',
-		// 	resave: false,
-		// 	saveUninitialized: true,
-		// 	cookie: { secure: true }
-		// }));
-		route.use(bodyParser.urlencoded({extended: true}));
-		// route.use(passport.initialize());
-		// route.use(passport.session());
+mongoose.connect(database.url, {useMongoClient: true})
 
-	})
-	app.use('/', require('./routes/index.js'));
-	// Passport
-	require('./Middlewares/auth.js')(passport);
 
-})
+// app.use((req, res,next)=>
+// {
 
+// 	res.setHeader('Access-Control-Allow-Origin',  'http://localhost:8080');
+// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+// });
+
+// // set up our express application
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+
+// // required for passport
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(session({
+	secret: '42-matcha secret SESSID',
+	resave: true,
+	saveUninitialized: true,
+	cookie: { secure: true }
+}));
+
+require('./Middlewares/auth.js')(passport);
+
+
+// // routes ======================================================================
+require('./Routes/users.js')(app, passport);
+
+
+// // Messaging ======================================================================
 socket.on('connection', function(data)
 {
 	// Sending message after bein connect
@@ -54,6 +59,8 @@ socket.on('connection', function(data)
 		console.log('messageSended')
 	})
 
-	console.log('connected')
 });
-server.listen(3000, () => console.log('listening 3000'))
+
+
+// Launch ======================================================================
+app.listen(3000)// () => console.log('listening 3000'))

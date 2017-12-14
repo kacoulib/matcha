@@ -2,17 +2,17 @@
 
 	<h1>form</h1>
 
-  <form action="http://localhost:3000/user/sign_in" method="post">
+  <form action="http://localhost:3000/sign_in" method="post">
     <div>
-        <label>Username:</label>
-        <input type="text" name="username"/>
+        <label>username:</label>
+        <input type="text" name="email"  value="sdsdf" />
     </div>
     <div>
         <label>Password:</label>
-        <input type="password" name="password"/>
+        <input type="password" name="password" value="sdsdf" />
     </div>
     <div>
-        <input type="submit" value="Log In"/>
+        <input type="submit" value="Log In" autofocus="true"/>
     </div>
 </form>
 

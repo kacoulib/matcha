@@ -3,11 +3,7 @@
 
   <form action="">
     <div>
-      <input type="text" name="first_name" value="lauren">
-    </div>
-
-    <div>
-      <input type="text" name="last_name" value="florian">
+      <input type="text" name="password" value="test">
     </div>
 
   	<div>
@@ -34,7 +30,7 @@
     </div>
     
     <div>
-      <input type="email" name="email" value="lauren@gmail.com">  
+      <input type="email" name="email" value="test@gmail.com">  
     </div>
   
     <div>
@@ -61,7 +57,7 @@
       		e.preventDefault();
           data = objectifyForm($('form').serializeArray());
 
-          $.post('http://localhost:3000/user/subscribe', data, (res) =>
+          $.post('http://localhost:3000/sign_in', data, (res) =>
           {
               console.log(res)
           })

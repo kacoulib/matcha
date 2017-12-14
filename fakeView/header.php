@@ -13,7 +13,7 @@
       <header>
         <ul>
           <li><a href="/">home</a></li>
-          <li><a href="/form.php">form</a></li>
+          <li><a href="/form.php">login</a></li>
           <li><a href="/chat.php">chat</a></li>
           <li><a href="/create_user.php">create user</a></li>
         </ul>

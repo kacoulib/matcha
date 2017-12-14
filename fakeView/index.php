@@ -10,7 +10,7 @@
 		$('document').ready(()=>
 		{
 			let newElems = '';
-			$.get('http://localhost:3000/user/all', (data)=>
+			$.get('http://localhost:3000/all', (data)=>
 			{
 
 				data.forEach((el, i)=>
