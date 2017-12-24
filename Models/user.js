@@ -2,7 +2,6 @@
 let	mongoose		= require('mongoose'),
 	bcrypt			= require('bcrypt-nodejs'),
 	Schema			= mongoose.Schema,
-	ObjectId 		= Schema.Types.ObjectId,
 	userSchema;
 
 // Schema
@@ -26,11 +25,12 @@ userSchema 	= new Schema(
 		}
 	},
 	password:
-	[{
+	{
 		type : String,
 		required : true,
+		alidate: (str) => str.length > 2, // change the min size
 		index: {unique: true}
-	}],
+	},
 	email:
 	{
 		type : String,
@@ -39,7 +39,7 @@ userSchema 	= new Schema(
 		validate:
 		{
 			validator: (email) =>  /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email),
-			message : 'unvalid adress mail'
+			message : 'Invalid adress mail'
 		},
 	},
 	age:
@@ -48,11 +48,13 @@ userSchema 	= new Schema(
 		min : 18,
 		max : 110,
 	},
-	adresses:
-	[{
+	location:
+	{
 		type : String,
+		coordinates: [Number],
+		adress: String,
 		required : true
-	}],
+	},
 	gender:
 	{
 		type : String,
@@ -63,6 +65,7 @@ userSchema 	= new Schema(
 	{
 		type : String,
 		enum: ['heterosexual', 'bisexual', 'homosexual'],
+		default : 'bisexual',
 		required: true
 	},
 	bio: String,
@@ -78,10 +81,16 @@ userSchema 	= new Schema(
 		default: 'active'
 	},
 	profil_picture: String,
-	tags: [ObjectId],
+	tags:
+	{
+		type: [String],
+		enum: ['bio', 'geek', 'piercing', 'sport']
+	},
 	viewers: [String],
 	likers: [String]
 });
+
+userSchema.index({location : '2dsphere'});
 
 userSchema.methods.generateHash = function(password)
 {
@@ -91,7 +100,15 @@ userSchema.methods.generateHash = function(password)
 // checking if password is valid
 userSchema.methods.validPassword = function(password)
 {
-    return bcrypt.compareSync(password, this.password);
+
+	if (password != null)
+	{
+	console.log(bcrypt.compareSync(password, this.password), '4')
+	// return (false)
+    	return bcrypt.compareSync(password, this.password);
+	}
+    else
+    	return (false);
 };
 
 module.exports = mongoose.model('User', userSchema);

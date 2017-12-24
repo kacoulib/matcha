@@ -1,5 +1,13 @@
 'use strict'
 
+function isAuthenticated(req,res,next)
+{
+	if(req.user)
+		return next();
+	else
+		return res.status(401).json({error: 'User not authenticated'})
+}
+
 module.exports = function (app, passport)
 {
 	// =====================================
@@ -7,7 +15,7 @@ module.exports = function (app, passport)
 	// =====================================
 	app.get(['/', '/me'], (req, res) =>
 	{
-
+		console.log('home')
 		res.send('home sweet home');
 	})
 	.put(['/', 'me'], (req, res) =>
@@ -20,26 +28,6 @@ module.exports = function (app, passport)
 	{
 		res.send('home swith home');
 	});
-
-
-	// =====================================
-	// LOGIN ===============================
-	// =====================================
-	app.get('/sign_in', passport.authenticate('local',
-	{
-		successRedirect: '/',
-		failureRedirect: '/sign_in'
-	}))
-	.post('/sign_in', passport.authenticate('local-signup'))
-	//	.post('/sign_in', (req, res, next) =>
-	// {
-	// 	console.log('-----------')
-	// 	passport.authenticate('local-signup', (err, user, info) =>
-	// 	{
-	// 		console.log(info)
-	// 	})(req, res, next)
-	// })
-
 
 	// =====================================
 	// SIGNUP ==============================
@@ -55,6 +43,29 @@ module.exports = function (app, passport)
 		failureRedirect : '/signup',
 		failureFlash : true
 	}))
+
+	// =====================================
+	// LOGIN ===============================
+	// =====================================
+	app.get('/sign_in', passport.authenticate('local',
+	{
+		successRedirect: '/',
+		failureRedirect: '/sign_in'
+	}))
+	.post('/sign_in', passport.authenticate('local-signin'))
+
+
+	// =====================================
+	// LOGOUT ==============================
+	// =====================================
+	app.get('/logout', function(req, res)
+	{
+		req.logout();
+		res.redirect('/');
+	});
+
+
+
 
 
 	// =====================================

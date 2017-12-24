@@ -10,9 +10,10 @@
 		$('document').ready(()=>
 		{
 			let newElems = '';
+
 			$.get('http://localhost:3000/all', (data)=>
 			{
-
+				console.log(data)
 				data.forEach((el, i)=>
 				{
 					console.log(el)

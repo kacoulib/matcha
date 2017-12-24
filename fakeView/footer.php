@@ -5,33 +5,33 @@
 	</form>
 
 	<script>
-		$('document').ready(function ()
-    	{
-			let socket   = io('http://localhost:3000');
+		// $('document').ready(function ()
+  //   	{
+		// 	let socket   = io('http://localhost:3000');
 
-			$('#chat_form').on('submit', (e)=>e.preventDefault());
+		// 	$('#chat_form').on('submit', (e)=>e.preventDefault());
 
-			$('#chat_btn').on('keyup', function(e)
-			{
-				var code = e.keyCode || e.which,
-					msg;
+		// 	$('#chat_btn').on('keyup', function(e)
+		// 	{
+		// 		var code = e.keyCode || e.which,
+		// 			msg;
 
-				if(code == 13)
-				{
-					msg = $(this).val();
-					$(this).val('');
+		// 		if(code == 13)
+		// 		{
+		// 			msg = $(this).val();
+		// 			$(this).val('');
 
-						socket.emit('newMessage', {});
-						console.log(msg)
-				}
-			})
+		// 				socket.emit('newMessage', {});
+		// 				console.log(msg)
+		// 		}
+		// 	})
 
-			socket.on('message', function(data)
-			{
-				console.log(data)
-			})
+		// 	socket.on('message', function(data)
+		// 	{
+		// 		console.log(data)
+		// 	})
 
-      })
+  //     })
     </script>
   </body>
 </html>

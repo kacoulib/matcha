@@ -16,7 +16,7 @@
     </div>
 
     <div>
-      <input type="text" name="adresses" value="96 Boulevard Bessières, 75017 Paris">
+      <input type="text" name="location" value="96 Boulevard Bessières, 75017 Paris">
     </div>
 
     <div>
@@ -57,7 +57,7 @@
       		e.preventDefault();
           data = objectifyForm($('form').serializeArray());
 
-          $.post('http://localhost:3000/sign_in', data, (res) =>
+          $.post('http://localhost:3000/sign_up', data, (res) =>
           {
               console.log(res)
           })

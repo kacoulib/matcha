@@ -4,12 +4,12 @@
 
   <form action="http://localhost:3000/sign_in" method="post">
     <div>
-        <label>username:</label>
-        <input type="text" name="email"  value="sdsdf" />
+        <label>Email:</label>
+        <input type="text" name="email"  value="test@gmail.com" />
     </div>
     <div>
         <label>Password:</label>
-        <input type="password" name="password" value="sdsdf" />
+        <input type="password" name="password" value="test" />
     </div>
     <div>
         <input type="submit" value="Log In" autofocus="true"/>
