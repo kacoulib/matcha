@@ -35,7 +35,7 @@ module.exports = function (passport)
 	function(req, email, password, next)
 	{
 		console.log(req.user)
-		User.findOne({ 'email': email }, function(err, user)
+		User.findOne({ 'email': email}, function(err, user)
 		{
 				console.log('0')
 			if (err)
@@ -55,6 +55,7 @@ module.exports = function (passport)
 				if (err)
 					return next(err);
 				console.log('User login succefully');
+				console.log(req.session);
 				console.log(user);
 				console.log('-------------');
 				return next(null, user);
@@ -88,7 +89,6 @@ module.exports = function (passport)
 				// if theres email exist
 				if (user)
 					return next(null, false, 'That email is already taken.');
-
 				// if there is no user with that email
 				// create the user
 				let newUser	= new User(
@@ -101,14 +101,14 @@ module.exports = function (passport)
 					bio			: req.body.bio,
 					email		: req.body.email
 				});
-
 				newUser.password = newUser.generateHash(password)
-
 				// save the new user
 				newUser.save(function(err)
 				{
 					if (err)
 						throw err;
+					
+					console.log('User succefully create');
 					return next(null, newUser);
 				});
 			});    

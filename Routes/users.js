@@ -22,7 +22,6 @@ module.exports = function (app, passport)
 	{})
 	.get('/all', (req, res) =>
 	{
-
 		res.send('ok')
 	}).delete(['/', '/me'], (req, res) =>
 	{
@@ -32,27 +31,16 @@ module.exports = function (app, passport)
 	// =====================================
 	// SIGNUP ==============================
 	// =====================================
-	app.get('/sign_up', passport.authenticate('local',
-	{
-		successRedirect: '/',
-		failureRedirect: '/sign_up'
-	}))
-	.post('/sign_up', passport.authenticate('local-signup',
+	app.post('/sign_up', passport.authenticate('local-signup',
 	{
 		successRedirect : '/profile',
-		failureRedirect : '/signup',
-		failureFlash : true
+		failureRedirect : '/signup'
 	}))
 
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
-	app.get('/sign_in', passport.authenticate('local',
-	{
-		successRedirect: '/',
-		failureRedirect: '/sign_in'
-	}))
-	.post('/sign_in', passport.authenticate('local-signin'))
+	app.post('/sign_in', passport.authenticate('local-signin'))
 
 
 	// =====================================
