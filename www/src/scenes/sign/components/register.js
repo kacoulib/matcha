@@ -6,10 +6,11 @@ import {
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import Divider from 'material-ui/Divider';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
+
+import First_step from './steps/first.js';
+import Second_step from './steps/second.js';
+import Third_step from './steps/third.js';
+
 
 /**
  * Horizontal steppers are ideal when the contents of one step depend on an earlier step.
@@ -20,10 +21,29 @@ import DatePicker from 'material-ui/DatePicker';
 class Register extends React.Component
 {
 
-  state = {
-    finished: false,
-    stepIndex: 0,
-  };
+  constructor(props)
+  {
+    super(props);
+    this.handleNext = this.handleNext.bind(this);
+    this.is_button_disable = this.is_button_disable.bind(this);
+
+    this.state = {
+      prenom: '',
+      orientation: '',
+      age: '',
+      username: '',
+      email: '',
+      password: '',
+      sex : '',
+
+      finished: false,
+      stepIndex: 0,
+      is_button_disable: false
+    }
+  }
+
+  // state = {
+  // };
 
   handleNext = () => {
     const {stepIndex} = this.state;
@@ -40,21 +60,38 @@ class Register extends React.Component
     }
   };
 
-  getStepContent(stepIndex) {
+  is_button_disable(data)
+  {
+    this.setState({is_button_disable : data});
+    console.log(data)
+  }
+
+  setData(event)
+  {
+    console.log(event);
+  }
+
+  getStepContent(stepIndex)
+  {
+    const parentProp = {
+      handleNext: this.handleNext,
+      is_button_disable: this.is_button_disable,
+    }
+
     switch (stepIndex) {
       case 0:
-        return third_step();
+        return <First_step {...parentProp} />;
       case 1:
-        return second_step();
+        return <Second_step {...parentProp} />;
       case 2:
-        return third_step();
+        return <Third_step {...parentProp} />;
       default:
-        return first_step();
+        return <First_step {...parentProp} />;
     }
   }
 
   render() {
-    const {finished, stepIndex} = this.state;
+    const {finished, stepIndex, is_button_disable} = this.state;
     const contentStyle = {margin: '0 16px'};
 
     return (
@@ -71,6 +108,7 @@ class Register extends React.Component
           </Step>
         </Stepper>
         <div style={contentStyle}>
+      
           {finished ? (
             <p>
               <a
@@ -85,7 +123,7 @@ class Register extends React.Component
             </p>
           ) : (
             <div>
-              <p>{this.getStepContent(stepIndex)}</p>
+              {this.getStepContent(stepIndex)}
               <div style={{marginTop: 12}}>
                 <FlatButton
                   label="Back"
@@ -97,6 +135,7 @@ class Register extends React.Component
                   label={stepIndex === 2 ? 'Finish' : 'Next'}
                   primary={true}
                   onClick={this.handleNext}
+                  disabled={is_button_disable}
                 />
               </div>
             </div>
@@ -107,61 +146,6 @@ class Register extends React.Component
   }
 }
 
-const first_step = ()=> (
-  <div>
-      <h3>Tu es...</h3>
-      <div>
-        <p>
-         <RaisedButton label="Homme" />
-        </p>
-        <p>
-         <RaisedButton label="Femme" />
-        </p>
-      </div>
-  </div>
-);
 
-// 'heterosexual', 'bisexual', 'homosexual'
-const second_step = ()=> (
-    <div>
-      <h3>Ton orientation</h3>
-      <div>
-        <p>
-         <RaisedButton label="Bisexual" />
-        </p>
-        <p>
-         <RaisedButton label="homosexual" />
-        </p>
-        <p>
-         <RaisedButton label="Heterosexual" />
-        </p>
-      </div>
-  </div>
-);
 
-const third_step = ()=>
-{
-  const style = {
-    marginLeft: 20,
-  }
-
-  return (
-
-    <div>
-        <h3>Bientôt fini :)</h3>
-        <div>
-          <Paper zDepth={2}>
-            <TextField hintText="Prenom" style={style} underlineShow={false} />
-            <Divider />
-            <DatePicker hintText="Age" style={style} underlineShow={false} autoOk="true" />
-            <Divider />
-            <TextField hintText="Email address" style={style} underlineShow={false} />
-            <Divider />
-            <TextField hintText="Password" style={style} underlineShow={false}  type="password"/>
-            <Divider />
-          </Paper>
-        </div>
-    </div>
-  );
-}
 export default Register;
