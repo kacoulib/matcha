@@ -3,30 +3,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 
 
-class First_step extends React.Component
+class FirstStep extends React.Component
 {
   constructor(props)
   {
     super(props);
-    // this.handleValid = this.handleValid.bind(this);
-
-    this.state = {
-      is_button_disable : true
-    }
   }
 
   handleValid(data)
   {
-    this.state.is_button_disable = false;
     console.log(data)
     // console.log(test)
+    this.props.setData({sex : data});
     this.props.handleNext();
-  }
-
-  componentDidMount()
-  {
-    this.props.is_button_disable(this.state.is_button_disable)
-    console.log(this.props)
   }
 
   render()
@@ -50,4 +39,4 @@ class First_step extends React.Component
     );
   }
 }
-export default First_step;
+export default FirstStep;

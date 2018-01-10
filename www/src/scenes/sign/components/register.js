@@ -5,11 +5,10 @@ import {
   StepLabel,
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 
-import First_step from './steps/first.js';
-import Second_step from './steps/second.js';
-import Third_step from './steps/third.js';
+import FirstStep from './steps/first.js';
+import SecondStep from './steps/second.js';
+import ThirdStep from './steps/third.js';
 
 
 /**
@@ -25,25 +24,23 @@ class Register extends React.Component
   {
     super(props);
     this.handleNext = this.handleNext.bind(this);
-    this.is_button_disable = this.is_button_disable.bind(this);
+    this.setData = this.setData.bind(this);
 
     this.state = {
       prenom: '',
       orientation: '',
       age: '',
-      username: '',
       email: '',
       password: '',
       sex : '',
 
       finished: false,
       stepIndex: 0,
-      is_button_disable: false
+      is_button_disable: true
     }
   }
 
-  // state = {
-  // };
+
 
   handleNext = () => {
     const {stepIndex} = this.state;
@@ -60,33 +57,56 @@ class Register extends React.Component
     }
   };
 
-  is_button_disable(data)
+  setData(data)
   {
-    this.setState({is_button_disable : data});
-    console.log(data)
+    this.setState(data);
+    // console.log(this.state);
   }
 
-  setData(event)
+  handleLogin()
   {
-    console.log(event);
+    let data = {
+      prenom: this.state.prenom,
+      age: this.state.age,
+      orientation: this.state.orientation,
+      orientation: this.state.orientation,
+      sex: this.state.sex,
+      email: this.state.email,
+      password: this.state.password,
+      is_button_disable: false
+    }
+
+    fetch('http://localhost:3000/sign_up',
+    {
+      method: 'POST',
+      headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      },
+      body:  JSON.stringify(data)
+
+    }).then((response)=>
+    {
+      response.json().then((res)=>console.log(res))
+    }).catch((err)=> {throw err})
   }
 
   getStepContent(stepIndex)
   {
     const parentProp = {
       handleNext: this.handleNext,
-      is_button_disable: this.is_button_disable,
+      setData: this.setData
     }
 
     switch (stepIndex) {
       case 0:
-        return <First_step {...parentProp} />;
+        return <FirstStep {...parentProp} />;
       case 1:
-        return <Second_step {...parentProp} />;
+        return <SecondStep {...parentProp} />;
       case 2:
-        return <Third_step {...parentProp} />;
+        return <ThirdStep {...parentProp} />;
       default:
-        return <First_step {...parentProp} />;
+        return <FirstStep {...parentProp} />;
     }
   }
 
@@ -111,6 +131,10 @@ class Register extends React.Component
       
           {finished ? (
             <p>
+              {
+
+
+              }
               <a
                 href="#"
                 onClick={(event) => {
@@ -125,14 +149,10 @@ class Register extends React.Component
             <div>
               {this.getStepContent(stepIndex)}
               <div style={{marginTop: 12}}>
-                <FlatButton
-                  label="Back"
-                  disabled={stepIndex === 0}
-                  onClick={this.handlePrev}
-                  style={{marginRight: 12}}
-                />
+                
                 <RaisedButton
-                  label={stepIndex === 2 ? 'Finish' : 'Next'}
+                  label="finished"
+                  style={stepIndex === 2 ? {display: 'block'} : {display: 'none'}}
                   primary={true}
                   onClick={this.handleNext}
                   disabled={is_button_disable}

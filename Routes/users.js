@@ -16,7 +16,7 @@ module.exports = function (app, passport)
 	app.get(['/', '/me'], (req, res) =>
 	{
 		console.log('home')
-		res.send('home sweet home');
+		res.send([{name:'test', passport: 'dsfd'}, {name:'toto', passport: 'toto'}]);
 	})
 	.put(['/', 'me'], (req, res) =>
 	{})

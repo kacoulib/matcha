@@ -1,40 +1,24 @@
 import React from 'react';
-import DatePicker from 'material-ui/DatePicker';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
 
 // 'heterosexual', 'bisexual', 'homosexual'
 
-class Second_step extends React.Component
+class SecondStep extends React.Component
 {
   constructor(props)
   {
     super(props);
-    // this.handleValid = this.handleValid.bind(this);
-
-    this.state = {
-      is_button_disable : true
-    }
   }
 
   handleValid(data)
   {
-    this.state.is_button_disable = false;
     console.log(data)
     // console.log(test)
+    this.props.setData({orientation : data});
     this.props.handleNext();
   }
-
-  componentDidMount()
-  {
-    this.props.is_button_disable(this.state.is_button_disable)
-    console.log(this.props)
-  }
-
 
   render()
   {
@@ -61,4 +45,4 @@ class Second_step extends React.Component
     );
   }
 }
-export default Second_step;
+export default SecondStep;

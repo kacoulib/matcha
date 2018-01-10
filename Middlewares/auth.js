@@ -71,11 +71,12 @@ module.exports = function (passport)
 		// by default, local strategy uses username and password, we will override with email
 		usernameField : 'email',
 		passwordField : 'password',
-		passReqToCallback : true // allows us to pass back the entire request to the callback
+		passReqToCallback : true,
+		session: false
 	},
 	function(req, email, password, next)
 	{
-
+		console.log('local-signup')
 		// asynchronous
 		// User.findOne wont fire unless data is sent back
 		process.nextTick(function()
