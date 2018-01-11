@@ -14,7 +14,7 @@ class FirstStep extends React.Component
   {
     console.log(data)
     // console.log(test)
-    this.props.setData({sex : data});
+    this.props.setData({gender : data});
     this.props.handleNext();
   }
 
@@ -29,10 +29,13 @@ class FirstStep extends React.Component
           <h3>Tu es...</h3>
           <div>
             <div style={styles}>
-             <RaisedButton label="Homme" onClick={this.handleValid.bind(this, "Homme")} />
+             <RaisedButton label="Homme" onClick={this.handleValid.bind(this, "male")} />
             </div>
             <div style={styles}>
-             <RaisedButton label="Femme" value="test"  onClick={this.handleValid.bind(this, "Femme")} />
+             <RaisedButton label="Femme"  onClick={this.handleValid.bind(this, "female")} />
+            </div>
+            <div style={styles}>
+             <RaisedButton label="Autre"  onClick={this.handleValid.bind(this, "other")} />
             </div>
           </div>
       </div>

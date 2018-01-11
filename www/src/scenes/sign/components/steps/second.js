@@ -32,13 +32,13 @@ class SecondStep extends React.Component
         <h3>Ton orientation</h3>
         <div>
           <div style={styles}>
-           <RaisedButton label="Bisexual" onClick={this.handleValid.bind(this, "Bisexual")}/>
+           <RaisedButton label="Bisexual" onClick={this.handleValid.bind(this, "bisexual")}/>
           </div>
           <div style={styles}>
            <RaisedButton label="homosexual" onClick={this.handleValid.bind(this, "homosexual")}/>
           </div>
           <div>
-           <RaisedButton label="Heterosexual" onClick={this.handleValid.bind(this, "Heterosexual")}/>
+           <RaisedButton label="Heterosexual" onClick={this.handleValid.bind(this, "beterosexual")}/>
           </div>
         </div>
       </div>

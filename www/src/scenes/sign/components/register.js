@@ -9,6 +9,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FirstStep from './steps/first.js';
 import SecondStep from './steps/second.js';
 import ThirdStep from './steps/third.js';
+import axios from 'axios';
+
 
 
 /**
@@ -25,6 +27,7 @@ class Register extends React.Component
     super(props);
     this.handleNext = this.handleNext.bind(this);
     this.setData = this.setData.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
 
     this.state = {
       prenom: '',
@@ -32,7 +35,7 @@ class Register extends React.Component
       age: '',
       email: '',
       password: '',
-      sex : '',
+      gender : '',
 
       finished: false,
       stepIndex: 0,
@@ -67,27 +70,18 @@ class Register extends React.Component
   {
     let data = {
       prenom: this.state.prenom,
-      age: this.state.age,
+      age: Date.parse(this.state.age),
       orientation: this.state.orientation,
-      orientation: this.state.orientation,
-      sex: this.state.sex,
+      gender: this.state.gender,
       email: this.state.email,
       password: this.state.password,
       is_button_disable: false
-    }
-
-    fetch('http://localhost:3000/sign_up',
+    };
+    console.log(data)
+    axios.post('http://localhost:3000/sign_up', data)
+    .then((res)=>
     {
-      method: 'POST',
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      },
-      body:  JSON.stringify(data)
-
-    }).then((response)=>
-    {
-      response.json().then((res)=>console.log(res))
+      console.log(res)
     }).catch((err)=> {throw err})
   }
 
@@ -154,7 +148,7 @@ class Register extends React.Component
                   label="finished"
                   style={stepIndex === 2 ? {display: 'block'} : {display: 'none'}}
                   primary={true}
-                  onClick={this.handleNext}
+                  onClick={this.handleLogin}
                   disabled={is_button_disable}
                 />
               </div>

@@ -44,9 +44,8 @@ userSchema 	= new Schema(
 	},
 	age:
 	{
-		type : Number,
-		min : 18,
-		max : 110,
+		type : Date,
+		required: true
 	},
 	location:
 	{
@@ -58,7 +57,7 @@ userSchema 	= new Schema(
 	gender:
 	{
 		type : String,
-		enum: ['male', 'female'],
+		enum: ['male', 'female', 'other'],
 		required: true
 	},
 	orientation:

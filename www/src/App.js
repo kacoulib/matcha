@@ -5,7 +5,6 @@ import Login from './scenes/sign/index.js';
 
 import './App.css';
 import Header from './partials/header.js';
-import Footer from './partials/footer.js';
 
 class App extends Component
 {

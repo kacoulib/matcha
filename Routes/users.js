@@ -31,12 +31,27 @@ module.exports = function (app, passport)
 	// =====================================
 	// SIGNUP ==============================
 	// =====================================
-	app.post('/sign_up', passport.authenticate('local-signup',
+	app.post('/sign_up', (req, res, next) =>
 	{
-		successRedirect : '/profile',
-		failureRedirect : '/signup'
-	}))
+		console.log(req.body)
+		// passport.authenticate('local-signup',
+		// {
+		// 	successRedirect : '/profile',
+		// 	failureRedirect : '/signup'
+		// })
+		passport.authenticate('local-signup', function(err, user, info) {
+			console.log(err)
+			console.log(user)
+			console.log(info)
+        	console.log("authenticate");
+    	})(req, res, next);
+	})
 
+	/* to remove */app.post('/add_user', (req, res, next)=>
+	{
+		console.log('ok')
+		next();
+	})
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
