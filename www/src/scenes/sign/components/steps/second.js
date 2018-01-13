@@ -7,10 +7,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 class SecondStep extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
-  }
 
   handleValid(data)
   {
@@ -26,7 +22,6 @@ class SecondStep extends React.Component
       marginBottom: 10
     }
 
-    console.log(this.props)
     return (
       <div>
         <h3>Ton orientation</h3>

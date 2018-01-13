@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 
 
@@ -19,26 +19,24 @@ class Header extends Component
 			register_button = '';
 
       if (!is_login)
-      	register_button =  <Link to='/home'>login</Link>;
+      	register_button =  <Link to='/'>login</Link>;
       else
       	register_button =  <Link to='ok'>Login</Link>;
 
 		return (
-			<Router>
 			<div>
 				<header className="App-header">
-		           <Link to='/topic'><img src={logo} className="App-logo" alt="logo" /> </Link>
+		           <Link to='/'><img src={logo} className="App-logo" alt="logo" /> </Link>
 		          {register_button}
 		        </header>
 				<div>
 					<ul>
-						<li><Link to='/topic'>1</Link></li>
-						<li><Link to='/2'>2</Link></li>
-						<li><Link to='/3'>3</Link></li>
+						<li><Link to='/'>home</Link></li>
+						<li><Link to='/register'>register</Link></li>
 					</ul>
 				</div>
+				
 			</div>
-			</Router>
 		);
 	}
 }

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Login from './scenes/sign/index.js';
 
 import './App.css';
 import Header from './partials/header.js';
+import Main from './partials/main.js';
 
 class App extends Component
 {
@@ -14,24 +13,12 @@ class App extends Component
         <div className="App">
 
           <Header />
-
-          <Router>
-            <div>
-              <Route path='/topic' component={Topic}/>
-              <Route path='/' component={Login}/>
-            </div>
-          </Router>
-
+          <Main />
+          <a href='https://www.facebook.com/beyonce/' target='_blank'>Maquette facebook</a>
         </div>
        </MuiThemeProvider>
     );
   }
 }
-
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
 
 export default App;

@@ -130,7 +130,7 @@ class Register extends React.Component
 
               }
               <a
-                href="#"
+                href="/"
                 onClick={(event) => {
                   event.preventDefault();
                   this.setState({stepIndex: 0, finished: false});

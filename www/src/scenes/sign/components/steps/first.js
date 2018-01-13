@@ -5,11 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 class FirstStep extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
-  }
-
+  
   handleValid(data)
   {
     console.log(data)
