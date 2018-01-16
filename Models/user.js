@@ -49,10 +49,17 @@ userSchema 	= new Schema(
 	},
 	location:
 	{
-		type : String,
-		coordinates: [Number],
-		adress: String,
-		required : true
+		name :
+		{
+			type : String,
+			required : true
+		},
+		loc :
+		{
+			type : [Number],
+			index: '2d',
+			required : true
+		}
 	},
 	gender:
 	{

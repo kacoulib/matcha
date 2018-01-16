@@ -1,22 +1,35 @@
 import React, { Component } from 'react';
-import Aside from '../../partials/aside.js';
-import Grid from 'material-ui/Grid';
+import axios from 'axios';
+
 
 class Home extends Component
 {
+	constructor(props)
+  	{
+	    super(props);
+		this.get_all = this.get_all.bind(this);
+	}
+
+	get_all()
+	{
+		axios.get('http://localhost:3000/all')
+		.then((res)=>
+		{
+			console.log(res)
+		})
+	}
+
 	render()
 	{
-
+		{this.get_all()}
 		return (
-				<Grid container spacing={24}>
-					<Grid item xs={12} sm={2}>
-						<Aside />
-					</Grid>
-					<Grid item xs={12} sm={10}>
-						<h1>test</h1>
-					</Grid>
-				</Grid>
-			);
+			<div>
+					<h1>test</h1>
+			</div>
+		);
 	}
 }
+
+
+
 export default Home;

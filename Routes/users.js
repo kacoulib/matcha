@@ -1,5 +1,8 @@
 'use strict'
 
+const User = require('../Models/user.js');
+
+
 function isAuthenticated(req,res,next)
 {
 	if(req.user)
@@ -19,14 +22,23 @@ module.exports = function (app, passport)
 		res.send([{name:'test', passport: 'dsfd'}, {name:'toto', passport: 'toto'}]);
 	})
 	.put(['/', 'me'], (req, res) =>
-	{})
-	.get('/all', (req, res) =>
-	{
-		res.send('ok')
-	}).delete(['/', '/me'], (req, res) =>
+	{}).delete(['/', '/me'], (req, res) =>
 	{
 		res.send('home swith home');
 	});
+
+	// =====================================
+	// USER CRUD (with login links) ========
+	// =====================================
+	app.get('/all', (req, res) =>
+	{
+		User.find({}, (err, data)=>
+		{
+			if (err)
+				throw err;
+			res.send(data);
+		})
+	})
 
 	// =====================================
 	// SIGNUP ==============================

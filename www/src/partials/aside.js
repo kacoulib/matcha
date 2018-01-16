@@ -1,32 +1,38 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import User1 from '../public/img/profiles/user1/default.jpg';
 
 
-class Aside extends Component
+class AsideLeft extends Component
 {
 	render()
 	{
-		// const styles = 
-		// {
-
-		// }
-
+		const styles =
+		{
+			display: 'block'
+		}
 		return (
 			<aside className='aside-nav'>
-				<div className='avatar'>
-					<img src={User1} alt="username profile photo" />
-				</div>
-				<div className='info'>
-					<h2 className='name'>user1</h2>
-				</div>
 				<ul>
-					<li><Link to='/'>Home</Link></li>
-					<li><Link to='/about'>About</Link></li>
-					<li><Link to='/notifications'>Notifications</Link></li>
+					<li className='aside_sprite'>
+						<Link to='/' style={styles}>
+							<span className='home'></span><span>My Profile</span>
+						</Link>
+					</li>
+
+					<li className='aside_sprite'>
+						<Link to='/notifications' style={styles}>
+							<span className='notifications'></span><span>Notifications</span>
+						</Link>
+					</li>
+
+					<li className='aside_sprite'>
+						<Link to='/friends' style={styles} >
+							<span className='friends'></span><span>friends</span>
+						</Link>
+					</li>
 				</ul>
 			</aside>
 		);
 	}
 }
-export default Aside;
+export default AsideLeft;

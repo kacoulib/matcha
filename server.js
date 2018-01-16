@@ -13,6 +13,7 @@ const	express			= require('express'),
 		database		= require('./Models/database.js');
 
 
+
 // configuration ===============================================================
 
 mongoose.connect(database.url, {useMongoClient: true})
@@ -44,6 +45,39 @@ app.use(session({
 }));
 
 
+// let faker = require('faker');
+// let	User			= require('./Models/user.js');
+
+// let get_random = (max) => Math.floor(Math.random() * Math.floor(max));
+
+// let data = {};
+// let orientation = ['heterosexual', 'bisexual', 'homosexual'];
+// let gender = ['male', 'female', 'other'];
+// let tags = ['bio', 'geek', 'piercing', 'sport'],
+// 	j = 0;
+// 	for (var i = 0; i < 2; i++)
+// 	{
+// 		data.name = {first: faker.name.firstName(), last: faker.name.lastName()};
+// 		data.email = faker.internet.email();
+// 		data.age = faker.date.past();
+// 		data.gender = gender[get_random(3)];
+// 		data.profil_picture = faker.image.avatar();
+// 		data.location = {};
+// 		data.location.name = faker.address.streetAddress();
+// 		data.location.loc = [faker.address.longitude(), faker.address.latitude()];
+// 		data.orientation = orientation[get_random(3)];
+// 		data.pictures = [data.profil_picture, faker.image.avatar(), faker.image.avatar(), faker.image.avatar()];
+// 		data.tags = tags[get_random(4)];
+// 		let newUser = new User(data);
+// 		newUser.password = newUser.generateHash("test");
+// 		newUser.save((err)=>
+// 		{
+// 			if (err)
+// 				throw err;
+// 			console.log('user ['+ j + '] created')
+// 			j++;
+// 		})
+// 	}
 // routes ======================================================================
 require('./Routes/users.js')(app, passport);
 
