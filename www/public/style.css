@@ -5,6 +5,12 @@ body
 	background-color: #edeef0;
 }
 
+a{
+	text-decoration: none;
+    cursor: pointer;
+    font-family: '-apple-system,BlinkMacSystemFont,Roboto,Open Sans,Helvetica Neue,sans-serif';
+}
+
 #page_layout
 {
 	display: flex;
@@ -29,10 +35,14 @@ img
 
 
 /* OTHERS */
-a{
-	text-decoration: none;
-    cursor: pointer;
-    font-family: '-apple-system,BlinkMacSystemFont,Roboto,Open Sans,Helvetica Neue,sans-serif';
+.left
+{
+	float: left;
+}
+
+.right
+{
+	float: right;
 }
 
 .aside_nav a

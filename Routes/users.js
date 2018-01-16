@@ -32,7 +32,11 @@ module.exports = function (app, passport)
 	// =====================================
 	app.get('/all', (req, res) =>
 	{
-		User.find({}, (err, data)=>
+		User
+		.find()
+		// .skip(1)
+		.limit(10)
+		.exec((err, data)=>
 		{
 			if (err)
 				throw err;

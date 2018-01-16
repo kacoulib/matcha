@@ -26,7 +26,7 @@ class App extends Component
             </div>
           </div>
 
-          <a href='https://www.facebook.com/beyonce/' target='_blank'>Maquette facebook</a>
+          <a href='https://vk.com/feed' target='_blank'>Maquette VK</a>
         </div>
        </MuiThemeProvider>
     );
