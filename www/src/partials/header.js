@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
+import Avatar from '../components/avatar.js';
+
 
 
 class Header extends Component
@@ -24,20 +26,33 @@ class Header extends Component
       	register_button =  <Link to='ok'>Login</Link>;
 
 		return (
-			<div>
-				<header className="App-header">
-		           <Link to='/'><img src={logo} className="App-logo" alt="logo" /> </Link>
-		          {register_button}
-		        </header>
+			<header>
 				<div>
-					<ul>
-						<li><Link to='/'>home</Link></li>
-						<li><Link to='/register'>register</Link></li>
-					</ul>
+	           		<Link to='/'><img src={logo} className="app-logo" alt="logo" /> </Link>
+	           	</div>
+
+				<div id='top_search'>
+					<input type="text" placeholder="Search" />
 				</div>
-				
-			</div>
+
+				<div id='top_notify' className='header_hover'>
+					<span></span>
+					<span></span>
+	           	</div>
+
+				<div id='top_profile' className='right header_hover'>
+					<span>kacoulib</span>
+					<Avatar />
+					<span className='top_profile_arrow'></span>
+				</div>
+	        </header>
 		);
 	}
 }
+				// <div>
+				// 	<ul>
+				// 		<li><Link to='/'>home</Link></li>
+				// 		<li><Link to='/register'>register</Link></li>
+				// 	</ul>
+				// </div>
 export default Header;

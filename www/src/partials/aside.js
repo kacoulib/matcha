@@ -14,7 +14,7 @@ class AsideLeft extends Component
 			<aside className='aside-nav'>
 				<ul>
 					<li className='aside_sprite'>
-						<Link to='/' style={styles}>
+						<Link to='/me' style={styles}>
 							<span className='home'></span><span>My Profile</span>
 						</Link>
 					</li>

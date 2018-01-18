@@ -7,29 +7,13 @@ import Home from '../scenes/home/index.js';
 
 class main extends Component
 {
-	// componentDidMount()
-	// {
-	// 	// if (!is_login)
-	// 	// {
-	// 		console.log('non');
-	// 		<Redirect to='/topic' />
-	// 	// }
-	// }
-
-	render() {
-		// let is_login = true
-
-		// if (is_login)
-		// {
-		// 	return (
-		// 		<Redirect to='/topic' />
-		// 		)
-		// }
-
+	render()
+	{
 	    return (
 	        <div className="main">
 	          <Switch>
 	              <Route exact path='/' component={Home}/>
+	              <Route path='/me' component={Topic}/>
 	              <Route path='/topic' component={Topic}/>
 	              <Route exact path='/register' component={Login}/>
 	              <Route  path='*' component={NotFound}/>

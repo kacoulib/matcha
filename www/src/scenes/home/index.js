@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import ucfirst from '../../tools/ucfirst.js';
+import Avatar from '../../components/avatar.js';
 
 
 class Home extends Component
@@ -33,16 +35,18 @@ class Home extends Component
 	{
 		let data = this.state.recommendation;
 		return (
-			<ul>
-				{	data.map((data)=>
-					{
-						return (
-							<ListItem key={data.email} user={data} />
-						);
-							
-					})
-				}
-			</ul>
+			<div className='feed_tab'>
+				<ul className='recommendation_ul'>
+					{	data.map((data)=>
+						{
+							return (
+								<ListItem key={data.email} user={data} />
+							);
+								
+						})
+					}
+				</ul>
+			</div>
 		)
 	}
 }
@@ -51,39 +55,32 @@ function ListItem(props)
 {
 	const user 	= props.user,
 		info 	= {first: user.name.first, last: user.name.last, address: 'paris'},
-		styles 	=
+		styles	=
 		{
-			clear: 'both'
-		} ;
+			avatar:
+			{
+				width: 50,
+				borderRadius: 100,
+				margin: '0 12px 0 0'			
+			}
+		}
 
 	return (
-		<li style={styles}>
+		<li>
 	 		<div className='recommendation_header'>
-	 			<Link to='http://localhost:3001/' className='left'>
-	 				<Avatar avatar={user.profil_picture} />
+	 			<Link to='http://localhost:3001/'>
+	 				<Avatar data={{avatar: user.profil_picture, styles: styles.avatar}} />
 	 			</Link>
  				<Info data={info} />
- 				<button className='right'>submit</button>
+ 				<button className='right'><span className='add_icon'></span><span>Subscribe</span></button>
 	 		</div>
-	 		<div className='pics'>
+	 		<div className='feed_user_pics'>
 	 			<ul>
 	 				<Pics data={{data: user.pictures, key: user.email}}/>
 	 			</ul>
 	 		</div>
 		</li>
 	);
-}
-
-function Avatar(props)
-{
-	const styles =
-	{
-		width: 50,
-		borderRadius: 100,
-		margin: '0 12px 0 0'
-	};
-
-	return (<div><img style={styles} src={props.avatar}/></div>);
 }
 
 function Info(props)
@@ -96,8 +93,8 @@ function Info(props)
 
 	return (
 		<div>
-			<h3>{props.data.first} {props.data.last}</h3>
-			<h4>{props.data.address}</h4>
+			<h3>{ucfirst(props.data.first)} {ucfirst(props.data.last)}</h3>
+			<h4>{ucfirst(props.data.address)}</h4>
 		</div>
 	);
 }
@@ -107,12 +104,11 @@ function Pics(props)
 	const data = props.data.data,
 	styles =
 	{
-	    position: 'relative',
+		position: 'relative',
 		display: 'inline-block',
 		borderRadius: 100,
 		height: 123,
 		width: 123,
-		marginLeft: 6,
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: '50% 50%'
@@ -121,7 +117,7 @@ function Pics(props)
 	const lst = data.map((pic) =>
 	{
 		styles.backgroundImage = pic;
-		return (<Link to='' key={data.key + pic} style={styles} ><img src={pic} /></Link>);
+		return (<li key={data.key + pic} style={styles} ><Link to=''><img src={pic} /></Link></li>);
 	});
 
 	return (lst)

@@ -12,9 +12,7 @@ class App extends Component
     return (
        <MuiThemeProvider>
         <div>
-          <div id="header">
-            <Header />
-          </div>
+          <Header />
 
           <div id="page_layout">
             <div id="aside">
