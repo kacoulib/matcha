@@ -18,11 +18,49 @@ module.exports = function (app, passport)
 	// =====================================
 	app.get(['/', '/me'], (req, res) =>
 	{
-		console.log('home')
-		res.send([{name:'test', passport: 'dsfd'}, {name:'toto', passport: 'toto'}]);
+		User.findById('5a5e42abb755294740df95f7', (err, user)=>
+		{
+			if (err)
+				throw err;
+		
+			res.send(user);
+			
+		})
 	})
-	.put(['/', 'me'], (req, res) =>
-	{}).delete(['/', '/me'], (req, res) =>
+	.put('/me/:id', (req, res, next) =>
+	{
+		const client_data = req.body;
+
+		User.findById(req.params.id, (err, user) =>
+		{
+			if (err)
+				throw err;
+
+			user.age 			=	client_data.age			|| user.age;
+			user.gender 		=	client_data.gender			|| user.gender;
+			user.adresses 		= 	client_data.adresses		|| user.adresses;
+			user.orientation	= 	client_data.orientation	|| user.orientation;
+			user.location 		= 	client_data.location		|| user.location;
+			user.name.first 	=	client_data.first		|| user.name.first;
+			user.name.last 		=	client_data.last		|| user.name.last;
+			user.bio 			=	client_data.bio			|| user.bio;
+			user.email 			=	client_data.email			|| user.email;
+
+			if (client_data.new_password.length != 0)
+			{
+				if (client_data.new_password.length < 3)
+					return (res.status(401).json({error: 'Password not valid'}));
+				user.password = user.generateHash(client_data.new_password)
+			}
+			user.save((err) =>
+			{
+				if (err)
+					throw err;
+				res.send('user updated');
+			})
+		})
+
+	}).delete(['/', '/me'], (req, res) =>
 	{
 		res.send('home swith home');
 	});
@@ -30,17 +68,41 @@ module.exports = function (app, passport)
 	// =====================================
 	// USER CRUD (with login links) ========
 	// =====================================
-	app.get('/all', (req, res) =>
+	app.get('/user/all', (req, res) =>
 	{
 		User
 		.find()
-		// .skip(1)
+		.skip(1)
 		.limit(10)
 		.exec((err, data)=>
 		{
 			if (err)
 				throw err;
 			res.send(data);
+		})
+	})
+	.get('/user/:id', (req, res, next) =>
+	{
+		// if (!req.session.test)
+		// {
+		// 	console.log('session test not set')
+		// 	req.session.test = "this's my session test";
+		// 	req.session.save((err)=>
+		// 	{
+		// 		if (err)
+		// 			throw err;
+		// 		console.log(req.session)
+		// 	})
+		// 	res.send('Not logged in')
+		// }
+		// else
+		// 	console.log('session test set : '+ req.session.test)
+
+		User.findById(req.params.id, (err, user) =>
+		{
+			if (err)
+				throw err;
+			res.send(user);
 		})
 	})
 

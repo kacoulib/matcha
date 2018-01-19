@@ -93,7 +93,8 @@ userSchema 	= new Schema(
 		enum: ['bio', 'geek', 'piercing', 'sport']
 	},
 	viewers: [String],
-	likers: [String]
+	likers: [String],
+	 score: [Number]
 });
 
 userSchema.index({location : '2dsphere'});

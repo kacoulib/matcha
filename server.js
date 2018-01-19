@@ -37,11 +37,16 @@ app.use(cookieParser());
 // required for passport
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({
-	secret: 'SESSID',
+app.use(session(
+{
+	secret: 'theMatchaSuperSessionSESSid0rNot',
 	resave: true,
 	saveUninitialized: true,
-	cookie: { secure: true }
+	cookie:
+	{
+		secure: false,
+		maxAge: 600000
+	}
 }));
 
 

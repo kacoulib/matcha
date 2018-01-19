@@ -24,7 +24,7 @@ class App extends Component
             </div>
           </div>
 
-          <a href='https://vk.com/feed' target='_blank'>Maquette VK</a>
+          <a href='https://vk.com/feed' target='_blank' rel="noopener noreferrer">Maquette VK</a>
         </div>
        </MuiThemeProvider>
     );

@@ -10,7 +10,7 @@ class Home extends Component
 	constructor(props)
   	{
 	    super(props);
-		this.get_all = this.get_all.bind(this);
+		this.get_all_users = this.get_all_users.bind(this);
 
 		this.state = {
 			recommendation: []
@@ -19,12 +19,12 @@ class Home extends Component
 	
 	componentDidMount()
 	{
-		this.get_all();
+		this.get_all_users();
 	}
 
-	get_all()
+	get_all_users()
 	{
-		axios.get('http://localhost:3000/all')
+		axios.get('http://localhost:3000/user/all')
 		.then((res)=>
 		{
 			this.setState({recommendation: res.data})
@@ -34,18 +34,22 @@ class Home extends Component
 	render()
 	{
 		let data = this.state.recommendation;
-		return (
-			<div className='feed_tab'>
-				<ul className='recommendation_ul'>
-					{	data.map((data)=>
-						{
-							return (
-								<ListItem key={data.email} user={data} />
-							);
-								
-						})
-					}
-				</ul>
+		return (		
+			<div className='white_tab_container'>
+				<div className='white_tab'>
+					<div className='tab_content'>
+						<ul className='recommendation_ul'>
+							{	data.map((data)=>
+								{
+									return (
+										<ListItem key={data.email} user={data} />
+									);
+										
+								})
+							}
+						</ul>
+					</div>
+				</div>
 			</div>
 		)
 	}
@@ -64,11 +68,10 @@ function ListItem(props)
 				margin: '0 12px 0 0'			
 			}
 		}
-
 	return (
 		<li>
 	 		<div className='recommendation_header'>
-	 			<Link to='http://localhost:3001/'>
+	 			<Link to={'/user/' + user._id}>
 	 				<Avatar data={{avatar: user.profil_picture, styles: styles.avatar}} />
 	 			</Link>
  				<Info data={info} />
@@ -85,12 +88,6 @@ function ListItem(props)
 
 function Info(props)
 {
-	const styles =
-	{
-		width: 50,
-		borderRadius: 100
-	};
-
 	return (
 		<div>
 			<h3>{ucfirst(props.data.first)} {ucfirst(props.data.last)}</h3>

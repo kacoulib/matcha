@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route} from 'react-router-dom'
 import Login from '../scenes/sign/index.js';
 import Home from '../scenes/home/index.js';
+import MyProfile from '../scenes/profile/my_profile.js';
+import Edit from '../scenes/profile/edit.js';
+import OtherProfile from '../scenes/profile/other_profile.js';
 
 
 
@@ -13,8 +16,9 @@ class main extends Component
 	        <div className="main">
 	          <Switch>
 	              <Route exact path='/' component={Home}/>
-	              <Route path='/me' component={Topic}/>
-	              <Route path='/topic' component={Topic}/>
+	              <Route path='/me' component={MyProfile}/>
+	              <Route path='/user/:id' component={OtherProfile}/>
+	              <Route path='/edit' component={Edit}/>
 	              <Route exact path='/register' component={Login}/>
 	              <Route  path='*' component={NotFound}/>
 	          </Switch>
@@ -33,11 +37,5 @@ const NotFound = () =>
 		</div>
 	)
 }
-
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
 
 export default main;

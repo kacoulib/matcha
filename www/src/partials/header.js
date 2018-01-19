@@ -10,40 +10,34 @@ class Header extends Component
 	constructor(props)
 	{
 		super(props);
-		this.state = {
-			is_login: false
-		};
+
+		this.state =
+		{};
 	}
 
 	render()
 	{
-		let is_login = this.state.is_login,
-			register_button = '';
-
-      if (!is_login)
-      	register_button =  <Link to='/'>login</Link>;
-      else
-      	register_button =  <Link to='ok'>Login</Link>;
-
 		return (
-			<header>
+			<header id="header">
 				<div>
-	           		<Link to='/'><img src={logo} className="app-logo" alt="logo" /> </Link>
-	           	</div>
+					<div>
+		           		<Link to='/'><img src={logo} className="app-logo" alt="logo" /> </Link>
+		           	</div>
 
-				<div id='top_search'>
-					<input type="text" placeholder="Search" />
-				</div>
+					<div id='top_search'>
+						<input type="text" placeholder="Search" />
+					</div>
 
-				<div id='top_notify' className='header_hover'>
-					<span></span>
-					<span></span>
-	           	</div>
+					<div id='top_notify' className='header_hover'>
+						<span></span>
+						<span></span>
+		           	</div>
 
-				<div id='top_profile' className='right header_hover'>
-					<span>kacoulib</span>
-					<Avatar />
-					<span className='top_profile_arrow'></span>
+					<div id='top_profile' className='right header_hover'>
+						<span>kacoulib</span>
+						<Avatar />
+						<span className='top_profile_arrow'></span>
+					</div>
 				</div>
 	        </header>
 		);
