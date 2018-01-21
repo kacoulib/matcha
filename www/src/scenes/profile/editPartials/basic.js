@@ -28,11 +28,12 @@ class EditBasic extends Component
 	{
 		let pic = e.target.files;
 
-		if (pic.length == 0)
+		if (pic.length === 0)
 			return ;
 		// this.setState({data})
 		console.log(data)
 		console.log(e)
+		this.props.set_upload_picture(data, pic)
 	}
 
 	render()
@@ -43,7 +44,7 @@ class EditBasic extends Component
 			pictures = user ? user.pictures : [],
 			pictureProp = { add_pic: this.add_pic, remove_pic: this.remove_pic, user: user };
 
-			console.log(this.state)
+			console.log(this.props)
 	    return (
 			<div className='white_tab'>
 				<header>
@@ -54,7 +55,6 @@ class EditBasic extends Component
 						<InputField  value={this.props.data.first} name='first' label_text='First name' {...parentProp}/>
 						<InputField  value={this.props.data.last} name='last' label_text='Last name' {...parentProp}/>
 						<InputField  value={this.props.data.email} type='email' name='email' label_text='Email' {...parentProp}/>
-						<InputField  value={this.props.data.new_password} type='password' name='new_password' label_text='Password' {...parentProp}/>
 						<div className='clear_fix'>
 							<label htmlFor='bio'>Bio:</label>
 							<textarea  id='bio' value={user.bio} onChange={parentProp.set_input_data.bind(this, 'bio')} />
@@ -65,7 +65,7 @@ class EditBasic extends Component
 						</div>
 						<div>
 							<div className='clear_fix'>
-								<label htmlFor='tags'>Picures:</label>
+								<label htmlFor='tags'>Pictures:</label>
 							</div>
 							<ul className='edit_pics'>
 								<li>

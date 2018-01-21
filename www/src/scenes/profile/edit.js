@@ -14,6 +14,7 @@ class Edit extends Component
 		this.set_input_data = this.set_input_data.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.getComponent = this.getComponent.bind(this);
+		this.set_upload_picture = this.set_upload_picture.bind(this);
 
 		this.state =
 		{
@@ -31,7 +32,6 @@ class Edit extends Component
 			status : '',
 			tags : '',
 			viewers : '',
-			new_password : '',
 			_id : '',
 			form_has_been_modified: 0,
 			stepIndex : 0
@@ -66,6 +66,28 @@ class Edit extends Component
 	    	this.setState({form_has_been_modified : 1});
 	    console.log(r)
 
+	}
+
+	set_upload_picture(index, files)
+	{
+		var reader = new FileReader(),
+			file = files[index],
+			data = this.state.pictures,
+			that = this;
+
+		reader.onload = function(e)
+		{
+			data[index] = e.target.result;
+			// console.log(data[index])
+			// console.log(e.target.result, index)
+			that.setState({pictures: data})
+			console.log(that.state)
+		// $('#blah').attr('file', e.target.result);
+		}
+		// console.log(file)
+		reader.readAsDataURL(file);
+
+		return (console.log(index, file))
 	}
 
 	handleSubmit(e)
@@ -110,6 +132,7 @@ class Edit extends Component
 		{
 			set_input_data: this.set_input_data,
 			handleSubmit: this.handleSubmit,
+			set_upload_picture: this.set_upload_picture,
 			data: this.state
 		}
 		console.log(this.state.stepIndex)
@@ -129,6 +152,7 @@ class Edit extends Component
 		{
 			set_input_data: this.set_input_data,
 			handleSubmit: this.handleSubmit,
+			set_upload_picture: this.set_upload_picture,
 			data: this.state
 		},
 		stepIndex = this.state.stepIndex || 0;
