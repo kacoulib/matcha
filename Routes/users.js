@@ -1,6 +1,8 @@
 'use strict'
 
-const User = require('../Models/user.js');
+const User = require('../Models/user.js'),
+	nodemailer = require('nodemailer'),
+	crypto		= require('crypto');
 
 
 function isAuthenticated(req,res,next)
@@ -133,7 +135,29 @@ module.exports = function (app, passport)
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
-	app.post('/sign_in', passport.authenticate('local-signin'))
+	app.post('/sign_in', (req, res, next) =>
+	{
+		passport.authenticate('local-signin', function(err, user, info)
+		{
+			if (err)
+				throw err;
+			if (info)
+				return (res.status(401).json({error: info}));
+			 if (req.session.user)
+			 {
+	        	console.log("already signin");
+
+	        	console.log(err)
+				console.log(user)
+			}
+			else
+			{
+				req.session.user = user;
+	        	console.log("now signin");
+			}
+        	res.send('user login successfuly')
+		})(req, res, next);
+	})
 
 
 	// =====================================
@@ -145,8 +169,73 @@ module.exports = function (app, passport)
 		res.redirect('/');
 	});
 
+	app.post('/send_password_reset_mail', (req, res) =>
+	{
+		User.findOne({email: req.body.email}, (err, user)=>
+		{
+			if (err)
+				throw err;
+			if (!user)
+				return (res.status(401).json({error: 'User no found'}));
+
+			const transport = nodemailer.createTransport({
+				service: 'Gmail',
+				auth: {
+				    user: process.env.MAIL_ADDRR,
+				    pass: process.env.MAIL_PASS
+				}
+			}),
+			reset_key = crypto.randomBytes(25).toString('hex');
+
+			transport.sendMail({
+			    from: "kacoulib ✔ <kaoculib@student.42.fr>", // sender address
+			    to: "coulibaly91karim@gmail.com", // list of receivers
+			    subject: "Matcha password reset", // Subject line
+			    html: "<b><a href='http://localhost:3001/pass_reset/"+ reset_key +"'>Link ✔</a></b>" // html body
+			}, function(err, response)
+			{
+			    if(err)
+			        throw err;
+
+			        console.log("Message sent: " + response.message);
 
 
+			    user.reset_pass = reset_key;
+			    user.save((err)=>
+			    {
+			    	if (err)
+			    		throw err;
+
+					res.json({message: 'An email has been sent to you with an link.\nplease follow the link inside it.'});
+			    })
+			    transport.close();
+			});
+		})
+	})
+
+	app.post('/reset_pass', (req, res) =>
+	{
+		if (!req.body.reset_pass)
+			return (res.status(401).json({error: 'User no found'}));
+
+		User.findOne({reset_pass: req.body.reset_pass}, (err, user)=>
+		{
+			if (err)
+				throw err;
+			if (!user)
+				return (res.status(401).json({error: 'User no found'}));
+
+		    user.password = user.generateHash(req.password);
+		    user.reset_pass = null;
+		    user.save((err)=>
+		    {
+		    	if (err)
+		    		throw err;
+
+				res.json({message: 'User password update successfuly.'});
+		    })
+		})
+	})
 
 
 	// =====================================

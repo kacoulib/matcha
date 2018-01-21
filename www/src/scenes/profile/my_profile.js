@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import ucfirst from '../../tools/ucfirst.js';
 import Avatar from '../../components/avatar.js';
 
 
@@ -61,10 +60,5 @@ class MyProfile extends Component
 	    );
 	}
 }
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
 
 export default MyProfile;

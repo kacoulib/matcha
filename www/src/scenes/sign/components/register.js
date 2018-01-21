@@ -5,12 +5,14 @@ import {
   StepLabel,
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 import FirstStep from './steps/first.js';
 import SecondStep from './steps/second.js';
 import ThirdStep from './steps/third.js';
 import axios from 'axios';
 
+import Login from './login.js';
 
 
 /**
@@ -106,55 +108,65 @@ class Register extends React.Component
 
   render() {
     const {finished, stepIndex, is_button_disable} = this.state;
-    const contentStyle = {margin: '0 16px'};
+    const contentStyle = {margin: '0 16px', textAlign: 'center'};
 
     return (
-      <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
-        <Stepper activeStep={stepIndex}>
-          <Step>
-            <StepLabel>Select campaign settings</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Create an ad group</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>Create an ad</StepLabel>
-          </Step>
-        </Stepper>
-        <div style={contentStyle}>
-      
-          {finished ? (
-            <p>
-              {
-
-
-              }
-              <a
-                href="/"
-                onClick={(event) => {
-                  event.preventDefault();
-                  this.setState({stepIndex: 0, finished: false});
-                }}
-              >
-                Click here
-              </a> to reset the example.
-            </p>
-          ) : (
-            <div>
-              {this.getStepContent(stepIndex)}
-              <div style={{marginTop: 12}}>
-                
-                <RaisedButton
-                  label="finished"
-                  style={stepIndex === 2 ? {display: 'block'} : {display: 'none'}}
-                  primary={true}
-                  onClick={this.handleLogin}
-                  disabled={is_button_disable}
-                />
-              </div>
+      <div style={{width: '100%', maxWidth: 700, margin: '20px auto auto'}}>
+        <Tabs>
+          <Tab label='Login'>
+            <div className="steper_container">
+                <Login />
             </div>
-          )}
-        </div>
+
+          </Tab>
+          <Tab label='Register'>
+            <Stepper activeStep={stepIndex}>
+              <Step>
+                <StepLabel>Select campaign settings</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Create an ad group</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Create an ad</StepLabel>
+              </Step>
+            </Stepper>
+            <div style={contentStyle}>
+          
+              {finished ? (
+                <p>
+                  {
+
+
+                  }
+                  <a
+                    href="/"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      this.setState({stepIndex: 0, finished: false});
+                    }}
+                  >
+                    Click here
+                  </a> to reset the example.
+                </p>
+              ) : (
+                <div className="steper_container">
+                  {this.getStepContent(stepIndex)}
+                  <div style={{marginTop: 12}}>
+                    
+                    <RaisedButton
+                      label="finished"
+                      style={stepIndex === 2 ? {display: 'block'} : {display: 'none'}}
+                      primary={true}
+                      onClick={this.handleLogin}
+                      disabled={is_button_disable}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </Tab>
+        </Tabs>
       </div>
     );
   }

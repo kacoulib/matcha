@@ -114,26 +114,26 @@ function Pics(props)
 	const lst = data.map((pic) =>
 	{
 		styles.backgroundImage = pic;
-		return (<li key={data.key + pic} style={styles} ><Link to=''><img src={pic} /></Link></li>);
+		return (<li key={data.key + pic} style={styles} ><Link to=''><img src={pic} alt={data.first + ' picture'} /></Link></li>);
 	});
 
 	return (lst)
 }
 
-function AppendUserRecommendation(props, data)
-{
-	const users = props.users;
-	console.log('1')
-	if (!users.length)
-		return (null);
-	console.log(users)
-	const lst = users.map((user)=>
-	{
-		return <ListItem key={user.email} value={user} />
-	})
+// function AppendUserRecommendation(props, data)
+// {
+// 	const users = props.users;
+// 	console.log('1')
+// 	if (!users.length)
+// 		return (null);
+// 	console.log(users)
+// 	const lst = users.map((user)=>
+// 	{
+// 		return <ListItem key={user.email} value={user} />
+// 	})
 
-	return (lst)
-}
+// 	return (lst);
+// }
 
 
 

@@ -43,10 +43,5 @@ class Header extends Component
 		);
 	}
 }
-				// <div>
-				// 	<ul>
-				// 		<li><Link to='/'>home</Link></li>
-				// 		<li><Link to='/register'>register</Link></li>
-				// 	</ul>
-				// </div>
+
 export default Header;

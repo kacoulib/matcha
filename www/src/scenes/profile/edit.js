@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import ucfirst from '../../tools/ucfirst';
+import EditBasic from './editPartials/basic.js';
+import EditPublic from './editPartials/basic.js';
 
 
 
@@ -13,6 +13,7 @@ class Edit extends Component
 		this.get_current_user = this.get_current_user.bind(this);
 		this.set_input_data = this.set_input_data.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.getComponent = this.getComponent.bind(this);
 
 		this.state =
 		{
@@ -32,7 +33,8 @@ class Edit extends Component
 			viewers : '',
 			new_password : '',
 			_id : '',
-			form_has_been_modified: 0
+			form_has_been_modified: 0,
+			stepIndex : 0
 		}
 	}
 
@@ -43,11 +45,11 @@ class Edit extends Component
 
 	get_current_user()
 	{
-		let data;
 		axios.get('http://localhost:3000/me')
 		.then((res)=>
 		{
-			data = res.data;
+			let data = res.data;
+
 			data.first = res.data.name.first;
 			data.last = res.data.name.last;
 			this.setState(data)
@@ -61,7 +63,7 @@ class Edit extends Component
 		r[data] = e.target.value;
 	    this.setState(r);
 	    if (!this.state.form_has_been_modified)
-	    	this.state.form_has_been_modified = 1;
+	    	this.setState({form_has_been_modified : 1});
 	    console.log(r)
 
 	}
@@ -95,7 +97,6 @@ class Edit extends Component
 		.then(res=>
 		{
 			console.log(res)
-			// this.history.push('/me');
 			console.log(this.context.history)
 		})
 		.catch(error => {
@@ -103,48 +104,62 @@ class Edit extends Component
 		});
 	}
 
+	getComponent()
+	{
+		const parentProp =
+		{
+			set_input_data: this.set_input_data,
+			handleSubmit: this.handleSubmit,
+			data: this.state
+		}
+		console.log(this.state.stepIndex)
+	    switch (this.state.stepIndex){
+	      case 0:
+	        	return <EditBasic {...parentProp} />;
+	      case 1:
+	        return <EditPublic {...parentProp} />;
+	      default:
+	        	return <EditBasic {...parentProp} />;
+		}
+	}
+
 	render()
 	{
-		const user = this.state.data || {},
-			parentProp = { set_input_data: this.set_input_data };
+		const parentProp =
+		{
+			set_input_data: this.set_input_data,
+			handleSubmit: this.handleSubmit,
+			data: this.state
+		},
+		stepIndex = this.state.stepIndex || 0;
 
 	    return (
 	        <div className="Profile">
+	        {this.state.data}
 	        	<div className='white_tab_container'>
-		        	<div className='white_tab'>
-		        		<header>
-		        			<h3>Basic info</h3>
-		        		</header>
-		        		<div className='tab_content' id='edit'>
-		        			<form onSubmit={this.handleSubmit} >
-		        				<InputField  value={this.state.first} name='first' label_text='First name' {...parentProp}/>
-		        				<InputField  value={this.state.last} name='last' label_text='Last name' {...parentProp}/>
-		        				<InputField  value={this.state.email} type='email' name='email' label_text='Email' {...parentProp}/>
-		        				<InputField  value={this.state.new_password} type='password' name='new_password' label_text='password' {...parentProp}/>
-		        				<div className='submit_container'>
-		        					<button className='flat_button'>Save</button>
-		        				</div>
-		        			</form>
-		        		</div>
+	        		
+	        		{
+	        			stepIndex ? 
+	        				<EditBasic {...parentProp} />
+	        			:
+	        				<EditPublic {...parentProp} />
+        			}
+
+		        	<div className='litle_row'>
+			        	<div className='white_tab'>
+			        		<div className='tab_content no_padding'>
+				        		<div className='relative'>
+									<div className='flat_button' onClick={()=>this.setState({stepIndex: 0})}>
+				          				Basic info
+									</div>
+				          		</div>
+			          		</div>
+			        	</div>
 		        	</div>
 		        </div>
 	        </div>
 	    );
 	}
-}
-
-const InputField = (props) =>
-{
-	const name = props.name,
-		type = props.type || 'text',
-		value = name == 'email' ? props.value : ucfirst(props.value);
-
-	return (
-		<div className='clear_fix'>
-			<label htmlFor={name}>{props.label_text}:</label>
-			<input name={name} id={name} type={type} value={value} onChange={props.set_input_data.bind(this, name)} />
-		</div>
-	)
 }
 
 export default Edit;

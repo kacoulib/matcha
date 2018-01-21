@@ -112,6 +112,14 @@ header .avatar img
 	width: 20px;
 
 }
+.steper_container > div
+{
+	text-align: center;
+}
+.steper_container h3
+{
+	margin-bottom: 20px;
+}
 #edit label
 {
 	color: #656565;
@@ -122,12 +130,18 @@ header .avatar img
 	float: left;
 	text-align: right;
 }
-#edit input
+#edit input,
+#edit textarea
 {
 	float: left;
     height: 30px;
     width: 300px;padding: 5px 9px 7px;
     box-sizing: border-box;
+}
+#edit textarea
+{
+	min-height: 150px;
+	border-color: rgb(204, 204, 204);
 }
 #edit form > div
 {
@@ -137,6 +151,52 @@ header .avatar img
 {
 	padding-bottom: 0;
 }
+#edit .edit_pics
+{
+	margin-top: 20px;
+	text-align: center;
+}
+#edit .edit_pics li
+{
+	position: relative;
+	width: 60px;
+	display: inline-block;
+	padding-right: 10px;
+}
+#edit .edit_pics li input[type=file]
+{
+	font-size: 100px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+
+#edit .edit_pics li:last-child
+{
+	padding-right: 0;
+}
+
+#edit .edit_pics li > span
+{
+	position: absolute;
+	width: 20px;
+	height: 18px;
+	text-align: center;
+	border-radius: 100%;
+	top: -10px;
+	right: calc(50% - 10px);
+	background-color: #e1e7ed;
+}
+#edit .edit_pics li > span:hover
+{
+	background-color: #e1e7ed69;
+	cursor: pointer;
+}
+
 #edit .submit_container
 {
 	display: inline-block;
@@ -151,7 +211,10 @@ header .avatar img
 	padding-left: 32px;
 	padding-right: 32px;
 }
-
+.white_tab .tab_content.no_padding
+{
+	padding: 0;
+}
 a{
 	text-decoration: none;
     cursor: pointer;

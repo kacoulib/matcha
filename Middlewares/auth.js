@@ -34,7 +34,6 @@ module.exports = function (passport)
 	},
 	function(req, email, password, next)
 	{
-		console.log(req.user)
 		User.findOne({ 'email': email}, function(err, user)
 		{
 				console.log('0')
@@ -46,17 +45,18 @@ module.exports = function (passport)
 				return next(null, false, { message: 'Incorrect email.' });
 				console.log('2')
 				
-				console.log('3')
+				console.log(password)
 			if (!user.validPassword(password))
 				return next(null, false, 'Oops! Wrong password.');
+				console.log('4')
 
 			req.logIn(user, function (err)
 			{
 				if (err)
 					return next(err);
 				console.log('User login succefully');
-				console.log(req.session);
-				console.log(user);
+				// console.log(req.session);
+				// console.log(user);
 				console.log('-------------');
 				return next(null, user);
 			})

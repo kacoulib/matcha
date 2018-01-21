@@ -1,4 +1,4 @@
 module.exports = function ucfirst(s)
 {
-  return s.charAt(0).toUpperCase() + s.substr(1);
+  return s ? s.charAt(0).toUpperCase() + s.substr(1) : s;
 };

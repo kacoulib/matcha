@@ -94,7 +94,12 @@ userSchema 	= new Schema(
 	},
 	viewers: [String],
 	likers: [String],
-	 score: [Number]
+	score: [Number],
+	reset_pass:
+	{
+		type : String,
+		default: null
+	}
 });
 
 userSchema.index({location : '2dsphere'});
