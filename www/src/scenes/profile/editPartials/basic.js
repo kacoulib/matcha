@@ -24,16 +24,16 @@ class EditBasic extends Component
 		console.log('remove')
 	}
 
-	add_pic(data, e)
+	add_pic(index, e)
 	{
 		let pic = e.target.files;
 
 		if (pic.length === 0)
 			return ;
-		// this.setState({data})
-		console.log(data)
-		console.log(e)
-		this.props.set_upload_picture(data, pic)
+		// this.setState({index})
+		console.log('index = '+index)
+		console.log('data = '+e)
+		this.props.set_upload_picture(index, pic)
 	}
 
 	render()
@@ -76,22 +76,22 @@ class EditBasic extends Component
 								<li>
 									{pictures[1] ? <span onClick={this.props.remove_pic}>x</span> : ''}
 									<img src={pictures[1] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 0)}/>
+									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 1)}/>
 								</li>
 								<li>
 									{pictures[2] ? <span onClick={this.props.remove_pic}>x</span> : ''}
 									<img src={pictures[2] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 0)}/>
+									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 2)}/>
 								</li>
 								<li>
 									{pictures[3] ? <span onClick={this.props.remove_pic}>x</span> : ''}
 									<img src={pictures[3] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 0)}/>
+									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 3)}/>
 								</li>
 								<li>
 									{pictures[4] ? <span onClick={this.props.remove_pic}>x</span> : ''}
 									<img src={pictures[4] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 0)}/>
+									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 4)}/>
 								</li>
 							</ul>
 						</div>

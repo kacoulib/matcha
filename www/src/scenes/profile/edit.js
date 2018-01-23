@@ -71,7 +71,7 @@ class Edit extends Component
 	set_upload_picture(index, files)
 	{
 		var reader = new FileReader(),
-			file = files[index],
+			file = files[0],
 			data = this.state.pictures,
 			that = this;
 
@@ -81,7 +81,7 @@ class Edit extends Component
 			// console.log(data[index])
 			// console.log(e.target.result, index)
 			that.setState({pictures: data})
-			console.log(that.state)
+			console.log(index)
 		// $('#blah').attr('file', e.target.result);
 		}
 		// console.log(file)

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '../../components/avatar.js';
+import Ucfirst from '../../tools/ucfirst.js';
+import Pics from '../../components/pics.js';
 
 
 
@@ -11,16 +13,36 @@ class OtherProfile extends Component
   	{
 	    super(props);
 		this.get_current_user = this.get_current_user.bind(this);
+		this.open_direct_message = this.open_direct_message.bind(this);
 
-		this.state = {
-			data: []
+		this.state =
+		{
+			name: {},
+			age : '',
+			email : '',
+			gender : '',
+			likers : '',
+			location : '',
+			orientation : '',
+			password : '',
+			pictures : '',
+			profil_picture : '',
+			status : '',
+			tags : '',
+			viewers : '',
+			_id : '',
 		}
 	}
 
 	componentDidMount()
 	{
 		this.get_current_user();
-		console.log(this.props.match.params.id)
+	}
+
+	open_direct_message(e)
+	{
+		console.log(e)
+		e.preventDefault();
 	}
 
 	get_current_user()
@@ -33,28 +55,58 @@ class OtherProfile extends Component
 		axios.get('http://localhost:3000/user/'+user_id)
 		.then((res)=>
 		{
-			this.setState({data: res.data})
+			this.setState(res.data)
 		})
 	}
 
 	render()
 	{
-		const user_profil_picture = this.state.data.profil_picture;
+		const {profil_picture, pictures, email, age} = this.state,
+			full_name = Ucfirst(this.state.name.first) + ' '+ Ucfirst(this.state.name.last),
+			date_format = new Date(age),
+			age_val = date_format.toLocaleDateString('en-EN', {day: 'numeric', month: 'long' });
+
 	    return (
 	        <div className="Profile">
 	        	<div className='white_tab_container'>
 		        	<div className='litle_row'>
-			        	<div className='white_tab'>
+			        	<div className='white_tab with_padding'>
 			        		<div className='relative'>
-			          			<Avatar data={{avatar: user_profil_picture}} />
-			          			<Link to='' className='flat_button'>
-			          				Edit
-			          			</Link>
+			          			<Avatar data={{avatar: profil_picture}} />
+			          			<div className='flat_button bg_blue'  onClick={this.open_direct_message}>
+			          				Message
+			          			</div>
 			          		</div>
 			        	</div>
 		        	</div>
-		        	<div className='white_tab'>
-		          		my profile
+		        	<div className='middle_row'>
+		        		<div className='tab_content'>
+			        		<header>
+			          			{full_name}
+			        		</header>
+			        		<div>
+			        			<ul className='other_info_basic'>
+			        				<li className='clear_fix'>
+				        					<span>Birthday:</span>
+				        					<span>{age_val}</span>
+			        				</li>
+			        				<li className='clear_fix'>
+				        					<span>Birthday:</span>
+				        					<span>toto</span>
+			        				</li>
+			        			</ul>
+			        		</div>
+			        		<footer>
+			          			my profile
+			        		</footer>
+		        		</div>
+			        	
+			        	<div className='tab_content'>
+		          			<span>{Ucfirst(this.state.name.first)} pictures <span className='gray_color'>{this.state.pictures.length}</span></span>
+							<ul className='pic_list'>
+								<Pics data={{data: pictures, key: email}} />
+							</ul>
+			        	</div>
 		        	</div>
 		        </div>
 	        </div>

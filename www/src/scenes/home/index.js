@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ucfirst from '../../tools/ucfirst.js';
 import Avatar from '../../components/avatar.js';
+import Pics from '../../components/pics.js';
 
 
 class Home extends Component
@@ -94,30 +95,6 @@ function Info(props)
 			<h4>{ucfirst(props.data.address)}</h4>
 		</div>
 	);
-}
-
-function Pics(props)
-{
-	const data = props.data.data,
-	styles =
-	{
-		position: 'relative',
-		display: 'inline-block',
-		borderRadius: 100,
-		height: 123,
-		width: 123,
-		backgroundSize: 'cover',
-		backgroundRepeat: 'no-repeat',
-		backgroundPosition: '50% 50%'
-	};
-
-	const lst = data.map((pic) =>
-	{
-		styles.backgroundImage = pic;
-		return (<li key={data.key + pic} style={styles} ><Link to=''><img src={pic} alt={data.first + ' picture'} /></Link></li>);
-	});
-
-	return (lst)
 }
 
 // function AppendUserRecommendation(props, data)

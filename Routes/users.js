@@ -2,7 +2,9 @@
 
 const User = require('../Models/user.js'),
 	nodemailer = require('nodemailer'),
-	crypto		= require('crypto');
+	crypto		= require('crypto'),
+	multer  = require('multer'),
+	upload = multer({dest: './'});
 
 
 function isAuthenticated(req,res,next)
@@ -29,10 +31,11 @@ module.exports = function (app, passport)
 			
 		})
 	})
-	.put('/me/:id', (req, res, next) =>
+	.put('/me/:id', upload.array('pictures'), (req, res, next) =>
 	{
 		const client_data = req.body;
-
+		console.log(req.file)
+		console.log(req.body)
 		User.findById(req.params.id, (err, user) =>
 		{
 			if (err)
@@ -48,12 +51,6 @@ module.exports = function (app, passport)
 			user.bio 			=	client_data.bio			|| user.bio;
 			user.email 			=	client_data.email			|| user.email;
 
-			if (client_data.new_password.length != 0)
-			{
-				if (client_data.new_password.length < 3)
-					return (res.status(401).json({error: 'Password not valid'}));
-				user.password = user.generateHash(client_data.new_password)
-			}
 			user.save((err) =>
 			{
 				if (err)
