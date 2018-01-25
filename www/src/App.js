@@ -1,14 +1,77 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import io from 'socket.io-client';
+import axios from 'axios';
 
 import './App.css';
 import Header from './partials/header.js';
 import Main from './partials/main.js';
 import Aside from './partials/aside.js';
+import Footer from './partials/footer.js';
+
 
 class App extends Component
 {
-  render() {
+  constructor(props)
+  {
+    super();
+
+    this.open_new_direct_message = this.open_new_direct_message.bind(this);
+    this.close_direct_message = this.close_direct_message.bind(this);
+    this.get_current_user = this.get_current_user.bind(this);
+
+    this.state =
+    {
+      current_user: {},
+      direct_message_friend: {},
+      direct_message_is_open: false
+    }
+  }
+
+
+  get_current_user()
+  {
+    axios.get('http://localhost:3000/me')
+    .then((res)=>
+    {
+      this.setState({data: res.data})
+      console.log(res.data)
+    })
+  }
+
+  close_direct_message(friend)
+  {
+    this.setState({direct_message_is_open: false})
+  }
+
+  open_new_direct_message(friend)
+  {
+    if (!friend._id)
+      return;
+    this.setState({direct_message_friend: friend, direct_message_is_open: true});
+  }
+
+  componentWillMount()
+  {
+    var socket = io('http://localhost:3000/');
+    socket.emit('newMessage', function(){
+      console.log('socket connected')
+    });
+  }
+
+  render()
+  {
+    const appProps={
+      open_new_direct_message: this.open_new_direct_message,
+      current_user: this.current_user
+    },
+
+    directMessageProps={
+      direct_message_friend: this.state.direct_message_friend,
+      close_direct_message: this.close_direct_message,
+      direct_message_is_open: this.state.direct_message_is_open
+    };
+
     return (
        <MuiThemeProvider>
         <div>
@@ -20,9 +83,12 @@ class App extends Component
             </div>
 
             <div id="main">
-              <Main />
+              <Main {...appProps} />
             </div>
           </div>
+
+          <Footer {...directMessageProps}/>
+
 
           <a href='https://vk.com/feed' target='_blank' rel="noopener noreferrer">Maquette VK</a>
         </div>

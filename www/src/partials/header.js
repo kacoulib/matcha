@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import Avatar from '../components/avatar.js';
+import io from 'socket.io-client';
 
 
 
@@ -13,6 +14,12 @@ class Header extends Component
 
 		this.state =
 		{};
+
+		var socket = io.connect('http://localhost:3000/');
+		socket.on('connect', function()
+		{
+			console.log('socket connected')
+		});
 	}
 
 	render()

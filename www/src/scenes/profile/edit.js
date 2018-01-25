@@ -78,13 +78,8 @@ class Edit extends Component
 		reader.onload = function(e)
 		{
 			data[index] = e.target.result;
-			// console.log(data[index])
-			// console.log(e.target.result, index)
-			that.setState({pictures: data})
-			console.log(index)
-		// $('#blah').attr('file', e.target.result);
+			that.setState({pictures: data}, ()=>console.log(that.state))
 		}
-		// console.log(file)
 		reader.readAsDataURL(file);
 
 		return (console.log(index, file))

@@ -11,15 +11,18 @@ import OtherProfile from '../scenes/profile/other_profile.js';
 
 class main extends Component
 {
+
 	render()
 	{
+		const appProps = this.props;
+
 	    return (
 	        <div className="main">
 				<Switch>
-					<Route exact path='/' component={Home}/>
+					<Route exact path='/' render={(props) => (<Home {...props} appProps={appProps}/>)} />
 					<Route path='/me' component={MyProfile}/>
-					<Route path='/user/:id' component={OtherProfile}/>
-					<Route path='/edit' component={Edit}/>
+					<Route path='/user/:id' render={(props) => (<OtherProfile {...props} appProps={appProps}/>)} />
+					<Route path='/edit' render={(props) => (<Edit {...props} appProps={appProps}/>)} />
 					<Route path='/pass_reset/:id' component={ResetPass}/>
 					<Route exact path='/register' component={Login}/>
 					<Route  path='*' component={NotFound}/>

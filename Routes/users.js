@@ -19,6 +19,20 @@ module.exports = function (app, passport)
 {
 	// =====================================
 	// HOME PAGE (with login links) ========
+
+	// =====================================
+	app.get('/test', (req, res) =>
+	{
+		let r;
+
+		if (req.session.user)
+			r = req.session.user.name.first + ' already set';
+		else
+			r = 'session user not set';
+		console.log(r)
+		res.send(r);
+			
+	})
 	// =====================================
 	app.get(['/', '/me'], (req, res) =>
 	{
@@ -26,13 +40,22 @@ module.exports = function (app, passport)
 		{
 			if (err)
 				throw err;
-		
+			if (req.session.user)
+				console.log(req.session.user.name.first + ' already set')
+			else
+				// console.log('user not set')
+			{
+				req.session.user = user;
+				console.log(req.session.user.name.first + ' set')
+			}
+				// console.log(req.session)
 			res.send(user);
 			
 		})
 	})
-	.put('/me/:id', upload.array('pictures'), (req, res, next) =>
+	.put('/me/:id', (req, res, next) =>
 	{
+		upload.array('pictures')
 		const client_data = req.body;
 		console.log(req.file)
 		console.log(req.body)
@@ -144,14 +167,13 @@ module.exports = function (app, passport)
 			 {
 	        	console.log("already signin");
 
-	        	console.log(err)
-				console.log(user)
+				// console.log(req.session)
 			}
 			else
 			{
-				req.session.user = user;
-	        	console.log("now signin");
+	        	console.log('user ' +user.name.first + " signin");
 			}
+			// console.log(req.session)
         	res.send('user login successfuly')
 		})(req, res, next);
 	})
@@ -162,8 +184,11 @@ module.exports = function (app, passport)
 	// =====================================
 	app.get('/logout', function(req, res)
 	{
+		console.log((req.session.user ? req.session.user.name.first : '...') + ' logout')
+		delete req.session.user;
 		req.logout();
-		res.redirect('/');
+		// res.redirect('/');
+		res.send('user logout successfuly');
 	});
 
 	app.post('/send_password_reset_mail', (req, res) =>

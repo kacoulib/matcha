@@ -41,10 +41,8 @@ class EditBasic extends Component
 		const user = this.props.data || {},
 			parentProp = { set_input_data: this.props.set_input_data },
 			// default_tags = ['bio', 'geek', 'piercing'],
-			pictures = user ? user.pictures : [],
-			pictureProp = { add_pic: this.add_pic, remove_pic: this.remove_pic, user: user };
+			pictures = user ? user.pictures : [];
 
-			console.log(this.props)
 	    return (
 			<div className='white_tab'>
 				<header>
@@ -68,31 +66,17 @@ class EditBasic extends Component
 								<label htmlFor='tags'>Pictures:</label>
 							</div>
 							<ul className='edit_pics'>
-								<li>
-									{pictures[0] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-									<img src={pictures[0] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 0)}/>
-								</li>
-								<li>
-									{pictures[1] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-									<img src={pictures[1] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 1)}/>
-								</li>
-								<li>
-									{pictures[2] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-									<img src={pictures[2] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 2)}/>
-								</li>
-								<li>
-									{pictures[3] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-									<img src={pictures[3] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 3)}/>
-								</li>
-								<li>
-									{pictures[4] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-									<img src={pictures[4] || '/img/sprites/camera_50.png'} alt="" />
-									<input type="file" name="myfile" onChange={this.add_pic.bind(this, 4)}/>
-								</li>
+								{[0, 1, 2, 3, 4].map((elem, i)=>{
+									return (
+										<li key={i}>
+											{pictures[i] ? <span onClick={this.props.remove_pic}>x</span> : ''}
+											<img src={pictures[i] || '/img/sprites/camera_50.png'} alt="" />
+											<input type="file" name="myfile" onChange={this.add_pic.bind(this, i)}/>
+										</li>
+									)
+								})}
+
+
 							</ul>
 						</div>
 
@@ -105,62 +89,98 @@ class EditBasic extends Component
 	    );
 	}
 }
+								// <li>
+								// 	{pictures[1] ? <span onClick={this.props.remove_pic}>x</span> : ''}
+								// 	<img src={pictures[1] || '/img/sprites/camera_50.png'} alt="" />
+								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 1)}/>
+								// </li>
+								// <li>
+								// 	{pictures[2] ? <span onClick={this.props.remove_pic}>x</span> : ''}
+								// 	<img src={pictures[2] || '/img/sprites/camera_50.png'} alt="" />
+								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 2)}/>
+								// </li>
+								// <li>
+								// 	{pictures[3] ? <span onClick={this.props.remove_pic}>x</span> : ''}
+								// 	<img src={pictures[3] || '/img/sprites/camera_50.png'} alt="" />
+								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 3)}/>
+								// </li>
+								// <li>
+								// 	{pictures[4] ? <span onClick={this.props.remove_pic}>x</span> : ''}
+								// 	<img src={pictures[4] || '/img/sprites/camera_50.png'} alt="" />
+								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 4)}/>
+								// </li>
 
 								// <Pic src={pictures[0]} {...pictureProp}/>
 								// <Pic src={pictures[1]} {...pictureProp}/>
 								// <Pic src={pictures[2]} {...pictureProp}/>
 								// <Pic src={pictures[3]} {...pictureProp}/>
 								// <Pic src={pictures[4]} {...pictureProp}/>
-class Pic extends Component
-{
-	constructor(props)
-  	{
-	    super(props);
+// class Pic extends Component
+// {
+// 	constructor(props)
+//   	{
+// 		this.state = 
+// 		{
+// 			src: '',
+// 			is_set: false
+// 		}
+// 	}
 
-		this.append_image = this.append_image.bind(this);
+// 	return ();
+// }
 
-		this.state = 
-		{
-			src: '',
-			is_set: false
-		}
-	}
 
-	componentDidMount()
-	{
-		console.log(this.props.src)
-		this.setState({src: this.props.src})
-	}
 
-	append_image(e)
-	{
-		const input = e.target;
+// class Pic extends Component
+// {
+// 	constructor(props)
+//   	{
+// 	    super(props);
 
-		if (input.files && input.files[0])
-		{
-			var reader = new FileReader();
+// 		this.append_image = this.append_image.bind(this);
 
-			reader.onload = function(e)
-			{
-				// $('#blah').attr('src', e.target.result);
-			}
-			reader.readAsDataURL(input.files[0]);
-		}
-	}
+// 		this.state = 
+// 		{
+// 			src: '',
+// 			is_set: false
+// 		}
+// 	}
 
-	render ()
-	{
-		const exist = this.props.src ? true : false,
-			src = this.props.src  || '/img/sprites/camera_50.png';
+// 	componentDidMount()
+// 	{
+// 		console.log(this.props.src)
+// 		this.setState({src: this.props.src})
+// 	}
 
-			if (exist && !this.state.is_set)
-				this.setState({src: this.props.src, is_set: true})
-		// console.log(this.state.src)
-		if (exist)
-			return (<li><img src={src} alt={this.props.user.first + ' picture'} /><span onClick={this.props.remove_pic}>x</span></li>);
-		return (<li><img src={src} alt={this.props.user.first + ' picture'} /><input type="file" name="myfile" onChange={this.append_image}/></li>);
-	}
-}
+// 	append_image(e)
+// 	{
+// 		const input = e.target;
+
+// 		if (input.files && input.files[0])
+// 		{
+// 			var reader = new FileReader();
+
+// 			reader.onload = function(e)
+// 			{
+// 				// $('#blah').attr('src', e.target.result);
+// 			}
+// 			reader.readAsDataURL(input.files[0]);
+// 		}
+// 	}
+
+// 	render ()
+// 	{
+// 		const exist = this.props.src ? true : false,
+// 			src = this.props.src  || '/img/sprites/camera_50.png';
+
+// 			if (exist && !this.state.is_set)
+// 				this.setState({src: this.props.src, is_set: true})
+// 		// console.log(this.state.src)
+// 		if (exist)
+// 			return (<li><img src={src} alt={this.props.user.first + ' picture'} /><span onClick={this.props.remove_pic}>x</span></li>);
+// 		return (<li><img src={src} alt={this.props.user.first + ' picture'} /><input type="file" name="myfile" onChange={this.append_image}/></li>);
+// 	}
+// }
 
 
 function Tags(props)

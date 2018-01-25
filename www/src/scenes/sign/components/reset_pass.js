@@ -33,15 +33,14 @@ class ResetPass extends Component
 	dataChange(data, e)
 	{
 		let r = {},
-		password = this.state.password,
-		confirm_password = this.state.confirm_password;
+		{password, confirm_password} = this.state;
 
 		r[data] =  e.target.value;
 		console.log(this)
 		this.setState(r, ()=>
 		{
-			if (this.state.password.length > 2  && this.state.confirm_password.length > 2 )
-				if (this.state.password === this.state.confirm_password)
+			if (password.length > 2  && confirm_password.length > 2 )
+				if (password === confirm_password)
 					return this.setState({is_valid: false});
 			return this.setState({is_valid: true});
 		});

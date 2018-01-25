@@ -9,7 +9,7 @@ const	express			= require('express'),
 		mongoose		= require('mongoose'),
 		passport		= require('passport'),
 		server			= require('http').createServer(app),
-		socket			= require('socket.io')(server),
+		io				= require('socket.io')(server),
 		database		= require('./Models/database.js');
 
 
@@ -35,19 +35,19 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
 // required for passport
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(session(
 {
 	secret: 'theMatchaSuperSessionSESSid0rNot',
-	resave: true,
+	resave: false,
 	saveUninitialized: true,
 	cookie:
 	{
 		secure: false,
-		maxAge: 600000
+		maxAge: 1000 * 60 * 60 * 24
 	}
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // let faker = require('faker');
@@ -88,18 +88,17 @@ require('./Routes/users.js')(app, passport);
 
 
 // // Messaging ======================================================================
-// socket.on('connection', function(data)
-// {
-// 	// Sending message after bein connect
-// 	socket.emit('message', {message: 'ok'})
 
-// 	socket.on('newMessage', function(data)
-// 	{
-// 		console.log('messageSended')
-// 	})
+io.on('connect', function (socket)
+{
+	// Sending message after bein connect
 
-// });
+	socket.on('newMessage', function(data)
+	{
+		socket.emit('message', {user_name: 'user 2', text: 'ok'})
+	})
+});
 
 
 // Launch ======================================================================
-app.listen(3000, () => console.log('listening 3000'))
+server.listen(3000, () => console.log('listening 3000'))

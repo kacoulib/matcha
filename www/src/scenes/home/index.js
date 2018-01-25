@@ -34,18 +34,19 @@ class Home extends Component
 
 	render()
 	{
-		let data = this.state.recommendation;
+		let data = this.state.recommendation,
+			pictures_len = data.pictures && data.pictures.length ? true : false;
+
 		return (		
 			<div className='white_tab_container'>
 				<div className='white_tab'>
 					<div className='tab_content'>
-						<ul className='recommendation_ul'>
+						<ul className={pictures_len ? 'recommendation_ul': ''}>
 							{	data.map((data)=>
 								{
 									return (
-										<ListItem key={data.email} user={data} />
+										<ListItem key={data.email} user={data} appProps={this.props.appProps}/>
 									);
-										
 								})
 							}
 						</ul>
@@ -76,7 +77,7 @@ function ListItem(props)
 	 				<Avatar data={{avatar: user.profil_picture, styles: styles.avatar}} />
 	 			</Link>
  				<Info data={info} />
- 				<button className='right'><span className='add_icon'></span><span>Subscribe</span></button>
+ 				<button className='right' onClick={(e)=>{props.appProps.open_new_direct_message(user)}}><span className='add_icon'></span><span>Subscribe</span></button>
 	 		</div>
 	 		<div className='feed_user_pics'>
 	 			<ul>
@@ -96,22 +97,6 @@ function Info(props)
 		</div>
 	);
 }
-
-// function AppendUserRecommendation(props, data)
-// {
-// 	const users = props.users;
-// 	console.log('1')
-// 	if (!users.length)
-// 		return (null);
-// 	console.log(users)
-// 	const lst = users.map((user)=>
-// 	{
-// 		return <ListItem key={user.email} value={user} />
-// 	})
-
-// 	return (lst);
-// }
-
 
 
 export default Home;
