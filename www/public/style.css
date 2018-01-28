@@ -75,7 +75,12 @@ header .avatar img
 {
 	border-radius: 14px;
 }
-
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
 #top_search input:focus
 {
     background-color: #fff;
@@ -136,12 +141,14 @@ header .avatar img
 {
 	float: left;
     height: 30px;
-    width: 300px;padding: 5px 9px 7px;
+    width: 300px;
+    padding: 5px 9px 7px;
     box-sizing: border-box;
 }
 #edit textarea
 {
 	min-height: 150px;
+	max-width: 300px;
 	border-color: rgb(204, 204, 204);
 }
 #edit form > div

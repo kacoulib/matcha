@@ -12,7 +12,7 @@ const	express			= require('express'),
 		io				= require('socket.io')(server),
 		database		= require('./Models/database.js');
 
-
+// console.log(mysql)
 
 // configuration ===============================================================
 
@@ -22,7 +22,7 @@ require('./Middlewares/auth.js')(passport);
 
 app.use((req, res,next)=>
 {
-	res.setHeader('Access-Control-Allow-Origin',  'http://localhost:3001');
+	res.setHeader('Access-Control-Allow-Origin',  'http://10.12.8.20:3001');
 	res.header('Access-Control-Allow-Credentials', true);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

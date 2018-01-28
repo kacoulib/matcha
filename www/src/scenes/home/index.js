@@ -77,7 +77,7 @@ function ListItem(props)
 	 				<Avatar data={{avatar: user.profil_picture, styles: styles.avatar}} />
 	 			</Link>
  				<Info data={info} />
- 				<button className='right' onClick={(e)=>{props.appProps.open_new_direct_message(user)}}><span className='add_icon'></span><span>Subscribe</span></button>
+ 				<button className='right' onClick={(e)=>{props.appProps.open_new_direct_message(user)}}><span className='add_icon'></span><span>Message</span></button>
 	 		</div>
 	 		<div className='feed_user_pics'>
 	 			<ul>
