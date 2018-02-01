@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import EditBasic from './editPartials/basic.js';
 import EditPublic from './editPartials/basic.js';
@@ -15,6 +16,7 @@ class Edit extends Component
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.getComponent = this.getComponent.bind(this);
 		this.set_upload_picture = this.set_upload_picture.bind(this);
+		this.toggle_tags = this.toggle_tags.bind(this);
 
 		this.state =
 		{
@@ -23,15 +25,15 @@ class Edit extends Component
 			age : '',
 			email : '',
 			gender : '',
-			likers : '',
+			likers : [],
 			location : '',
 			orientation : '',
 			password : '',
-			pictures : '',
+			pictures : [],
 			profil_picture : '',
 			status : '',
-			tags : '',
-			viewers : '',
+			tags : [],
+			viewers : [],
 			_id : '',
 			form_has_been_modified: 0,
 			stepIndex : 0
@@ -54,6 +56,22 @@ class Edit extends Component
 			data.last = res.data.name.last;
 			this.setState(data)
 		})
+	}
+
+	toggle_tags(name)
+	{
+		let	tmp = this.state.tags,
+			index = tmp.indexOf(name);
+
+		if (!name)
+			return ;
+
+		if (index < 0)
+			tmp.push(name)
+		else
+			tmp.splice(index, 1);
+		
+		this.setState({tags: tmp});
 	}
 
 	set_input_data(data, e)
@@ -128,9 +146,9 @@ class Edit extends Component
 			set_input_data: this.set_input_data,
 			handleSubmit: this.handleSubmit,
 			set_upload_picture: this.set_upload_picture,
-			data: this.state
+			data: this.state,
+			toggle_tags: this.toggle_tags
 		}
-		console.log(this.state.stepIndex)
 	    switch (this.state.stepIndex){
 	      case 0:
 	        	return <EditBasic {...parentProp} />;
@@ -148,7 +166,8 @@ class Edit extends Component
 			set_input_data: this.set_input_data,
 			handleSubmit: this.handleSubmit,
 			set_upload_picture: this.set_upload_picture,
-			data: this.state
+			data: this.state,
+			toggle_tags: this.toggle_tags
 		},
 		stepIndex = this.state.stepIndex || 0;
 
@@ -170,6 +189,9 @@ class Edit extends Component
 				        		<div className='relative'>
 									<div className='flat_button' onClick={()=>this.setState({stepIndex: 0})}>
 				          				Basic info
+									</div>
+									<div className='flat_button' onClick={()=>this.setState({stepIndex: 0})}>
+				          				<Link to='/register?reset_pass'>Reset password</Link>
 									</div>
 				          		</div>
 			          		</div>

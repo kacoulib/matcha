@@ -40,10 +40,13 @@ class Header extends Component
 						<span></span>
 		           	</div>
 
-					<div id='top_profile' className='right header_hover'>
+					<div id='top_profile' className='right header_hover menu'>
 						<span>kacoulib</span>
 						<Avatar />
 						<span className='top_profile_arrow'></span>
+						<ul className='sub_menu blue_btn'>
+							<Link to='/logout'>Logout</Link>
+						</ul>
 					</div>
 				</div>
 	        </header>

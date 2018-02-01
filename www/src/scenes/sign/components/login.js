@@ -17,6 +17,7 @@ class Login extends Component
     	this.dataChange = this.dataChange.bind(this);
     	this.dataChange = this.dataChange.bind(this);
     	this.handleValid = this.handleValid.bind(this);
+    	this.update_user_address = this.update_user_address.bind(this);
 
 
 		this.state =
@@ -26,7 +27,14 @@ class Login extends Component
 
 			reset_pass: false,
 			finished: true,
+			user_address: ''
 		}
+	}
+
+	update_user_address(e)
+	{
+
+		console.log(e.target.value)
 	}
 
 	dataChange(data, e)
@@ -70,6 +78,13 @@ class Login extends Component
 		}));
 	}
 
+
+  componentWillMount()
+  {
+    if (window.location.search.indexOf('reset_pass') >= 0)
+      this.setState({reset_pass: true})
+  }
+
 	render()
 	{
     	const style = { marginLeft: 20 },
@@ -89,6 +104,7 @@ class Login extends Component
 					<TextField hintText="Password" style={style} underlineShow={false}  type="password"
 					onChange={this.dataChange.bind(this, "password")}
 					/>
+
 				}
 				<Divider />
 				</Paper>
@@ -98,7 +114,7 @@ class Login extends Component
 						style={{marginTop: 12, marginBottom: 12, width: '100%'}}
 						onClick={this.handleValid}
 					/>
-
+				<Divider />
 				<Checkbox
 					label="Reset password"
 					style={{textAlign: 'left'}}

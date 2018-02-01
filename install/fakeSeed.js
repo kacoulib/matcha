@@ -175,8 +175,6 @@ function add_new_location( user_id)
 
 
 // add_new_user()
-// add_new_tag('piercing')
-// add_new_tag('vegan')
-add_new_tag('programming')
+// add_new_tag('hangout')
 
 // console.log(add_new_location(1))

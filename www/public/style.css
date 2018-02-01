@@ -19,6 +19,11 @@ body
     font-size: 12.5px;
 }
 
+a
+{
+	display: inline-block;
+}
+
 header > div
 {
 	width: 960px;
@@ -87,6 +92,27 @@ button:focus {
     color: #000;
     outline-width: 0;
     outline: none;
+}
+
+#top_profile
+{
+	cursor: pointer!important;
+}
+
+.menu
+{
+	position:  relative;
+}
+.menu:hover > .sub_menu
+{
+	display: block;
+	padding: 1em;
+}
+.sub_menu
+{
+	position: absolute;
+	display: none;
+	bottom: -2.5em;
 }
 
 #top_profile > span
@@ -341,8 +367,26 @@ img
 	border: 1px solid #c6e0ff;
 	word-break: break-word;
 }
-
+.edit_header
+{
+	display: block;
+	background: #fafbfc;
+	padding: 0 20px;
+	height: 54px;
+	line-height: 54px;
+	border-bottom: 1px solid #e7e8ec;
+	border-radius: 2px 2px 0 0;
+	font-size: 16px;
+	outline: none;
+	color: #000;
+}
 /* OTHERS */
+
+.blue_btn a
+{
+	white-space: nowrap;
+	color: #2a5885;
+}
 
 .app-logo
 {

@@ -14,10 +14,10 @@ class EditBasic extends Component
 		this.remove_pic = this.remove_pic.bind(this);
 
 		this.state = {
-			data: []
+			data: [],
+			default_tags: ['bio', 'geek', 'hangout', 'piercing', 'programming', 'vegan']
 		}
 	}
-
 
 	remove_pic()
 	{
@@ -40,12 +40,12 @@ class EditBasic extends Component
 	{
 		const user = this.props.data || {},
 			parentProp = { set_input_data: this.props.set_input_data },
-			// default_tags = ['bio', 'geek', 'piercing'],
+			tagProp = {user_tags: user.tags, toggle_tags: this.props.toggle_tags},
 			pictures = user ? user.pictures : [];
 
 	    return (
 			<div className='white_tab'>
-				<header>
+				<header className='edit_header'>
 					<h3>Basic info</h3>
 				</header>
 				<div className='tab_content' id='edit'>
@@ -58,8 +58,13 @@ class EditBasic extends Component
 							<textarea  id='bio' value={user.bio} onChange={parentProp.set_input_data.bind(this, 'bio')} />
 						</div>
 						<div className='clear_fix'>
-							<label htmlFor='tags'>tags:</label>
-							<Tags/>
+							<label htmlFor='tags'>Tags:</label>
+							<div className="left" style={{width: 300}}>
+								{this.state.default_tags.map((elem, i)=>
+								{
+									return (<Tags key={i} {...tagProp} name={elem}/>)
+								})}
+							</div>
 						</div>
 						<div>
 							<div className='clear_fix'>
@@ -89,103 +94,14 @@ class EditBasic extends Component
 	    );
 	}
 }
-								// <li>
-								// 	{pictures[1] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-								// 	<img src={pictures[1] || '/img/sprites/camera_50.png'} alt="" />
-								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 1)}/>
-								// </li>
-								// <li>
-								// 	{pictures[2] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-								// 	<img src={pictures[2] || '/img/sprites/camera_50.png'} alt="" />
-								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 2)}/>
-								// </li>
-								// <li>
-								// 	{pictures[3] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-								// 	<img src={pictures[3] || '/img/sprites/camera_50.png'} alt="" />
-								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 3)}/>
-								// </li>
-								// <li>
-								// 	{pictures[4] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-								// 	<img src={pictures[4] || '/img/sprites/camera_50.png'} alt="" />
-								// 	<input type="file" name="myfile" onChange={this.add_pic.bind(this, 4)}/>
-								// </li>
-
-								// <Pic src={pictures[0]} {...pictureProp}/>
-								// <Pic src={pictures[1]} {...pictureProp}/>
-								// <Pic src={pictures[2]} {...pictureProp}/>
-								// <Pic src={pictures[3]} {...pictureProp}/>
-								// <Pic src={pictures[4]} {...pictureProp}/>
-// class Pic extends Component
-// {
-// 	constructor(props)
-//   	{
-// 		this.state = 
-// 		{
-// 			src: '',
-// 			is_set: false
-// 		}
-// 	}
-
-// 	return ();
-// }
-
-
-
-// class Pic extends Component
-// {
-// 	constructor(props)
-//   	{
-// 	    super(props);
-
-// 		this.append_image = this.append_image.bind(this);
-
-// 		this.state = 
-// 		{
-// 			src: '',
-// 			is_set: false
-// 		}
-// 	}
-
-// 	componentDidMount()
-// 	{
-// 		console.log(this.props.src)
-// 		this.setState({src: this.props.src})
-// 	}
-
-// 	append_image(e)
-// 	{
-// 		const input = e.target;
-
-// 		if (input.files && input.files[0])
-// 		{
-// 			var reader = new FileReader();
-
-// 			reader.onload = function(e)
-// 			{
-// 				// $('#blah').attr('src', e.target.result);
-// 			}
-// 			reader.readAsDataURL(input.files[0]);
-// 		}
-// 	}
-
-// 	render ()
-// 	{
-// 		const exist = this.props.src ? true : false,
-// 			src = this.props.src  || '/img/sprites/camera_50.png';
-
-// 			if (exist && !this.state.is_set)
-// 				this.setState({src: this.props.src, is_set: true})
-// 		// console.log(this.state.src)
-// 		if (exist)
-// 			return (<li><img src={src} alt={this.props.user.first + ' picture'} /><span onClick={this.props.remove_pic}>x</span></li>);
-// 		return (<li><img src={src} alt={this.props.user.first + ' picture'} /><input type="file" name="myfile" onChange={this.append_image}/></li>);
-// 	}
-// }
 
 
 function Tags(props)
 {
-	return (<FlatButton label="Default" />);
+	if (props.user_tags && props.user_tags.includes(props.name))
+		return (<FlatButton label={props.name} primary={true} onClick={(e)=>props.toggle_tags(props.name)}/>);
+	else
+		return (<FlatButton label={props.name} onClick={(e)=>props.toggle_tags(props.name)}/>);
 }
 
 export default EditBasic;

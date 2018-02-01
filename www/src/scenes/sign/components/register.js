@@ -45,8 +45,6 @@ class Register extends React.Component
     }
   }
 
-
-
   handleNext = () => {
     const {stepIndex} = this.state;
     this.setState({
@@ -107,8 +105,9 @@ class Register extends React.Component
   }
 
   render() {
-    const {finished, stepIndex, is_button_disable} = this.state;
-    const contentStyle = {margin: '0 16px', textAlign: 'center'};
+    const {finished, stepIndex} = this.state,
+      is_button_disable = this.state.is_button_disable,
+      contentStyle = {margin: '0 16px', textAlign: 'center'};
 
     return (
       <div style={{width: '100%', maxWidth: 700, margin: '20px auto auto'}}>

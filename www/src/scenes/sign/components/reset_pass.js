@@ -36,7 +36,7 @@ class ResetPass extends Component
 		{password, confirm_password} = this.state;
 
 		r[data] =  e.target.value;
-		console.log(this)
+
 		this.setState(r, ()=>
 		{
 			if (password.length > 2  && confirm_password.length > 2 )
