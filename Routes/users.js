@@ -4,15 +4,17 @@ const User = require('../Models/user.js'),
 	nodemailer = require('nodemailer'),
 	crypto		= require('crypto'),
 	multer  = require('multer'),
-	upload = multer({dest: './'});
+	upload = multer({dest: './'}),
+	jwt = require('../Middlewares/jwt.js'),
+	utils	= require('../Utils/user');
 
 
 function isAuthenticated(req,res,next)
 {
-	if(req.user)
+	if (req.user)
 		return next();
 	else
-		return res.status(401).json({error: 'User not authenticated'})
+		return res.status(401).json({sucess: false, message: 'User not authenticated'})
 }
 
 module.exports = function (app, passport)
@@ -29,7 +31,6 @@ module.exports = function (app, passport)
 			r = req.session.user.name.first + ' already set';
 		else
 			r = 'session user not set';
-		console.log(r)
 		res.send(r);
 			
 	})
@@ -49,7 +50,7 @@ module.exports = function (app, passport)
 				console.log(req.session.user.name.first + ' set')
 			}
 				// console.log(req.session)
-			res.send(user);
+			res.json({sucess: true, user: user});
 			
 		})
 	})
@@ -78,13 +79,13 @@ module.exports = function (app, passport)
 			{
 				if (err)
 					throw err;
-				res.send('user updated');
+				res.json({sucess: true, message: 'user updated'});
 			})
 		})
 
 	}).delete(['/', '/me'], (req, res) =>
 	{
-		res.send('home swith home');
+		res.json({sucess: true, message: 'home swith home'});
 	});
 
 	// =====================================
@@ -100,7 +101,7 @@ module.exports = function (app, passport)
 		{
 			if (err)
 				throw err;
-			res.send(data);
+			res.json({sucess: true, users: data});
 		})
 	})
 	.get('/user/:id', (req, res, next) =>
@@ -124,7 +125,7 @@ module.exports = function (app, passport)
 		{
 			if (err)
 				throw err;
-			res.send(user);
+			res.json({sucess: true, user: user});
 		})
 	})
 
@@ -139,15 +140,69 @@ module.exports = function (app, passport)
 		// 	successRedirect : '/profile',
 		// 	failureRedirect : '/signup'
 		// })
-		passport.authenticate('local-signup', function(err, user, info) {
-			console.log(err)
-			console.log(user)
-			console.log(info)
-        	console.log("authenticate");
+		passport.authenticate('local-signup', (err, user, info) =>
+		{
+			if (err)
+				throw err;
+
+			if (info)
+				return (res.status(401).json({sucess: false, message: info}));
+
+			let new_user = utils.getCleanUser(user),
+				token = jwt.generateToken(new_user);
+
+			res.json({
+				sucess: true,
+				user: new_user,
+				token: token
+			})
+
     	})(req, res, next);
 	})
 
-	/* to remove */app.post('/add_user', (req, res, next)=>
+	// =====================================
+	// TOKEN  ==============================
+	// =====================================
+	app.get('/get_token/:token', (req, res, next) =>
+	{
+		let token = req.params.token;
+
+		if (!token)
+			return (res.status(401).json({sucess: false, message: 'User no found'}));
+
+		jwt.verify(token, (err, tokenUser) =>
+		{
+
+			try
+			{
+				if (err)
+					throw (err);
+
+				User.findById({_id: tokenUser._id}, (err, user) =>
+				{
+					let new_user;
+
+					if (err)
+						throw (err);
+
+					new_user = utils.getCleanUser(user);
+
+					res.json({
+						sucess: true,
+						user: new_user,
+						token: jwt.generateToken(new_user)
+					});
+				})
+
+			}
+			catch (e)
+			{
+				res.status(401).json({sucess: false, message: "Token can't be verified"})
+			}
+		})
+	})
+
+	/* to remove */app.post('/add_user', (req, res, next) =>
 	{
 		console.log('ok')
 		next();
@@ -157,24 +212,23 @@ module.exports = function (app, passport)
 	// =====================================
 	app.post('/sign_in', (req, res, next) =>
 	{
-		passport.authenticate('local-signin', function(err, user, info)
+
+		passport.authenticate('local-signin', (err, user, info)=>
 		{
 			if (err)
 				throw err;
-			if (info)
-				return (res.status(401).json({error: info}));
-			 if (req.session.user)
-			 {
-	        	console.log("already signin");
 
-				// console.log(req.session)
-			}
-			else
-			{
-	        	console.log('user ' +user.name.first + " signin");
-			}
-			// console.log(req.session)
-        	res.send('user login successfuly')
+			if (info)
+				return (res.status(401).json({sucess: false, message: info}));
+
+			let new_user = utils.getCleanUser(user),
+				token = jwt.generateToken(new_user);
+
+			res.json({
+				sucess: true,
+				user: new_user,
+				token: token
+			})
 		})(req, res, next);
 	})
 
@@ -198,7 +252,7 @@ module.exports = function (app, passport)
 			if (err)
 				throw err;
 			if (!user)
-				return (res.status(401).json({error: 'User no found'}));
+				return (res.status(401).json({sucess: false, message: 'User no found'}));
 
 			const transport = nodemailer.createTransport({
 				service: 'Gmail',
@@ -238,14 +292,14 @@ module.exports = function (app, passport)
 	app.post('/reset_pass', (req, res) =>
 	{
 		if (!req.body.reset_pass)
-			return (res.status(401).json({error: 'User no found'}));
+			return (res.status(401).json({sucess: false, message: 'User no found'}));
 
 		User.findOne({reset_pass: req.body.reset_pass}, (err, user)=>
 		{
 			if (err)
 				throw err;
 			if (!user)
-				return (res.status(401).json({error: 'User no found'}));
+				return (res.status(401).json({sucess: false, message: 'User no found'}));
 
 		    user.password = user.generateHash(req.password);
 		    user.reset_pass = null;
@@ -254,7 +308,7 @@ module.exports = function (app, passport)
 		    	if (err)
 		    		throw err;
 
-				res.json({message: 'User password update successfuly.'});
+				res.json({sucess: true, message: 'User password update successfuly.'});
 		    })
 		})
 	})

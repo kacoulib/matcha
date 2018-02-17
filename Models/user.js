@@ -7,23 +7,23 @@ let	mongoose		= require('mongoose'),
 // Schema
 userSchema 	= new Schema(
 {
-	name:
-	{
-		first:
-		{
-			type: String,
-			lowercase: true,
-			trim: true,
-			validate: (str) => str.indexOf('$') < 0
-		},
-		last:
-		{
-			type: String,
-			lowercase: true,
-			trim: true,
-			validate: (str) => str.indexOf('$') < 0
-		}
-	},
+	// name:
+	// {
+	// 	first:
+	// 	{
+	// 		type: String,
+	// 		lowercase: true,
+	// 		trim: true,
+	// 		validate: (str) => str.indexOf('$') < 0
+	// 	},
+	// 	last:
+	// 	{
+	// 		type: String,
+	// 		lowercase: true,
+	// 		trim: true,
+	// 		validate: (str) => str.indexOf('$') < 0
+	// 	}
+	// },
 	password:
 	{
 		type : String,
@@ -42,25 +42,25 @@ userSchema 	= new Schema(
 			message : 'Invalid adress mail'
 		},
 	},
-	age:
-	{
-		type : Date,
-		required: true
-	},
-	location:
-	{
-		name :
-		{
-			type : String,
-			required : true
-		},
-		loc :
-		{
-			type : [Number],
-			index: '2d',
-			required : true
-		}
-	},
+	// age:
+	// {
+	// 	type : Date,
+	// 	required: true
+	// },
+	// location:
+	// {
+	// 	name :
+	// 	{
+	// 		type : String,
+	// 		required : true
+	// 	},
+	// 	loc :
+	// 	{
+	// 		type : [Number],
+	// 		index: '2d',
+	// 		required : true
+	// 	}
+	// },
 	gender:
 	{
 		type : String,

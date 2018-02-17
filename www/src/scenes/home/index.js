@@ -28,7 +28,11 @@ class Home extends Component
 		axios.get('http://localhost:3000/user/all')
 		.then((res)=>
 		{
-			this.setState({recommendation: res.data})
+			console.log(res.data)
+			this.setState({recommendation: res.data.users}, function()
+			{
+				console.log(this.state.recommendation)
+			})
 		})
 	}
 
@@ -60,7 +64,9 @@ class Home extends Component
 function ListItem(props)
 {
 	const user 	= props.user,
-		info 	= {first: user.name.first, last: user.name.last, address: 'paris'},
+		first = user.name ? user.name.first: 'test',
+		last = user.name ? user.name.last: 'test',
+		info 	= {first: first, last: last, address: 'paris'},
 		styles	=
 		{
 			avatar:
