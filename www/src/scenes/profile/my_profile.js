@@ -13,7 +13,7 @@ class MyProfile extends Component
 		this.get_current_user = this.get_current_user.bind(this);
 
 		this.state = {
-			data: []
+			data: {}
 		}
 	}
 
@@ -27,7 +27,8 @@ class MyProfile extends Component
 		axios.get('http://localhost:3000/me')
 		.then((res)=>
 		{
-			this.setState({data: res.data})
+			if (res.data.sucess)
+				this.setState({data: res.data.user})
 		})
 	}
 

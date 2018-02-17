@@ -50,11 +50,14 @@ class Edit extends Component
 		axios.get('http://localhost:3000/me')
 		.then((res)=>
 		{
-			let data = res.data;
+			if (!res.data.sucess)
+				return ;
 
-			data.first = res.data.name.first;
-			data.last = res.data.name.last;
-			this.setState(data)
+			let user = res.data.user;
+
+			user.first = user.name ? user.name.first: '';
+			user.last = user.name ?  user.name.last: '';
+			this.setState(user)
 		})
 	}
 

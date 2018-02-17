@@ -39,18 +39,16 @@ module.exports = function (app, passport)
 	{
 		User.findById('5a5e42abb755294740df95f7', (err, user)=>
 		{
-			if (err)
-				throw err;
-			if (req.session.user)
-				console.log(req.session.user.name.first + ' already set')
-			else
-				// console.log('user not set')
+			try
 			{
-				req.session.user = user;
-				console.log(req.session.user.name.first + ' set')
+				if (err)
+					throw err;
+
+				res.json({sucess: true, user: user});
+			}catch(e)
+			{
+				return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));				
 			}
-				// console.log(req.session)
-			res.json({sucess: true, user: user});
 			
 		})
 	})
