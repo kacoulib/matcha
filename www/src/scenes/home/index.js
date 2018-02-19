@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ucfirst from '../../helpers/ucfirst.js';
+import Requests from '../../helpers/requests.js';
 import Avatar from '../../components/avatar.js';
 import Pics from '../../components/pics.js';
 
@@ -17,7 +18,7 @@ class Home extends Component
 			recommendation: []
 		}
 	}
-	
+
 	componentDidMount()
 	{
 		this.get_all_users();
@@ -25,7 +26,8 @@ class Home extends Component
 
 	get_all_users()
 	{
-		axios.get('http://localhost:3000/user/all')
+		
+		Requests.getAll()
 		.then((res)=>
 		{
 			console.log(res.data)
@@ -33,13 +35,14 @@ class Home extends Component
 			{
 				console.log(this.state.recommendation)
 			})
-		})
+		}).catch((e)=>console.log(e))
 	}
 
 	render()
 	{
 		let data = this.state.recommendation,
 			pictures_len = data.pictures && data.pictures.length ? true : false;
+
 
 		return (		
 			<div className='white_tab_container'>
