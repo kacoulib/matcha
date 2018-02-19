@@ -1,5 +1,5 @@
 import React from 'react';
-import ucfirst from '../../../tools/ucfirst';
+import ucfirst from '../../../helpers/ucfirst';
 
 
 export default function InputField(props)

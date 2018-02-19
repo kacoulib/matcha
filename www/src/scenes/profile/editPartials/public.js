@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import ucfirst from '../../../tools/ucfirst';
 import InputField from '../components/input_field.js';
 
 

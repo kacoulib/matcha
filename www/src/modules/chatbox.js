@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Ucfirst from './../tools/ucfirst.js';
+import Ucfirst from './../helpers/ucfirst.js';
 import io from 'socket.io-client';
 
 class ChatBox extends Component

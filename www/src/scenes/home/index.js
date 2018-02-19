@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import ucfirst from '../../tools/ucfirst.js';
+import ucfirst from '../../helpers/ucfirst.js';
 import Avatar from '../../components/avatar.js';
 import Pics from '../../components/pics.js';
 
