@@ -44,6 +44,7 @@ module.exports = function (app, passport)
 				if (err)
 					throw err;
 
+				// return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));				
 				res.json({sucess: true, user: user});
 			}catch(e)
 			{

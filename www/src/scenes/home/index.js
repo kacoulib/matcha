@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ucfirst from '../../helpers/ucfirst.js';
-import Requests from '../../helpers/requests.js';
+import AppRequest from '../../helpers/appRequest.js';
 import Avatar from '../../components/avatar.js';
 import Pics from '../../components/pics.js';
 
@@ -13,6 +13,7 @@ class Home extends Component
   	{
 	    super(props);
 		this.get_all_users = this.get_all_users.bind(this);
+		this.appRequest = new AppRequest();
 
 		this.state = {
 			recommendation: []
@@ -26,11 +27,11 @@ class Home extends Component
 
 	get_all_users()
 	{
-		
-		Requests.getAll()
+		console.log(this.appRequest)
+		this.appRequest.all_users()
 		.then((res)=>
 		{
-			console.log(res.data)
+			console.log()
 			this.setState({recommendation: res.data.users}, function()
 			{
 				console.log(this.state.recommendation)

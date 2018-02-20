@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Checkbox from 'material-ui/Checkbox';
+import AppRequest from '../../../helpers/appRequest';
+
 
 
 class Login extends Component
@@ -29,6 +30,8 @@ class Login extends Component
 			finished: true,
 			user_address: ''
 		}
+
+		this.appRequest = new AppRequest();
 	}
 
 	update_user_address(e)
@@ -52,7 +55,7 @@ class Login extends Component
 
 		if (this.state.reset_pass && email)
 		{
-			axios.post('http://localhost:3000/send_password_reset_mail', {email: email})
+			this.appRequest.reset_password_from_mail(email)
 			.then((res)=>
 			{
 				console.log(res)
@@ -62,11 +65,16 @@ class Login extends Component
 		}
 		else if (email && password)
 		{
-			axios.post('http://localhost:3000/sign_in', {email: email, password: password})
+			this.appRequest.sign_in(email, password)
 			.then((res)=>
 			{
-				console.log(res)
-			}).catch((err)=> {throw err})
+				if (!res.data || !res.data.token)
+					return ;
+
+				window.sessionStorage.setItem('token', res.data.token)
+				window.location = '/';
+
+			}).catch((err)=> {console.log('no');throw err})
 		}
 	}
 

@@ -9,6 +9,15 @@ import OtherProfile from '../scenes/profile/other_profile.js';
 
 
 
+function requireAuth(props, replace)
+{
+	if (true)
+		window.location = '/register';
+	console.log('ok')
+	// else
+	// 	window.location = '/register';
+}
+
 class main extends Component
 {
 
@@ -20,7 +29,7 @@ class main extends Component
 	        <div className="main">
 				<Switch>
 					<Route exact path='/' render={(props) => (<Home {...props} appProps={appProps}/>)} />
-					<Route path='/me' component={MyProfile}/>
+					<Route path='/me' component={MyProfile} onEnter={requireAuth} />
 					<Route path='/user/:id' render={(props) => (<OtherProfile {...props} appProps={appProps}/>)} />
 					<Route path='/edit' render={(props) => (<Edit {...props} appProps={appProps}/>)} />
 					<Route path='/pass_reset/:id' component={ResetPass}/>

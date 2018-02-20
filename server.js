@@ -10,7 +10,8 @@ const	express			= require('express'),
 		passport		= require('passport'),
 		server			= require('http').createServer(app),
 		io				= require('socket.io')(server),
-		database		= require('./Models/database.js');
+		database		= require('./Models/database.js'),
+		jwt				= require('jsonwebtoken');
 
 // console.log(mysql)
 
@@ -25,7 +26,7 @@ app.use((req, res,next)=>
 	res.setHeader('Access-Control-Allow-Origin',  'http://localhost:3001');
 	res.header('Access-Control-Allow-Credentials', true);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 	next();
 });
 
@@ -50,6 +51,27 @@ app.use(session(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+// app.use(function(req, res, next) {
+//   // check header or url parameters or post parameters for token
+//   var token = req.headers['authorization'];
+//   if (!token) return next(); //if no token, continue
+
+//   console.log('ok')
+//   token = token.replace('Bearer ', '');
+
+//   jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+//     if (err) {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'Please register Log in using a valid email to submit posts'
+//       });
+//     } else {
+//       req.user = user; //set the user to req so other routes can use it
+//       next();
+//     }
+//   });
+// });
 
 // let faker = require('faker');
 // let	User			= require('./Models/user.js');
