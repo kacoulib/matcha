@@ -162,6 +162,32 @@ module.exports = function (app, passport)
 	// =====================================
 	// TOKEN  ==============================
 	// =====================================
+	app.post('/verify_token', (req, res, next) =>
+	{
+		let token = req.body.token;
+
+		if (!token)
+			return (res.status(401).json({sucess: false, message: 'Token not valid'}));
+
+		jwt.verify(token, (err, tokenUser) =>
+		{
+
+			try
+			{
+				if (err)
+					throw (err);
+
+				res.json({
+					sucess: true
+				});
+			}
+			catch (e)
+			{
+				res.status(401).json({sucess: false, message: "Token not valid"})
+			}
+		})
+	})
+
 	app.get('/get_token/:token', (req, res, next) =>
 	{
 		let token = req.params.token;

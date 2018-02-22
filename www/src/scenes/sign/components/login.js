@@ -66,15 +66,7 @@ class Login extends Component
 		else if (email && password)
 		{
 			this.appRequest.sign_in(email, password)
-			.then((res)=>
-			{
-				if (!res.data || !res.data.token)
-					return ;
-
-				window.sessionStorage.setItem('token', res.data.token)
-				window.location = '/';
-
-			}).catch((err)=> {console.log('no');throw err})
+			.catch((err)=> {console.log('no');throw err})
 		}
 	}
 

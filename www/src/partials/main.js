@@ -1,13 +1,48 @@
 import React, { Component } from 'react';
-import { Switch, Route} from 'react-router-dom'
+import { Switch, Route, Redirect} from 'react-router-dom'
 import Login from '../scenes/sign/index.js';
 import ResetPass from '../scenes/sign/components/reset_pass.js';
 import Home from '../scenes/home/index.js';
 import MyProfile from '../scenes/profile/my_profile.js';
 import Edit from '../scenes/profile/edit.js';
 import OtherProfile from '../scenes/profile/other_profile.js';
+import Requests from '../helpers/appRequest.js'
 
 
+async function check_token()
+{
+	let appRequest = new Requests();
+
+	return appRequest.verify_token()
+	.then((res)=>true)
+	.catch((err)=>false)
+}
+
+
+const AuthRoute = ({ component: Component, ...rest }) => 
+{
+	var isAuth = sessionStorage.getItem('token');
+	// var isAuth = await check_token();
+		// console.log(await)
+
+		return (<Route {...rest} render={props => (
+			isAuth
+			? <Component {...props} />
+			: <Redirect to={{ pathname: '/register', state: { from: props.location } }} />
+		)} />)
+}
+
+
+const NotAuthRoute = ({ component: Component, ...rest }) => 
+{
+	var notIsAuth = sessionStorage.getItem('token');
+
+		return (<Route {...rest} render={props => (
+			!notIsAuth
+			? <Component {...props} />
+			: <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+		)} />)
+}
 
 function requireAuth(props, replace)
 {
@@ -18,6 +53,7 @@ function requireAuth(props, replace)
 	// 	window.location = '/register';
 }
 
+					// <Route exact path='/' render={(props) => (<Home {...props} appProps={appProps}/>)} />
 class main extends Component
 {
 
@@ -28,12 +64,12 @@ class main extends Component
 	    return (
 	        <div className="main">
 				<Switch>
-					<Route exact path='/' render={(props) => (<Home {...props} appProps={appProps}/>)} />
-					<Route path='/me' component={MyProfile} onEnter={requireAuth} />
-					<Route path='/user/:id' render={(props) => (<OtherProfile {...props} appProps={appProps}/>)} />
-					<Route path='/edit' render={(props) => (<Edit {...props} appProps={appProps}/>)} />
-					<Route path='/pass_reset/:id' component={ResetPass}/>
-					<Route exact path='/register' component={Login}/>
+					<AuthRoute exact path='/' component={Home} appProps={appProps} />
+					<AuthRoute path='/me' component={MyProfile} />
+					<AuthRoute path='/user/:id' component={OtherProfile} appProps={appProps} />
+					<AuthRoute path='/edit' component={Edit} appProps={appProps} />
+					<AuthRoute path='/pass_reset/:id' component={ResetPass}/>
+					<NotAuthRoute exact path='/register' component={Login}/>
 					<Route  path='*' component={NotFound}/>
 				</Switch>
 	        </div>
