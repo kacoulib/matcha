@@ -17,7 +17,12 @@ const	express			= require('express'),
 
 // configuration ===============================================================
 
-mongoose.connect(database.url, {useMongoClient: true})
+mongoose.connect(database.url, {useMongoClient: true}, (err)=>
+{
+	if (err)
+		throw  err;
+	console.log('connected')
+})
 
 require('./Middlewares/auth.js')(passport);
 

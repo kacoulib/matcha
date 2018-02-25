@@ -39,6 +39,7 @@ module.exports = function (app, passport)
 	{
 		User.findById('5a5e42abb755294740df95f7', (err, user)=>
 		{
+			console.log('doing stuf')
 			try
 			{
 				if (err)
@@ -237,7 +238,6 @@ module.exports = function (app, passport)
 	// =====================================
 	app.post('/sign_in', (req, res, next) =>
 	{
-
 		passport.authenticate('local-signin', (err, user, info)=>
 		{
 			if (err)
@@ -246,8 +246,10 @@ module.exports = function (app, passport)
 			if (info)
 				return (res.status(401).json({sucess: false, message: info}));
 
+			console.log('ok')
 			let new_user = utils.getCleanUser(user),
 				token = jwt.generateToken(new_user);
+			console.log(token)
 
 			res.json({
 				sucess: true,

@@ -1,3 +1,5 @@
+"STRICT MODE"
+
 let 
 	User			= require('../Models/user.js'),
 	localStrategy	= require('passport-local').Strategy,
