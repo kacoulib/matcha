@@ -38,10 +38,11 @@ class Requests
 		})
 	}
 
-	verify_token ()
+	async verify_token ()
 	{
 		axios.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem('token');
-		return axios.post(this.url + '/verify_token', {token: sessionStorage.getItem('token')})
+		let res =  await axios.post(this.url + '/verify_token', {token: sessionStorage.getItem('token')})
+		return res
 	}
 
 	reset_password_from_mail (email)

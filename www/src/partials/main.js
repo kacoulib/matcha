@@ -9,13 +9,11 @@ import OtherProfile from '../scenes/profile/other_profile.js';
 import Requests from '../helpers/appRequest.js'
 
 
-async function check_token()
+function check_token()
 {
 	let appRequest = new Requests();
 
-	return appRequest.verify_token()
-	.then((res)=>true)
-	.catch((err)=>false)
+	return appRequest.verify_token();
 }
 
 
@@ -24,7 +22,7 @@ const AuthRoute = ({ component: Component, ...rest }) =>
 	var isAuth = sessionStorage.getItem('token');
 	// var isAuth = await check_token();
 		// console.log(await)
-
+	console.log('this\n' + check_token())
 		return (<Route {...rest} render={props => (
 			isAuth
 			? <Component {...props} />
