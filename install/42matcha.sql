@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS matcha;
+CREATE DATABASE IF NOT EXISTS 42matcha;
 
-USE matcha;
+USE 42matcha;
 
 CREATE TABLE IF NOT EXISTS `User` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -18,12 +18,12 @@ CREATE TABLE IF NOT EXISTS `User` (
 	`status` enum('online','offline') NOT NULL DEFAULT 'offline',
 	`is_lock` boolean NOT NULL DEFAULT false,
 	`reset_pass` varchar(255) DEFAULT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Image` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`src` varchar(255) NOT NULL UNIQUE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Post` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
     FOREIGN KEY (user_id)
         REFERENCES User(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Location` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `Location` (
     FOREIGN KEY (user_id)
         REFERENCES User(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Comment` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY key,
@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS `Comment` (
         REFERENCES Comment(id)
         ON DELETE CASCADE
 
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Tag` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY key,
 	`tag_name` varchar(255) NOT NULL UNIQUE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Post_tag` (
 	`post_id` INT NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `Post_tag` (
     FOREIGN KEY (tag_id)
         REFERENCES Tag(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `User_tag` (
 	`user_id` INT NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `User_tag` (
     FOREIGN KEY (tag_id)
         REFERENCES Tag(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `User_image` (
 	`user_id` INT NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `User_image` (
     FOREIGN KEY (image_id)
         REFERENCES Image(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Post_image` (
 	`post_id` INT NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `Post_image` (
     FOREIGN KEY (image_id)
         REFERENCES Image(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Liker` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `Liker` (
     FOREIGN KEY (liked_user_id)
         REFERENCES User(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Viewer` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -171,4 +171,4 @@ CREATE TABLE IF NOT EXISTS `Viewer` (
     FOREIGN KEY (viewed_user_id)
         REFERENCES User(id)
         ON DELETE CASCADE
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
