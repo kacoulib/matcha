@@ -8,7 +8,7 @@ const	mysql	= require('mysql'),
 var con = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "test",
+	password: "",
 	database: "42matchaDb"
 });
 
@@ -48,7 +48,7 @@ let get_random = (max) => Math.floor(Math.random() * Math.floor(max));
 
 function add_new_user()
 {
-	
+
 	con.connect(function(err)
 	{
 		if (err)
@@ -64,7 +64,7 @@ function add_new_user()
 			tags = ['bio', 'geek', 'piercing', 'sport'],
 			j = 0;
 
-			
+
 			user = [];
 			user[0] 	= faker.name.firstName()
 			user[1]		= faker.name.lastName();
@@ -95,14 +95,14 @@ function add_new_user()
 
 function add_new_tag(name)
 {
-	
+
 	con.connect(function(err)
 	{
 		if (err)
 			throw err;
 
 		console.log('Connected');
-    	
+
     	sql = "INSERT INTO Tag (tag_name) VALUES ?",
 
 		con.query(sql, [[[name]]], function (err, res)
@@ -122,7 +122,7 @@ function add_new_img(nb = 1)
 
 	for (var i = 0; i < nb; i++)
 		data.push([faker.image.avatar()])
-	return (data);	
+	return (data);
 }
 
 function add_new_location( user_id)
