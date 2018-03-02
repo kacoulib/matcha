@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS matcha;
+
+USE matcha;
 
 CREATE TABLE IF NOT EXISTS `User` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -13,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 	`bio` TEXT,
 	`status` enum('online','offline') NOT NULL DEFAULT 'offline',
 	`is_lock` boolean NOT NULL DEFAULT false,
-	`reset_pass` varchar(255)
+	`reset_pass` varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `Image` (
@@ -30,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `Post` (
 	INDEX post_user (user_id),
     FOREIGN KEY (user_id)
         REFERENCES User(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Location` (
@@ -43,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `Location` (
 	INDEX location_user (user_id),
     FOREIGN KEY (user_id)
         REFERENCES User(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Comment` (
@@ -61,12 +64,12 @@ CREATE TABLE IF NOT EXISTS `Comment` (
      INDEX comment_post (post_id),
     FOREIGN KEY (post_id)
         REFERENCES Post(id)
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
 
     INDEX post_parent (comment_parent_id),
     FOREIGN KEY (comment_parent_id)
         REFERENCES Comment(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 
 );
 
@@ -88,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `Post_tag` (
     INDEX Post_tag_tag (tag_id),
     FOREIGN KEY (tag_id)
         REFERENCES Tag(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `User_tag` (
@@ -104,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `User_tag` (
     INDEX User_tag_tag (tag_id),
     FOREIGN KEY (tag_id)
         REFERENCES Tag(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `User_image` (
@@ -114,13 +117,13 @@ CREATE TABLE IF NOT EXISTS `User_image` (
     INDEX User_image_user (user_id),
     FOREIGN KEY (user_id)
         REFERENCES User(id)
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
 
 
     INDEX User_image_image (image_id),
     FOREIGN KEY (image_id)
         REFERENCES Image(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Post_image` (
@@ -131,13 +134,13 @@ CREATE TABLE IF NOT EXISTS `Post_image` (
     INDEX Post_image_user (post_id),
     FOREIGN KEY (post_id)
         REFERENCES Post(id)
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
 
 
     INDEX Post_image_image (image_id),
     FOREIGN KEY (image_id)
         REFERENCES Image(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Liker` (
@@ -149,12 +152,12 @@ CREATE TABLE IF NOT EXISTS `Liker` (
     INDEX user_liker (user_id),
     FOREIGN KEY (user_id)
         REFERENCES User(id)
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
 
     INDEX liked_user (liked_user_id),
     FOREIGN KEY (liked_user_id)
         REFERENCES User(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `Viewer` (
@@ -163,8 +166,8 @@ CREATE TABLE IF NOT EXISTS `Viewer` (
 	`viewed_user_id` INT NOT NULL,
 
 
-    INDEX viewd_user (viewed_user_id),
+    INDEX viewed_user (viewed_user_id),
     FOREIGN KEY (viewed_user_id)
         REFERENCES User(id)
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 );

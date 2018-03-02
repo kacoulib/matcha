@@ -13,7 +13,6 @@ const	express			= require('express'),
 		database		= require('./Models/database.js'),
 		jwt				= require('jsonwebtoken');
 
-// console.log(mysql)
 
 // configuration ===============================================================
 
@@ -129,4 +128,4 @@ io.on('connect', function (socket)
 
 
 // Launch ======================================================================
-server.listen(3000, () => console.log('listening 3000'))
+server.listen(3000, () => console.log('listening 3000.....'))
