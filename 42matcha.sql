@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 	`first_name` varchar(255) NOT NULL,
 	`last_name` varchar(255) NOT NULL,
 	`password` varchar(255) NOT NULL,
+	`login` varchar(255) NOT NULL UNIQUE,
 	`email` varchar(255) NOT NULL UNIQUE,
 	`age` TIMESTAMP NOT NULL,
 	`nb_image` INT NOT NULL DEFAULT 0,

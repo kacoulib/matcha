@@ -1,0 +1,19 @@
+// Client side
+  1.) /register
+    A.) register part
+      a.) Add the two fields lastName and login in the register page
+
+    B.) Login part
+      a.) Let the choice to the user to use his login or his email
+
+
+  2.) /me
+    a.) Let the user the possibility to change his password when login
+
+
+
+// Server side
+*  1.)  integrete the mysql database
+
+
+  2.)  Make the file upload
