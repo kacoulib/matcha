@@ -10,6 +10,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import FirstStep from './steps/first.js';
 import SecondStep from './steps/second.js';
 import ThirdStep from './steps/third.js';
+import AppRequest from '../../../helpers/appRequest';
 import axios from 'axios';
 
 import Login from './login.js';
@@ -32,7 +33,9 @@ class Register extends React.Component
     this.handleLogin = this.handleLogin.bind(this);
 
     this.state = {
-      prenom: '',
+      first_name: '',
+      last_name: '',
+      login: '',
       orientation: '',
       age: '',
       email: '',
@@ -43,6 +46,8 @@ class Register extends React.Component
       stepIndex: 0,
       is_button_disable: true
     }
+
+    this.appRequest = new AppRequest();
   }
 
   handleNext = () => {
@@ -69,16 +74,17 @@ class Register extends React.Component
   handleLogin()
   {
     let data = {
-      prenom: this.state.prenom,
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      login: this.state.login,
       age: Date.parse(this.state.age),
       orientation: this.state.orientation,
       gender: this.state.gender,
       email: this.state.email,
       password: this.state.password,
-      is_button_disable: false
     };
-    console.log(data)
-    axios.post('http://localhost:3000/sign_up', data)
+
+    this.appRequest.add_user(data)
     .then((res)=>
     {
       console.log(res)
@@ -131,7 +137,7 @@ class Register extends React.Component
               </Step>
             </Stepper>
             <div style={contentStyle}>
-          
+
               {finished ? (
                 <p>
                   {
@@ -152,7 +158,7 @@ class Register extends React.Component
                 <div className="steper_container">
                   {this.getStepContent(stepIndex)}
                   <div style={{marginTop: 12}}>
-                    
+
                     <RaisedButton
                       label="finished"
                       style={stepIndex === 2 ? {display: 'block'} : {display: 'none'}}

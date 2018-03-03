@@ -3,10 +3,12 @@
 const User = require('../Models/user.js'),
 	nodemailer = require('nodemailer'),
 	crypto		= require('crypto'),
+	bcrypt	= require('bcrypt-nodejs'),
 	multer  = require('multer'),
 	upload = multer({dest: './'}),
 	jwt = require('../Middlewares/jwt.js'),
-	utils	= require('../Utils/user');
+	userUtils	= require('../Utils/user'),
+	dataUtils	= require('../Utils/dataValidator');
 
 
 function isAuthenticated(req,res,next)
@@ -32,7 +34,7 @@ module.exports = function (app, passport)
 		else
 			r = 'session user not set';
 		res.send(r);
-			
+
 	})
 	// =====================================
 	app.get(['/', '/me'], (req, res) =>
@@ -45,13 +47,13 @@ module.exports = function (app, passport)
 				if (err)
 					throw err;
 
-				// return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));				
+				// return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));
 				res.json({sucess: true, user: user});
 			}catch(e)
 			{
-				return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));				
+				return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));
 			}
-			
+
 		})
 	})
 	.put('/me/:id', (req, res, next) =>
@@ -91,6 +93,32 @@ module.exports = function (app, passport)
 	// =====================================
 	// USER CRUD (with login links) ========
 	// =====================================
+
+	app.post('/user/add', (req, res, next) =>
+	{
+		let new_user = userUtils.cleanNewUser(req.body),
+				tmp;
+
+
+		if (!dataUtils.is_new_user_valid(new_user))
+			return (res.status(401).json({sucess: false, message: 'Invalid data'}));
+
+		new_user.status = 'online';
+		new_user.password = bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8), null);
+		//con.query("INSERT INTO User SET ?", post, (err, res, fields)=>
+		//{
+		//	if (err)
+		//		throw err;
+
+		//		console.log(res)
+		//		console.log(fields)
+		//})
+
+		console.log(new_user)
+		console.log('ok')
+		next();
+	})
+
 	app.get('/user/all', (req, res) =>
 	{
 		User
@@ -148,7 +176,7 @@ module.exports = function (app, passport)
 			if (info)
 				return (res.status(401).json({sucess: false, message: info}));
 
-			let new_user = utils.getCleanUser(user),
+			let new_user = userUtils.tokenazableUser(user),
 				token = jwt.generateToken(new_user);
 
 			res.json({
@@ -211,7 +239,7 @@ module.exports = function (app, passport)
 					if (err)
 						throw (err);
 
-					new_user = utils.getCleanUser(user);
+					new_user = userUtils.getCleanUser(user);
 
 					res.json({
 						sucess: true,
@@ -228,11 +256,6 @@ module.exports = function (app, passport)
 		})
 	})
 
-	/* to remove */app.post('/add_user', (req, res, next) =>
-	{
-		console.log('ok')
-		next();
-	})
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
@@ -247,7 +270,7 @@ module.exports = function (app, passport)
 				return (res.status(401).json({sucess: false, message: info}));
 
 			console.log('ok')
-			let new_user = utils.getCleanUser(user),
+			let new_user = userUtils.getCleanUser(user),
 				token = jwt.generateToken(new_user);
 			console.log(token)
 

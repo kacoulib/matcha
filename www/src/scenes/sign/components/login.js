@@ -13,17 +13,14 @@ class Login extends Component
 	constructor(props)
 	{
 		super(props);
-    
-    	this.updateCheck = this.updateCheck.bind(this);
-    	this.dataChange = this.dataChange.bind(this);
-    	this.dataChange = this.dataChange.bind(this);
-    	this.handleValid = this.handleValid.bind(this);
-    	this.update_user_address = this.update_user_address.bind(this);
 
+  	this.updateCheck = this.updateCheck.bind(this);
+  	this.dataChange = this.dataChange.bind(this);
+  	this.handleValid = this.handleValid.bind(this);
 
 		this.state =
 		{
-			email: '',
+			loginOrEmail: '',
 			password: '',
 
 			reset_pass: false,
@@ -32,12 +29,6 @@ class Login extends Component
 		}
 
 		this.appRequest = new AppRequest();
-	}
-
-	update_user_address(e)
-	{
-
-		console.log(e.target.value)
 	}
 
 	dataChange(data, e)
@@ -50,22 +41,20 @@ class Login extends Component
 
 	handleValid()
 	{
-		let email = this.state.email,
+		let loginOrEmail = this.state.loginOrEmail,
 			password = this.state.password;
 
-		if (this.state.reset_pass && email)
+		if (this.state.reset_pass && loginOrEmail.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
 		{
-			this.appRequest.reset_password_from_mail(email)
+			this.appRequest.reset_password_from_mail(loginOrEmail)
 			.then((res)=>
 			{
 				console.log(res)
 			}).catch((err)=> {throw err})
-
-			console.log('reset')
 		}
-		else if (email && password)
+		else if (loginOrEmail && password)
 		{
-			this.appRequest.sign_in(email, password)
+			this.appRequest.sign_in(loginOrEmail, password)
 			.catch((err)=> {console.log('no');throw err})
 		}
 	}
@@ -93,12 +82,12 @@ class Login extends Component
 		return (
 			<div>
 				<Paper zDepth={2}>
-					<TextField hintText="Email address" style={style} underlineShow={false} type="email"
-					onChange={this.dataChange.bind(this, "email")}
+					<TextField hintText="Login or Email" style={style} underlineShow={false} type="text"
+					onChange={this.dataChange.bind(this, "loginOrEmail")}
 					/>
 				<Divider />
 
-				{reset_pass ? 
+				{reset_pass ?
 					''
 				:
 					<TextField hintText="Password" style={style} underlineShow={false}  type="password"

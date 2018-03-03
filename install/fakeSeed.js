@@ -2,25 +2,66 @@ const	mysql	= require('mysql'),
 		faker	= require('faker'),
 		bcrypt	= require('bcrypt-nodejs'),
 		NodeGeocoder = require('node-geocoder'),
-		geocoder = NodeGeocoder();
+		geocoder = NodeGeocoder(),
+		utilis = require('../Utils/dataValidator.js');
 
 
 var con = mysql.createConnection({
 	host: "localhost",
 	user: "root",
 	password: "",
-	database: "42matchaDb"
+	database: "42matcha"
 });
 
-// con.connect(function(err)
-// {
-// 	if (err)
-// 		throw err;
+con.connect(function(err)
+{
+	if (err)
+		throw err;
+})
+
 // 	let sql, val;
 // 	console.log("Connected!");
 
-// user
-    // sql = "INSERT INTO User (first_name, last_name, password, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass) VALUES ?",
+let post = {
+	first_name : 'toto',
+	last_name : 'tata',
+	login : 'myLogin',
+	password : 'test',
+	email : 'toto@toto.com',
+	age : 'Wed Mar 01 2000 00:00:00 GMT+0100',
+	nb_image : 0,
+	profile_image : null,
+	gender : 'male',
+	orientation : 'heterosexual',
+	bio : 'klsdjfsd fjlfjdsjf sdfjmsdjfldksjfdslkmfjmj dfs',
+	status : 'offline'
+}
+
+if (!utilis.isMajor(post.age))
+	return ;
+
+// Delete
+con.query("DELETE FROM User WHERE login = ?", ['myLogin'], (err, res, fields)=>
+{
+	if (err)
+		throw err;
+
+		console.log(res)
+		console.log(fields)
+})
+
+
+//con.query("INSERT INTO User SET ?", post, (err, res, fields)=>
+//{
+//	if (err)
+//		throw err;
+
+//		console.log(res)
+//		console.log(fields)
+//})
+
+
+
     // val = add_new_user(1);
 
 // image
