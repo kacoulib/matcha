@@ -34,4 +34,28 @@ module.exports =
 			})
 		})
 	},
+
+	findByLoginOrEmail: (email, login, con)=>
+	{
+		return new Promise((resolve, reject)=>
+		{
+			con.query('select * from User where email = ? or login = ?', [email, login], (err, user)=>
+			{
+					if (err)
+						return (reject(err));
+					if (!user[0])
+						return (reject('No user found'));
+
+					return (resolve(user));
+			})
+		})
+	},
+
+	add: (new_user, con)=>
+	{
+		return new Promise((resolve, reject)=>
+		{
+			con.query('INSERT INTO User SET ?', new_user, (err, user)=> (err ? reject(err) : resolve(user.insertId)));
+		})
+	},
 };

@@ -1,6 +1,7 @@
 "STRICT MODE"
 
 let localStrategy	= require('passport-local').Strategy,
+		User = require('../Models/user.js'),
 		userUtils			= require('../Utils/user'),
 		dataUtils			= require('../Utils/dataValidator'),
 		bcrypt				= require('bcrypt-nodejs');
@@ -18,7 +19,9 @@ module.exports = function (passport, con)
 
     passport.deserializeUser(function(id, next)
     {
-        con.query("select * from User where id = "+id, (err,rows)=> next(err, user));
+        User.findById(id, con)
+					.then((user)=>next(null, user))
+					.catch((err)=> next(err, null));
     });
 
 
@@ -34,22 +37,18 @@ module.exports = function (passport, con)
 	},
 	function(req, loginOrEmail, password, next)
 	{
-		con.query('select * from User where email = ? or login = ?', [loginOrEmail, loginOrEmail], (err, rows)=>
+		User.findByLoginOrEmail(loginOrEmail, loginOrEmail, con)
+		.then((user)=>
 		{
-			if (err)
-				return next(err);
-
-			if (!rows)
+			if (!user)
 				return next(null, false, { message: 'Incorrect login or email.' });
 
-			if (!(rows[0].password == password))
+				bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8), null)
+			if (!(user[0].password == password))
 				return next(null, false, 'Oops! Wrong password.');
-
-				if (err)
-					return next(err);
-
-				return next(null, rows[0]);
-		});
+			return next(null, user[0]);
+		})
+		.catch((err)=>next(err))
 	}));
 
     // =========================================================================
@@ -74,33 +73,36 @@ module.exports = function (passport, con)
 
 			if (!dataUtils.is_new_user_valid(new_user))
 				return next(null, false, 'Invalid data');
-			con.query('select * from User where email = ? or login = ?', [new_user.email, new_user.login], (err, rows)=>
-			{
-				// if there are any errors
-				if (err)
-					return next(err);
 
-				// if theres email exist
-				if (rows[0])
+			user.findByLoginOrEmail(loginOrEmail, loginOrEmail, con)
+			.then((user)=>
+			{
+
+				// if user exist
+				if (user[0])
 				{
 					console.log('already exist')
 					return next(null, false, 'That email is already taken.');
 				}
 
 				new_user.status = 'online';
-				new_user.password = bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8), null);
 
-				// save the new user
-				con.query('INSERT INTO User SET ?', new_user, (err, new_inserted_user)=>
+				bcrypt.hash(new_user.password, 8)
+				.then((salt)=>
 				{
-					if (err)
-						throw err;
-						new_user.id = new_inserted_user.insertId;
+					new_user.password = salt;
 
-					console.log('User succefully create');
-					return next(null, new_user);
-				});
-			});
+					// save the new user
+					User.add(new_user, con).then((new_user_id)=>
+					{
+						new_user.id = new_user_id;
+
+						console.log('User succefully create');
+						return next(null, new_user);
+					}).catch((e));
+				})
+			})
+			.catch((err)=>next(null, false, { message: 'Incorrect login or email.' }));
 		});
 	}))
 }
