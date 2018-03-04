@@ -1,14 +1,15 @@
 'use strict'
 
-const User = require('../Models/user.js'),
-	nodemailer = require('nodemailer'),
+const nodemailer = require('nodemailer'),
+			User = require('../Models/user.js'),
 	crypto		= require('crypto'),
-	bcrypt	= require('bcrypt-nodejs'),
+
+	//bcrypt	= require('bcrypt-nodejs'),
 	multer  = require('multer'),
 	upload = multer({dest: './'}),
 	jwt = require('../Middlewares/jwt.js'),
-	userUtils	= require('../Utils/user'),
-	dataUtils	= require('../Utils/dataValidator');
+	userUtils	= require('../Utils/user');
+	//dataUtils	= require('../Utils/dataValidator');
 
 
 function isAuthenticated(req,res,next)
@@ -19,7 +20,7 @@ function isAuthenticated(req,res,next)
 		return res.status(401).json({sucess: false, message: 'User not authenticated'})
 }
 
-module.exports = function (app, passport)
+module.exports = function (app, passport, con)
 {
 	// =====================================
 	// HOME PAGE (with login links) ========
@@ -121,40 +122,38 @@ module.exports = function (app, passport)
 
 	app.get('/user/all', (req, res) =>
 	{
-		User
-		.find()
-		.skip(1)
-		.limit(10)
-		.exec((err, data)=>
+
+
+		User.all(con).then((users)=>
 		{
-			if (err)
-				throw err;
-			res.json({sucess: true, users: data});
+				return (res.json({sucess: true, users: users}));
 		})
+		.catch((err)=>
+		{
+				return (res.status(401).json({sucess: false}));
+
+		})
+		//.find()
+		//.skip(1)
+		//.limit(10)
+		//.exec((err, data)=>
+		//{
+		//	if (err)
+		//		throw err;
+		//	res.json({sucess: true, users: data});
+		//})
 	})
 	.get('/user/:id', (req, res, next) =>
 	{
-		// if (!req.session.test)
-		// {
-		// 	console.log('session test not set')
-		// 	req.session.test = "this's my session test";
-		// 	req.session.save((err)=>
-		// 	{
-		// 		if (err)
-		// 			throw err;
-		// 		console.log(req.session)
-		// 	})
-		// 	res.send('Not logged in')
-		// }
-		// else
-		// 	console.log('session test set : '+ req.session.test)
+				User.findById(req.params.id, con).then((user)=>
+				{
+						return (res.json({sucess: true, user: user}));
+				})
+				.catch((err)=>
+				{
+						return (res.status(401).json({sucess: false, message: err}));
 
-		User.findById(req.params.id, (err, user) =>
-		{
-			if (err)
-				throw err;
-			res.json({sucess: true, user: user});
-		})
+				})
 	})
 
 	// =====================================
@@ -162,7 +161,6 @@ module.exports = function (app, passport)
 	// =====================================
 	app.post('/sign_up', (req, res, next) =>
 	{
-		console.log(req.body)
 		// passport.authenticate('local-signup',
 		// {
 		// 	successRedirect : '/profile',
@@ -232,21 +230,21 @@ module.exports = function (app, passport)
 				if (err)
 					throw (err);
 
-				User.findById({_id: tokenUser._id}, (err, user) =>
-				{
-					let new_user;
+				//User.findById({_id: tokenUser._id}, (err, user) =>
+				// {
+				// 	let new_user;
 
-					if (err)
-						throw (err);
+				// 	if (err)
+				// 		throw (err);
 
-					new_user = userUtils.getCleanUser(user);
+				// 	new_user = userUtils.getCleanUser(user);
 
-					res.json({
-						sucess: true,
-						user: new_user,
-						token: jwt.generateToken(new_user)
-					});
-				})
+				// 	res.json({
+				// 		sucess: true,
+				// 		user: new_user,
+				// 		token: jwt.generateToken(new_user)
+				// 	});
+				// })
 
 			}
 			catch (e)

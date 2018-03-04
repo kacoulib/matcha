@@ -77,14 +77,14 @@ class Register extends React.Component
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       login: this.state.login,
-      age: Date.parse(this.state.age),
+      age: this.state.age,
       orientation: this.state.orientation,
       gender: this.state.gender,
       email: this.state.email,
       password: this.state.password,
     };
 
-    this.appRequest.add_user(data)
+    this.appRequest.sign_up(data)
     .then((res)=>
     {
       console.log(res)

@@ -1,12 +1,12 @@
 "STRICT MODE"
 
-let 
-	User			= require('../Models/user.js'),
-	localStrategy	= require('passport-local').Strategy,
-	saltRounds		= 10;
+let localStrategy	= require('passport-local').Strategy,
+		userUtils			= require('../Utils/user'),
+		dataUtils			= require('../Utils/dataValidator'),
+		bcrypt				= require('bcrypt-nodejs');
 
 
-module.exports = function (passport)
+module.exports = function (passport, con)
 {
 	// =========================================================================
     // passport session setup ==================================================
@@ -18,9 +18,7 @@ module.exports = function (passport)
 
     passport.deserializeUser(function(id, next)
     {
-        User.findById(id, function(err, user) {
-            next(err, user);
-        });
+        con.query("select * from User where id = "+id, (err,rows)=> next(err, user));
     });
 
 
@@ -29,37 +27,28 @@ module.exports = function (passport)
     // =========================================================================
 	passport.use('local-signin', new localStrategy(
 	{
-		usernameField: 'email',
+		usernameField: 'loginOrEmail',
 		passwordField: 'password',
 		passReqToCallback : true // allows us to pass back the entire request to the callback
 
 	},
-	function(req, email, password, next)
+	function(req, loginOrEmail, password, next)
 	{
-		User.findOne({ 'email': email}, function(err, user)
+		con.query('select * from User where email = ? or login = ?', [loginOrEmail, loginOrEmail], (err, rows)=>
 		{
 			if (err)
 				return next(err);
 
-			if (!user)
-				return next(null, false, { message: 'Incorrect email.' });
-				
-			if (!user.validPassword(password))
+			if (!rows)
+				return next(null, false, { message: 'Incorrect login or email.' });
+
+			if (!(rows[0].password == password))
 				return next(null, false, 'Oops! Wrong password.');
 
-			// req.logIn(user, function (err)
-			// {
 				if (err)
 					return next(err);
-				// console.log('User login succefully');
-				// console.log(req.session);
-				// console.log(user);
-				// console.log('-------------');
-				// req.session.user = user;
-				req.session.user = user;
-				
-				return next(null, user);
-			// })
+
+				return next(null, rows[0]);
 		});
 	}));
 
@@ -76,43 +65,42 @@ module.exports = function (passport)
 	},
 	function(req, email, password, next)
 	{
-		console.log('local-signup')
 		// asynchronous
 		// User.findOne wont fire unless data is sent back
 		process.nextTick(function()
 		{
-			User.findOne({ 'email' :  email }, function(err, user)
+			// create the user
+			let new_user = userUtils.cleanNewUser(req.body);
+
+			if (!dataUtils.is_new_user_valid(new_user))
+				return next(null, false, 'Invalid data');
+			con.query('select * from User where email = ? or login = ?', [new_user.email, new_user.login], (err, rows)=>
 			{
 				// if there are any errors
 				if (err)
 					return next(err);
 
 				// if theres email exist
-				if (user)
-					return next(null, false, 'That email is already taken.');
-				// if there is no user with that email
-				// create the user
-				let newUser	= new User(
+				if (rows[0])
 				{
-					age			: req.body.age,
-					gender		: req.body.gender,
-					adresses	: req.body.adresses,
-					orientation	: req.body.orientation,
-					location	: req.body.location,
-					bio			: req.body.bio,
-					email		: req.body.email
-				});
-				newUser.password = newUser.generateHash(password)
+					console.log('already exist')
+					return next(null, false, 'That email is already taken.');
+				}
+
+				new_user.status = 'online';
+				new_user.password = bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8), null);
+
 				// save the new user
-				newUser.save(function(err)
+				con.query('INSERT INTO User SET ?', new_user, (err, new_inserted_user)=>
 				{
 					if (err)
 						throw err;
-					
+						new_user.id = new_inserted_user.insertId;
+
 					console.log('User succefully create');
-					return next(null, newUser);
+					return next(null, new_user);
 				});
-			});    
+			});
 		});
 	}))
 }

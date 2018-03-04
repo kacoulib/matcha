@@ -38,9 +38,9 @@ class Requests
 		})
 	}
 
-	add_user (newUserData)
+	sign_up (newUserData)
 	{
-		return axios.post(this.url + '/user/add', newUserData)
+		return axios.post(this.url + '/sign_up', newUserData)
 		.then((res)=>
 		{
 			let data = res.data;

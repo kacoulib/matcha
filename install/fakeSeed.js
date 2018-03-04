@@ -46,8 +46,6 @@ con.query("DELETE FROM User WHERE login = ?", ['myLogin'], (err, res, fields)=>
 	if (err)
 		throw err;
 
-		console.log(res)
-		console.log(fields)
 })
 
 

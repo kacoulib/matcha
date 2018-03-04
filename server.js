@@ -10,11 +10,13 @@ const	express			= require('express'),
 		passport			= require('passport'),
 		server				= require('http').createServer(app),
 		io						= require('socket.io')(server),
-		jwt						= require('jsonwebtoken'),
-		dotenv				= require('dotenv').config();
+		jwt						= require('jsonwebtoken');
+
 
 
 // Database login ==============================================================
+
+require('dotenv').config();
 
 let con = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -29,14 +31,14 @@ con.connect(function(err)
 		throw err;
 
 	console.log('connected')
-
 	// configuration ===============================================================
 
-	//require('./Middlewares/auth.js')(passport);
+	require('./Middlewares/auth.js')(passport, con);
 
 	app.use((req, res,next)=>
 	{
-		res.setHeader('Access-Control-Allow-Origin',  'http://localhost:3001');
+		//res.setHeader('Access-Control-Allow-Origin',  'http://localhost:3001');
+		res.setHeader('Access-Control-Allow-Origin',  '*');
 		res.header('Access-Control-Allow-Credentials', true);
 		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -120,7 +122,7 @@ con.connect(function(err)
 	// 		})
 	// 	}
 	// routes ======================================================================
-	//require('./Routes/users.js')(app, passport);
+	require('./Routes/users.js')(app, passport, con);
 
 
 	// // Messaging ======================================================================
