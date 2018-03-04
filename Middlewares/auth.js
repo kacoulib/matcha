@@ -80,10 +80,7 @@ module.exports = function (passport, con)
 
 				// if user exist
 				if (user[0])
-				{
-					console.log('already exist')
 					return next(null, false, 'That email is already taken.');
-				}
 
 				new_user.status = 'online';
 

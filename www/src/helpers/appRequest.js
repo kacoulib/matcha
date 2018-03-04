@@ -40,7 +40,7 @@ class Requests
 
 	sign_up (newUserData)
 	{
-		return axios.post(this.url + '/sign_up', newUserData)
+		return axios.post(this.url + '/user', newUserData)
 		.then((res)=>
 		{
 			let data = res.data;

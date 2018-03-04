@@ -22,6 +22,61 @@ function isAuthenticated(req,res,next)
 
 module.exports = function (app, passport, con)
 {
+
+
+
+		// =====================================
+		// USER CRUD (with login links) ========
+		// =====================================
+
+	app.post('/user', (req, res, next) =>
+	{
+		passport.authenticate('local-signup', (err, user, info) =>
+		{
+			if (err)
+			throw err;
+
+			if (info)
+			return (res.status(401).json({sucess: false, message: info}));
+
+			let new_user = userUtils.tokenazableUser(user),
+			token = jwt.generateToken(new_user);
+
+			res.json({
+				sucess: true,
+				user: new_user,
+				token: token
+			})
+		})(req, res, next);
+	})
+	.get('/user/:id', (req, res, next) =>
+	{
+				User.findById(req.params.id, con).then((user)=>
+				{
+						return (res.json({sucess: true, user: user}));
+				})
+				.catch((err)=>
+				{
+						return (res.status(401).json({sucess: false, message: err}));
+
+				})
+	})
+	.delete('/user/:id', (req, res, next) =>
+	{
+				let id  = req.params.id;
+
+				User.delete(id, con).then((user)=>
+				{
+						return (res.json({sucess: true, message: `User ${id} deteled`}));
+				})
+				.catch((err)=>
+				{
+						return (res.status(401).json({sucess: false, message: err}));
+
+				})
+	})
+
+
 	// =====================================
 	// HOME PAGE (with login links) ========
 
@@ -86,44 +141,15 @@ module.exports = function (app, passport, con)
 			})
 		})
 
-	}).delete(['/', '/me'], (req, res) =>
-	{
-		res.json({sucess: true, message: 'home swith home'});
-	});
-
-	// =====================================
-	// USER CRUD (with login links) ========
-	// =====================================
-
-	app.post('/user/add', (req, res, next) =>
-	{
-		let new_user = userUtils.cleanNewUser(req.body),
-				tmp;
-
-
-		if (!dataUtils.is_new_user_valid(new_user))
-			return (res.status(401).json({sucess: false, message: 'Invalid data'}));
-
-		new_user.status = 'online';
-		new_user.password = bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8), null);
-		//con.query("INSERT INTO User SET ?", post, (err, res, fields)=>
-		//{
-		//	if (err)
-		//		throw err;
-
-		//		console.log(res)
-		//		console.log(fields)
-		//})
-
-		console.log(new_user)
-		console.log('ok')
-		next();
 	})
+
+
+	// =====================================
+	// SIGNUP ==============================
+	// =====================================
 
 	app.get('/user/all', (req, res) =>
 	{
-
-
 		User.all(con).then((users)=>
 		{
 				return (res.json({sucess: true, users: users}));
@@ -133,57 +159,6 @@ module.exports = function (app, passport, con)
 				return (res.status(401).json({sucess: false}));
 
 		})
-		//.find()
-		//.skip(1)
-		//.limit(10)
-		//.exec((err, data)=>
-		//{
-		//	if (err)
-		//		throw err;
-		//	res.json({sucess: true, users: data});
-		//})
-	})
-	.get('/user/:id', (req, res, next) =>
-	{
-				User.findById(req.params.id, con).then((user)=>
-				{
-						return (res.json({sucess: true, user: user}));
-				})
-				.catch((err)=>
-				{
-						return (res.status(401).json({sucess: false, message: err}));
-
-				})
-	})
-
-	// =====================================
-	// SIGNUP ==============================
-	// =====================================
-	app.post('/sign_up', (req, res, next) =>
-	{
-		// passport.authenticate('local-signup',
-		// {
-		// 	successRedirect : '/profile',
-		// 	failureRedirect : '/signup'
-		// })
-		passport.authenticate('local-signup', (err, user, info) =>
-		{
-			if (err)
-				throw err;
-
-			if (info)
-				return (res.status(401).json({sucess: false, message: info}));
-
-			let new_user = userUtils.tokenazableUser(user),
-				token = jwt.generateToken(new_user);
-
-			res.json({
-				sucess: true,
-				user: new_user,
-				token: token
-			})
-
-    	})(req, res, next);
 	})
 
 	// =====================================
@@ -365,11 +340,6 @@ module.exports = function (app, passport, con)
 	// =====================================
 	// PROFILE SECTION =====================
 	// =====================================
-	app.put('/update/:id', (req, res) =>
-	{})
-	app.get('/:id', (req, res) =>
-	{})
-
 
 	// =====================================
 	// LOGOUT ==============================

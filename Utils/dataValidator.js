@@ -20,11 +20,21 @@ function is_valid_email(email)
 	return (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) ? true : false)
 }
 
+function is_valid_db_id(id)
+{
+	if (isNaN(id)|| id < 0)
+		return (false);
+
+	return (true);	
+}
+
 module.exports =
 {
 	isMajor: isMajor,
 
 	is_valid_email: is_valid_email,
+
+	is_valid_db_id:	is_valid_db_id,
 
 	is_new_user_valid: (user) =>
 	{
