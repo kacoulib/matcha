@@ -74,32 +74,30 @@ module.exports = function (passport, con)
 			if (!dataUtils.is_new_user_valid(new_user))
 				return next(null, false, 'Invalid data');
 
-			user.findByLoginOrEmail(loginOrEmail, loginOrEmail, con)
-			.then((user)=>
+			User.findByLoginOrEmail(new_user.login, new_user.email, con)
+			.then((err)=>{next(null, false, { message: 'The email or login provided is already taken.' })})
+			.catch((user)=>
 			{
-
-				// if user exist
-				if (user[0])
-					return next(null, false, 'That email is already taken.');
-
 				new_user.status = 'online';
 
-				bcrypt.hash(new_user.password, 8)
-				.then((salt)=>
+				bcrypt.hash(new_user.password, bcrypt.genSaltSync(8), null, (err, salt)=>
 				{
-					new_user.password = salt;
+					if (err)
+						return next(null, false, { message: 'Error.' });
+
+						new_user.password = salt;
 
 					// save the new user
-					User.add(new_user, con).then((new_user_id)=>
+					User.add(new_user, con)
+					.then((new_user_id)=>
 					{
 						new_user.id = new_user_id;
 
-						console.log('User succefully create');
 						return next(null, new_user);
-					}).catch((e));
+					})
+					.catch((e)=> next(null, false, { message: 'User insertion Error.' }));
 				})
 			})
-			.catch((err)=>next(null, false, { message: 'Incorrect login or email.' }));
 		});
 	}))
 }

@@ -8,7 +8,7 @@ module.exports =
 	{
 		return new Promise((resolve, reject)=>
 		{
-			con.query(' SELECT first_name, last_name, login, password, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass FROM User', (err, user)=>
+			con.query(' SELECT id, first_name, last_name, login, password, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass FROM User', (err, user)=>
 			{
 					if (err)
 						return (reject(err));
@@ -37,11 +37,11 @@ module.exports =
 		})
 	},
 
-	findByLoginOrEmail: (email, login, con)=>
+	findByLoginOrEmail: (login, email, con)=>
 	{
 		return new Promise((resolve, reject)=>
 		{
-			con.query('select * from User where email = ? or login = ?', [email, login], (err, user)=>
+			con.query('select * from User where login = ? or email = ?', [login, email], (err, user)=>
 			{
 					if (err)
 						return (reject(err));
@@ -63,8 +63,6 @@ module.exports =
 
 	update: (new_user, con)=>
 	{
-		let fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
-
 		return new Promise((resolve, reject)=>
 		{
 			con.query('INSERT INTO User SET ?', new_user, (err, user)=> (err ? reject(err) : resolve(user.insertId)));

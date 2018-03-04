@@ -5,20 +5,20 @@ module.exports =
 	tokenazableUser: (user)=>
 	{
 		let u = {
-			name: user.name,
-			location: user.location,
-			orientation: user.orientation,
-			pictures: user.pictures,
-			status: user.status,
-			tags: user.tags,
-			viewers: user.viewers,
-			likers: user.likers,
-			age: user.age,
-			score: user.score,
-			reset_pass: user.reset_pass,
+			id: user.id,
+			first_name: user.first_name,
+			last_name: user.last_name,
+			login: user.login,
 			email: user.email,
+			age: user.age,
+			nb_image: 0,
+			profile_image: null,
 			gender: user.gender,
-			_id: user._id
+			orientation: user.orientation,
+			bio: '',
+			status: 'online',
+			is_lock: false,
+			reset_pass: null,
 		}
 
 		return (u);
@@ -33,8 +33,14 @@ module.exports =
 			password: user.password,
 			email: user.email,
 			age: user.age,
+			nb_image: 0,
+			profile_image: null,
 			gender: user.gender,
 			orientation: user.orientation,
+			bio: '',
+			status: 'online',
+			is_lock: false,
+			reset_pass: null
 		}
 
 		return (u);

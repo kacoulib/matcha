@@ -25,58 +25,6 @@ module.exports = function (app, passport, con)
 
 
 
-		// =====================================
-		// USER CRUD (with login links) ========
-		// =====================================
-
-	app.post('/user', (req, res, next) =>
-	{
-		passport.authenticate('local-signup', (err, user, info) =>
-		{
-			if (err)
-			throw err;
-
-			if (info)
-			return (res.status(401).json({sucess: false, message: info}));
-
-			let new_user = userUtils.tokenazableUser(user),
-			token = jwt.generateToken(new_user);
-
-			res.json({
-				sucess: true,
-				user: new_user,
-				token: token
-			})
-		})(req, res, next);
-	})
-	.get('/user/:id', (req, res, next) =>
-	{
-				User.findById(req.params.id, con).then((user)=>
-				{
-						return (res.json({sucess: true, user: user}));
-				})
-				.catch((err)=>
-				{
-						return (res.status(401).json({sucess: false, message: err}));
-
-				})
-	})
-	.delete('/user/:id', (req, res, next) =>
-	{
-				let id  = req.params.id;
-
-				User.delete(id, con).then((user)=>
-				{
-						return (res.json({sucess: true, message: `User ${id} deteled`}));
-				})
-				.catch((err)=>
-				{
-						return (res.status(401).json({sucess: false, message: err}));
-
-				})
-	})
-
-
 	// =====================================
 	// HOME PAGE (with login links) ========
 
@@ -150,6 +98,7 @@ module.exports = function (app, passport, con)
 
 	app.get('/user/all', (req, res) =>
 	{
+
 		User.all(con).then((users)=>
 		{
 				return (res.json({sucess: true, users: users}));
@@ -344,5 +293,65 @@ module.exports = function (app, passport, con)
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
+
+
+	// =====================================
+	// USER CRUD (with login links) ========
+	// =====================================
+
+app.post('/user', (req, res, next) =>
+{
+	passport.authenticate('local-signup', (err, user, info) =>
+	{
+		if (err)
+			throw err;
+
+		if (info)
+			return (res.status(401).json({sucess: false, message: info}));
+
+		let new_user = userUtils.tokenazableUser(user),
+		token = jwt.generateToken(new_user);
+
+		res.json({
+			sucess: true,
+			user: new_user,
+			token: token
+		})
+	})(req, res, next);
+})
+.get('/user/:id', (req, res, next) =>
+{
+			User.findById(req.params.id, con).then((user)=>
+			{
+					return (res.json({sucess: true, user: user}));
+			})
+			.catch((err)=>
+			{
+					return (res.status(401).json({sucess: false, message: err}));
+
+			})
+})
+.delete('/user/:id', (req, res, next) =>
+{
+			let id  = req.params.id;
+
+			User.delete(id, con).then((user)=>
+			{
+					return (res.json({sucess: true, message: `User ${id} deteled`}));
+			})
+			.catch((err)=>
+			{
+					return (res.status(401).json({sucess: false, message: err}));
+			})
+})
+.put('/user', (req, res, next)=>
+{
+	let fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
+
+	return (res.status(401).json({sucess: false, message: err}));
+
+})
+
+
 
 }

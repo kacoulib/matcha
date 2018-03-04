@@ -25,7 +25,7 @@ function is_valid_db_id(id)
 	if (isNaN(id)|| id < 0)
 		return (false);
 
-	return (true);	
+	return (true);
 }
 
 module.exports =
@@ -39,7 +39,7 @@ module.exports =
 	is_new_user_valid: (user) =>
 	{
 		let min_len = 4,
-		required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'gender', 'orientation'],
+		required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
 		required_fields_len = required_fields.length,
 		key;
 
