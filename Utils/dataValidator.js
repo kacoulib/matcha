@@ -30,7 +30,7 @@ function is_valid_db_id(id)
 
 function is_valid_gender(gender)
 {
-	return (['female', 'male', 'other'].indexOf(user[key]) >= 0);
+	return (['female', 'male', 'other'].indexOf(gender) >= 0);
 }
 
 module.exports =
@@ -44,7 +44,7 @@ module.exports =
 	is_new_user_valid: (user) =>
 	{
 		let min_len = 4,
-				required_fields = ['id', 'first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
+				required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
 				required_fields_len = required_fields.length,
 				key;
 

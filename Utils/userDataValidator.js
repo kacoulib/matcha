@@ -4,7 +4,7 @@ module.exports =
 {
 	tokenazableUser: (user)=>
 	{
-		let u = {
+		return {
 			id: user.id,
 			first_name: user.first_name,
 			last_name: user.last_name,
@@ -20,13 +20,11 @@ module.exports =
 			is_lock: false,
 			reset_pass: null,
 		}
-
-		return (u);
 	},
 
 	cleanNewUser: (user)=>
 	{
-		let u = {
+		return {
 			first_name: user.first_name,
 			last_name: user.last_name,
 			login: user.login,
@@ -46,7 +44,7 @@ module.exports =
 
 	cleanUpdateUser: (user)=>
 	{
-		let u = {
+		return {
 			id: user.id,
 			first_name: user.first_name,
 			last_name: user.last_name,
@@ -63,6 +61,5 @@ module.exports =
 			is_lock: user.is_lock,
 			reset_pass: user.reset_pass
 		}
-		return (u);
 	}
 }
