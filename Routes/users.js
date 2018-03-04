@@ -1,16 +1,13 @@
 'use strict'
 
-const nodemailer = require('nodemailer'),
-			User = require('../Models/user.js'),
-	crypto		= require('crypto'),
-
-	//bcrypt	= require('bcrypt-nodejs'),
-	multer  = require('multer'),
-	upload = multer({dest: './'}),
-	jwt = require('../Middlewares/jwt.js'),
-	userUtils	= require('../Utils/user');
-	//dataUtils	= require('../Utils/dataValidator');
-
+const nodemailer	= require('nodemailer'),
+			User				= require('../Models/user.js'),
+			crypto			= require('crypto'),
+			multer  		= require('multer'),
+			upload 			= multer({dest: './'}),
+			jwt 				= require('../Middlewares/jwt.js'),
+			dataUtils		= require('../Utils/dataValidator'),
+			userUtils		= require('../Utils/userDataValidator');
 
 function isAuthenticated(req,res,next)
 {
@@ -299,28 +296,28 @@ module.exports = function (app, passport, con)
 	// USER CRUD (with login links) ========
 	// =====================================
 
-app.post('/user', (req, res, next) =>
-{
-	passport.authenticate('local-signup', (err, user, info) =>
+	app.post('/user', (req, res, next) =>
 	{
-		if (err)
-			throw err;
+			passport.authenticate('local-signup', (err, user, info) =>
+			{
+				if (err)
+					throw err;
 
-		if (info)
-			return (res.status(401).json({sucess: false, message: info}));
+				if (info)
+					return (res.status(401).json({sucess: false, message: info}));
 
-		let new_user = userUtils.tokenazableUser(user),
-		token = jwt.generateToken(new_user);
+				let new_user = userUtils.tokenazableUser(user),
+				token = jwt.generateToken(new_user);
 
-		res.json({
-			sucess: true,
-			user: new_user,
-			token: token
-		})
-	})(req, res, next);
-})
-.get('/user/:id', (req, res, next) =>
-{
+				res.json({
+					sucess: true,
+					user: new_user,
+					token: token
+				})
+			})(req, res, next);
+	})
+	.get('/user/:id', (req, res, next) =>
+	{
 			User.findById(req.params.id, con).then((user)=>
 			{
 					return (res.json({sucess: true, user: user}));
@@ -330,9 +327,32 @@ app.post('/user', (req, res, next) =>
 					return (res.status(401).json({sucess: false, message: err}));
 
 			})
-})
-.delete('/user/:id', (req, res, next) =>
-{
+	})
+
+	.put('/user', (req, res, next)=>
+	{
+		let new_user = userUtils.cleanUpdateUser(req.body);
+
+		console.log(new_user)
+		if (!dataUtils.is_new_user_valid(new_user))
+			return next(null, false, 'Invalid data');
+
+		User.findByLoginOrEmail(new_user.login, new_user.email, con)
+		.then((err)=>
+		{
+			User.update(new_user, con)
+			.then((user)=>res.json({sucess: true, message: 'user updated'}))
+			.catch((err)=>
+				{
+					console.log(err)
+				return (res.status(401).json({sucess: false, message: 'Error while updating user.' }))
+			})
+		})
+		.catch((user)=>(res.status(401).json({sucess: false, message: 'User not found.' })))
+	})
+
+	.delete('/user/:id', (req, res, next) =>
+	{
 			let id  = req.params.id;
 
 			User.delete(id, con).then((user)=>
@@ -343,15 +363,5 @@ app.post('/user', (req, res, next) =>
 			{
 					return (res.status(401).json({sucess: false, message: err}));
 			})
-})
-.put('/user', (req, res, next)=>
-{
-	let fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
-
-	return (res.status(401).json({sucess: false, message: err}));
-
-})
-
-
-
+	})
 }

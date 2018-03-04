@@ -1,6 +1,6 @@
 'use strict'
 
-function isMajor(age)
+function is_major(age)
 {
 	if (!age)
 		return (false);
@@ -28,9 +28,14 @@ function is_valid_db_id(id)
 	return (true);
 }
 
+function is_valid_gender(gender)
+{
+	return (['female', 'male', 'other'].indexOf(user[key]) >= 0);
+}
+
 module.exports =
 {
-	isMajor: isMajor,
+	is_major: is_major,
 
 	is_valid_email: is_valid_email,
 
@@ -39,9 +44,9 @@ module.exports =
 	is_new_user_valid: (user) =>
 	{
 		let min_len = 4,
-		required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
-		required_fields_len = required_fields.length,
-		key;
+				required_fields = ['id', 'first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
+				required_fields_len = required_fields.length,
+				key;
 
 		for (key in user)
 		{
@@ -49,6 +54,10 @@ module.exports =
 			{
 				switch (key)
 				{
+					case 'id':
+						if (!is_valid_db_id(user[key]))
+							return (false);
+						break;
 					case 'first_name':
 					case 'last_name':
 					case 'login':
@@ -56,19 +65,22 @@ module.exports =
 						if (user[key].length < min_len)
 							return (false);
 						break;
+					case 'age':
+						if (!is_major(user[key]))
+							return (false);
+						break;
 					case 'email':
 						if (!is_valid_email(user[key]))
 							return (false);
 						break;
 					case 'gender':
-						if (['female', 'male', 'other'].indexOf(user[key]) < 0)
+						if (!is_valid_gender(user[key]))
 							return (false);
 						break;
 					default:
 						break;
-
 				}
-					required_fields_len--;
+				required_fields_len--;
 			}
 		}
 

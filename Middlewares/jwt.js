@@ -2,7 +2,7 @@
 
 let jwt		= require('jsonwebtoken'),
 	dotenv	= require('dotenv').config(),
-	utils	= require('../Utils/user');
+	utils	= require('../Utils/userDataValidator');
 
 
 module.exports =

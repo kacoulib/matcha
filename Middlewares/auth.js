@@ -2,7 +2,7 @@
 
 let localStrategy	= require('passport-local').Strategy,
 		User = require('../Models/user.js'),
-		userUtils			= require('../Utils/user'),
+		userUtils			= require('../Utils/userDataValidator'),
 		dataUtils			= require('../Utils/dataValidator'),
 		bcrypt				= require('bcrypt-nodejs');
 

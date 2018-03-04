@@ -8,7 +8,7 @@ module.exports =
 	{
 		return new Promise((resolve, reject)=>
 		{
-			con.query(' SELECT id, first_name, last_name, login, password, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass FROM User', (err, user)=>
+			con.query(' SELECT id, first_name, last_name, login, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass FROM User', (err, user)=>
 			{
 					if (err)
 						return (reject(err));
@@ -65,7 +65,7 @@ module.exports =
 	{
 		return new Promise((resolve, reject)=>
 		{
-			con.query('INSERT INTO User SET ?', new_user, (err, user)=> (err ? reject(err) : resolve(user.insertId)));
+			con.query('UPDATE User SET ? WHERE email = :email', {new_user}, (err, user)=> (err ? reject(err) : resolve(user.insertId)));
 		})
 	},
 
