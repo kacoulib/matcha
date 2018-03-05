@@ -20,21 +20,26 @@ class Edit extends Component
 
 		this.state =
 		{
-			first : '',
-			last : '',
+			first_name : '',
+			last_name : '',
 			age : '',
+			login : '',
 			email : '',
+			password : '',
 			gender : '',
+			orientation : '',
+			nb_image: 0,
+			profile_image: '',
+			bio: '',
+			status : '',
+			is_lock: false,
+
 			likers : [],
 			location : '',
-			orientation : '',
-			password : '',
 			pictures : [],
-			profil_picture : '',
-			status : '',
 			tags : [],
 			viewers : [],
-			_id : '',
+
 			form_has_been_modified: 0,
 			stepIndex : 0
 		}
@@ -53,10 +58,15 @@ class Edit extends Component
 			if (!res.data.sucess)
 				return ;
 
-			let user = res.data.user;
+			let tmp = res.data.user,
+				userState = this.state,
+				user = {},
+				key;
 
-			user.first = user.name ? user.name.first: '';
-			user.last = user.name ?  user.name.last: '';
+			for (key in tmp)
+				if (userState.hasOwnProperty(key))
+					user[key] = tmp[key]
+
 			this.setState(user)
 		})
 	}
@@ -73,7 +83,7 @@ class Edit extends Component
 			tmp.push(name)
 		else
 			tmp.splice(index, 1);
-		
+
 		this.setState({tags: tmp});
 	}
 
@@ -116,8 +126,6 @@ class Edit extends Component
 
 		if (!data.form_has_been_modified)
 			return (console.log('data not modified'));
-
-
 
 		for (key in data)
 		{
@@ -178,9 +186,9 @@ class Edit extends Component
 	        <div className="Profile">
 	        {this.state.data}
 	        	<div className='white_tab_container'>
-	        		
+
 	        		{
-	        			stepIndex ? 
+	        			stepIndex ?
 	        				<EditBasic {...parentProp} />
 	        			:
 	        				<EditPublic {...parentProp} />

@@ -137,7 +137,7 @@ module.exports =
 
 	is_update_user_valid: (user) =>
 	{
-		let required_fields = ['id', 'first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
+		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
 
 		return (check_user_field_data(user, required_fields));
 	}

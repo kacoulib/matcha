@@ -14,10 +14,10 @@ class Requests
 		return axios.get(this.url + '/me');
 	}
 
-	all_users (offset, limit)
+	all_users (limit, offset = 0)
 	{
 		axios.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem('token');
-		return axios.get(this.url + '/user/all');
+		return axios.get(`${this.url}/user/all/?limit=${limit}&offset=${offset}`);
 	}
 
 	sign_in (loginOrEmail, password)

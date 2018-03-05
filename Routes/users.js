@@ -40,22 +40,7 @@ module.exports = function (app, passport, con)
 	// =====================================
 	app.get(['/', '/me'], (req, res) =>
 	{
-		User.findById('5a5e42abb755294740df95f7', (err, user)=>
-		{
-			console.log('doing stuf')
-			try
-			{
-				if (err)
-					throw err;
-
-				// return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));
-				res.json({sucess: true, user: user});
-			}catch(e)
-			{
-				return (res.status(401).json({sucess: false, message: 'Problem finding this user'}));
-			}
-
-		})
+			res.json({sucess: true, user: req.user});
 	})
 	.put('/me/:id', (req, res, next) =>
 	{
@@ -93,16 +78,15 @@ module.exports = function (app, passport, con)
 	// SIGNUP ==============================
 	// =====================================
 
-	app.get('/user/all', (req, res) =>
+	app.get('/user/all/', (req, res) =>
 	{
-
-		User.all(con).then((users)=>
+		User.all(req.query.limit, req.query.offset, con).then((users)=>
 		{
 				return (res.json({sucess: true, users: users}));
 		})
 		.catch((err)=>
 		{
-				return (res.status(401).json({sucess: false}));
+				return (res.status(401).json({sucess: false, message: err}));
 
 		})
 	})
@@ -332,6 +316,7 @@ module.exports = function (app, passport, con)
 	.put('/user', (req, res, next)=>
 	{
 		let new_user = userUtils.cleanUpdateUser(req.body);
+
 
 		if (!dataUtils.is_update_user_valid(new_user))
 			return next(null, false, 'Invalid data');

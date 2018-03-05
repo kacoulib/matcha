@@ -10,13 +10,15 @@ import Pics from '../../components/pics.js';
 class Home extends Component
 {
 	constructor(props)
-  	{
+	{
 	    super(props);
 		this.get_all_users = this.get_all_users.bind(this);
 		this.appRequest = new AppRequest();
 
 		this.state = {
-			recommendation: []
+			recommendation: [],
+			limit : 2,
+			offset : 0
 		}
 	}
 
@@ -27,11 +29,9 @@ class Home extends Component
 
 	get_all_users()
 	{
-		console.log(this.appRequest)
-		this.appRequest.all_users()
+		this.appRequest.all_users(this.state.limit, this.state.offset)
 		.then((res)=>
 		{
-			console.log()
 			this.setState({recommendation: res.data.users}, function()
 			{
 				console.log(this.state.recommendation)
@@ -45,7 +45,7 @@ class Home extends Component
 			pictures_len = data.pictures && data.pictures.length ? true : false;
 
 
-		return (		
+		return (
 			<div className='white_tab_container'>
 				<div className='white_tab'>
 					<div className='tab_content'>
@@ -77,7 +77,7 @@ function ListItem(props)
 			{
 				width: 50,
 				borderRadius: 100,
-				margin: '0 12px 0 0'			
+				margin: '0 12px 0 0'
 			}
 		}
 	return (

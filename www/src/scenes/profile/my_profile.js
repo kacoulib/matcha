@@ -28,7 +28,7 @@ class MyProfile extends Component
 		.then((res)=>
 		{
 			if (res.data.sucess)
-				this.setState({data: res.data.user})
+				this.setState({data: res.data.user}, ()=>console.log(this.state.data))
 		})
 	}
 

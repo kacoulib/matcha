@@ -50,8 +50,8 @@ class EditBasic extends Component
 				</header>
 				<div className='tab_content' id='edit'>
 					<form onSubmit={this.props.handleSubmit} >
-						<InputField  value={this.props.data.first} name='first' label_text='First name' {...parentProp}/>
-						<InputField  value={this.props.data.last} name='last' label_text='Last name' {...parentProp}/>
+						<InputField  value={this.props.data.first_name} name='first_name' label_text='First name' {...parentProp}/>
+						<InputField  value={this.props.data.last_name} name='last_name' label_text='Last name' {...parentProp}/>
 						<InputField  value={this.props.data.email} type='email' name='email' label_text='Email' {...parentProp}/>
 						<div className='clear_fix'>
 							<label htmlFor='bio'>Bio:</label>

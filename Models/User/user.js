@@ -4,11 +4,17 @@ let dataValidator = require('../../Utils/dataValidator.js');
 
 module.exports =
 {
-	all: (con)=>
+	all: (limit, offset, con)=>
 	{
 		return new Promise((resolve, reject)=>
 		{
-			con.query(' SELECT id, first_name, last_name, login, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass FROM User', (err, user)=>
+			if (!dataValidator.is_valid_db_id(limit) || !dataValidator.is_valid_db_id(offset))
+				return (reject('Invalid limit or offset'));
+
+			limit	 = parseInt(limit);
+			offset = parseInt(offset);
+
+			con.query(' SELECT id, first_name, last_name, login, email, age, nb_image, profile_image, gender, orientation, bio, status, is_lock, reset_pass FROM User LIMIT ? OFFSET ?', [limit, offset], (err, user)=>
 			{
 					if (err)
 						return (reject(err));
@@ -67,7 +73,7 @@ module.exports =
 
 		return new Promise((resolve, reject)=>
 		{
-			con.query('UPDATE User SET ? WHERE email = ?', [new_user, new_user.email], (err, user)=> (err ? reject(err) : resolve(user.insertId)));
+			con.query('UPDATE User SET ? WHERE login = ?', [new_user, new_user.login], (err, user)=> (err ? reject(err) : resolve(user.insertId)));
 		})
 	},
 
