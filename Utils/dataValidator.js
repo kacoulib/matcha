@@ -33,6 +33,60 @@ function is_valid_gender(gender)
 	return (['female', 'male', 'other'].indexOf(gender) >= 0);
 }
 
+function is_valid_orientation(orientation)
+{
+	return (['heterosexual','bisexual','homosexual'].indexOf(orientation) >= 0);
+}
+
+function check_user_field_data(user, required_fields)
+{
+	let  min_len = 4,
+			required_fields_len = required_fields.length,
+			key;
+
+	for (key in user)
+	{
+		if (user.hasOwnProperty(key))
+		{
+			switch (key)
+			{
+				case 'id':
+					if (!is_valid_db_id(user[key]))
+						return (false);
+					break;
+				case 'first_name':
+				case 'last_name':
+				case 'login':
+				case 'password':
+					if (user[key].length < min_len)
+						return (false);
+					break;
+				case 'age':
+					if (!is_major(user[key]))
+						return (false);
+					break;
+				case 'email':
+					if (!is_valid_email(user[key]))
+						return (false);
+					break;
+				case 'gender':
+					if (!is_valid_gender(user[key]))
+						return (false);
+					break;
+				case 'orientation':
+					if (!is_valid_orientation(user[key]))
+						return (false);
+					break;
+				default:
+					break;
+			}
+			required_fields_len--;
+		}
+	}
+
+	return (required_fields_len == 0);
+}
+
 module.exports =
 {
 	is_major: is_major,
@@ -43,47 +97,15 @@ module.exports =
 
 	is_new_user_valid: (user) =>
 	{
-		let min_len = 4,
-				required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
-				required_fields_len = required_fields.length,
-				key;
+		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
 
-		for (key in user)
-		{
-			if (user.hasOwnProperty(key))
-			{
-				switch (key)
-				{
-					case 'id':
-						if (!is_valid_db_id(user[key]))
-							return (false);
-						break;
-					case 'first_name':
-					case 'last_name':
-					case 'login':
-					case 'password':
-						if (user[key].length < min_len)
-							return (false);
-						break;
-					case 'age':
-						if (!is_major(user[key]))
-							return (false);
-						break;
-					case 'email':
-						if (!is_valid_email(user[key]))
-							return (false);
-						break;
-					case 'gender':
-						if (!is_valid_gender(user[key]))
-							return (false);
-						break;
-					default:
-						break;
-				}
-				required_fields_len--;
-			}
-		}
+		return (check_user_field_data(user, required_fields));
+	},
 
-		return (required_fields_len == 0);
+	is_update_user_valid: (user) =>
+	{
+		let required_fields = ['id', 'first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
+
+		return (check_user_field_data(user, required_fields));
 	}
 }

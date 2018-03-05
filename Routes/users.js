@@ -333,20 +333,16 @@ module.exports = function (app, passport, con)
 	{
 		let new_user = userUtils.cleanUpdateUser(req.body);
 
-		console.log(new_user)
-		if (!dataUtils.is_new_user_valid(new_user))
+		if (!dataUtils.is_update_user_valid(new_user))
 			return next(null, false, 'Invalid data');
+
 
 		User.findByLoginOrEmail(new_user.login, new_user.email, con)
 		.then((err)=>
 		{
 			User.update(new_user, con)
-			.then((user)=>res.json({sucess: true, message: 'user updated'}))
-			.catch((err)=>
-				{
-					console.log(err)
-				return (res.status(401).json({sucess: false, message: 'Error while updating user.' }))
-			})
+			.then((user)=>res.json({sucess: true, message: 'User updated'}))
+			.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))
 		})
 		.catch((user)=>(res.status(401).json({sucess: false, message: 'User not found.' })))
 	})

@@ -11,14 +11,14 @@ module.exports =
 			login: user.login,
 			email: user.email,
 			age: user.age,
-			nb_image: 0,
-			profile_image: null,
+			nb_image: user.image || 0,
+			profile_image: user.profile_image || null,
 			gender: user.gender,
 			orientation: user.orientation,
-			bio: '',
-			status: 'online',
-			is_lock: false,
-			reset_pass: null,
+			bio: user.bio || '',
+			status: user.status || 'offline',
+			is_lock: user.is_lock || false,
+			reset_pass: user.reset_pass || null
 		}
 	},
 
@@ -56,10 +56,10 @@ module.exports =
 			profile_image: user.profile_image,
 			gender: user.gender,
 			orientation: user.orientation,
-			bio: user.bio,
-			status: user.status,
-			is_lock: user.is_lock,
-			reset_pass: user.reset_pass
+			bio: user.bio || '',
+			status: user.status || 'offline',
+			is_lock: user.is_lock || false,
+			reset_pass: user.reset_pass || null
 		}
 	}
 }
