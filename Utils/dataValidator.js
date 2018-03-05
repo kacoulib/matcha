@@ -1,5 +1,7 @@
 'use strict'
 
+let user_struct = require('../Models/User/struct/columns');
+
 function is_major(age)
 {
 	if (!age)
@@ -30,12 +32,17 @@ function is_valid_db_id(id)
 
 function is_valid_gender(gender)
 {
-	return (['female', 'male', 'other'].indexOf(gender) >= 0);
+	return (user_struct.single.gender.value.indexOf(gender) >= 0);
 }
 
 function is_valid_orientation(orientation)
 {
-	return (['heterosexual','bisexual','homosexual'].indexOf(orientation) >= 0);
+	return (user_struct.single.orientation.value.indexOf(orientation) >= 0);
+}
+
+function is_valid_status(status)
+{
+	return (user_struct.single.status.value.indexOf(status) >= 0);
 }
 
 function check_user_field_data(user, required_fields)
@@ -77,14 +84,38 @@ function check_user_field_data(user, required_fields)
 					if (!is_valid_orientation(user[key]))
 						return (false);
 					break;
+				case 'status':
+					if (!is_valid_status(user[key]))
+						return (false);
+					break;
 				default:
 					break;
 			}
 			required_fields_len--;
 		}
 	}
-
 	return (required_fields_len == 0);
+}
+
+function exclude_data(struct, data, excludes)
+{
+	let keys = struct.all,
+			keys_len = keys.length,
+			r = {},
+			tmp,
+			i = 0;
+
+	for (i; i < keys_len; i++)
+	{
+		if (excludes.indexOf(keys[i]) < 0)
+		{
+			if (struct.single.hasOwnProperty(keys[i]) && (tmp = struct.single[keys[i]].default) !== undefined)
+				r[keys[i]] = data[keys[i]] || tmp;
+			else
+				r[keys[i]] = data[keys[i]];
+		}
+	}
+	return r;
 }
 
 module.exports =
@@ -94,6 +125,8 @@ module.exports =
 	is_valid_email: is_valid_email,
 
 	is_valid_db_id:	is_valid_db_id,
+
+	exclude_data: exclude_data,
 
 	is_new_user_valid: (user) =>
 	{

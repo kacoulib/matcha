@@ -1,7 +1,7 @@
 "STRICT MODE"
 
 let localStrategy	= require('passport-local').Strategy,
-		User = require('../Models/user.js'),
+		User = require('../Models/User/user.js'),
 		userUtils			= require('../Utils/userDataValidator'),
 		dataUtils			= require('../Utils/dataValidator'),
 		bcrypt				= require('bcrypt-nodejs');
@@ -73,6 +73,8 @@ module.exports = function (passport, con)
 
 			if (!dataUtils.is_new_user_valid(new_user))
 				return next(null, false, 'Invalid data');
+
+			console.log(new_user)
 
 			User.findByLoginOrEmail(new_user.login, new_user.email, con)
 			.then((err)=>{next(null, false, { message: 'The email or login provided is already taken.' })})

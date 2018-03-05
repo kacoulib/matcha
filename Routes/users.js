@@ -1,7 +1,7 @@
 'use strict'
 
 const nodemailer	= require('nodemailer'),
-			User				= require('../Models/user.js'),
+			User				= require('../Models/User/user'),
 			crypto			= require('crypto'),
 			multer  		= require('multer'),
 			upload 			= multer({dest: './'}),
