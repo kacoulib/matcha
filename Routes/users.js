@@ -321,10 +321,16 @@ module.exports = function (app, passport, con)
 				new_user.password = bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8));
 
 			User.update(new_user, con)
-			.then((user)=>
+			.then(()=>
 			{
-				console.log(user)
-				res.json({sucess: true, message: 'User updated'})
+				User.findById(user[0].id, con).then((updated_user)=>
+				{
+					updated_user = userUtils.tokenazableUser(updated_user);
+					let token = jwt.generateToken(updated_user);
+
+					res.json({sucess: true, message: 'User updated', token})
+				})
+				.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))
 			})
 			.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))
 		})
