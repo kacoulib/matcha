@@ -71,17 +71,23 @@ con.connect(function(err)
 	app.use(function(req, res, next)
 	{
 	   // check header or url parameters or post parameters for token
-	   var token = req.headers['authorization'];
-	   if (!token) return next(); //if no token, continue
+	   var token = req.headers['authorization'],
+		 		not_loged_user_acess_page = ['/sign_in'];
 
-	   console.log('ok')
-	   token = token.replace('Bearer ', '');
+		 if (not_loged_user_acess_page.indexOf(req.originalUrl) > -1)
+			 return next();
 
-	   jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+		 if (!token)
+		 	return next(); //if no token, continue
+
+		 token = token.replace('Bearer ', '');
+
+	   jwt.verify(token, process.env.JWT_SECRET, function(err, user)
+		 {
 	     if (err) {
 	       return res.status(401).json({
 	         success: false,
-	         message: 'Please register Log in using a valid email to submit posts'
+	         message: 'Invalid token provided'
 	       });
 	     } else {
 	       req.user = user; //set the user to req so other routes can use it
