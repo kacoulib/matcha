@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 	`orientation` enum('heterosexual','bisexual','homosexual') NOT NULL DEFAULT 'bisexual',
 	`bio` TEXT,
 	`status` enum('online','offline') NOT NULL DEFAULT 'offline',
-	`is_lock` boolean NOT NULL DEFAULT false,
+	`is_lock` enum('true','false') NOT NULL DEFAULT 'false',
 	`reset_pass` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 

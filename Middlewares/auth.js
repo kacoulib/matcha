@@ -41,23 +41,23 @@ module.exports = function (passport, con)
 		.then((user)=>
 		{
 			if (!user || !user[0])
-				return next(null, false, { message: 'Incorrect login or email.' });
+				return next({message: 'Incorrect login or email.' });
 
-			if (user[0].is_lock)
-				return next(null, false, { message: 'Sorry but your account is lock.' });
+			if (user[0].is_lock == 'true')
+				return next({ message: 'Sorry but your account is lock.' });
 
 			bcrypt.compare(password, user[0].password, (err, res)=>
 			{
 				if (err)
-					return next(null, false, { message: 'Error.' });
+					return next({ message: 'Password error.' });
 
 				if (res == false)
-					return next(null, false, 'Oops! Wrong password.');
+					return next({ message: 'Oops! Wrong password.'});
 
 				return next(null, user[0]);
 			})
 		})
-		.catch((err)=>next(err, null, {message: 'Incorrect login or email.'}))
+		.catch((err)=>next({message: 'Incorrect login or email.'}))
 	}));
 
     // =========================================================================
@@ -68,8 +68,7 @@ module.exports = function (passport, con)
 		// by default, local strategy uses username and password, we will override with email
 		usernameField : 'email',
 		passwordField : 'password',
-		passReqToCallback : true,
-		session: false
+		passReqToCallback : true
 	},
 	function(req, email, password, next)
 	{
@@ -83,7 +82,6 @@ module.exports = function (passport, con)
 			if (!dataUtils.is_new_user_valid(new_user))
 				return next(null, false, 'Invalid data');
 
-			//console.log(new_user)
 
 			User.findByLoginOrEmail(new_user.login, new_user.email, con)
 			.then((err)=>{next(null, false, { message: 'The email or login provided is already taken.' })})

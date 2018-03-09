@@ -47,7 +47,11 @@ function is_valid_status(status)
 
 function is_boolean(bool)
 {
-	return (bool == 'true' || bool == 'false');
+	if (typeof bool != 'string')
+		return (false);
+
+	bool = bool.toString().toLowerCase();
+	return (bool === 'true' || bool === 'false')
 }
 
 function check_user_field_data(user, required_fields)
@@ -106,6 +110,21 @@ function check_user_field_data(user, required_fields)
 	return (required_fields_len == 0);
 }
 
+function extract_data_and_exclude(struct, data, excludes)
+{
+	let keys = struct.all,
+			keys_len = keys.length,
+			r = {},
+			tmp,
+			i = 0;
+
+	for (i; i < keys_len; i++)
+		if (data.hasOwnProperty(keys[i]) &&  excludes.indexOf(keys[i]) < 0)
+					r[keys[i]] = data[keys[i]];
+
+	return r;
+}
+
 function exclude_data(struct, data, excludes)
 {
 	let keys = struct.all,
@@ -137,6 +156,8 @@ module.exports =
 
 	exclude_data: exclude_data,
 
+	extract_data_and_exclude: extract_data_and_exclude,
+
 	is_new_user_valid: (user) =>
 	{
 		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
@@ -146,7 +167,12 @@ module.exports =
 
 	is_update_user_valid: (user) =>
 	{
-		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
+		let required_fields = Object.keys(user);
+
+		if (required_fields.length < 2)
+			return (false);
+		else if (required_fields.indexOf('login') < 0 && required_fields.indexOf('email') < 0)
+			return (false);
 
 		return (check_user_field_data(user, required_fields));
 	}

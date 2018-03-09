@@ -30,7 +30,8 @@ con.connect(function(err)
 	if (err)
 		throw err;
 
-	console.log('connected')
+	console.log('Database connected');
+
 	// configuration ===============================================================
 
 	require('./Middlewares/auth.js')(passport, con);

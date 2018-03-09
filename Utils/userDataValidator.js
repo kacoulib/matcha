@@ -10,5 +10,5 @@ module.exports =
 
 	cleanNewUser: (user)=> dataValidator.exclude_data(user_struct , user, ['id']),
 
-	cleanUpdateUser: (user)=> dataValidator.exclude_data(user_struct , user, ['id'])
+	cleanUpdateUser: (user)=> dataValidator.extract_data_and_exclude(user_struct , user, ['id'])
 }

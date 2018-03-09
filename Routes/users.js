@@ -7,7 +7,8 @@ const nodemailer	= require('nodemailer'),
 			upload 			= multer({dest: './'}),
 			jwt 				= require('../Middlewares/jwt.js'),
 			dataUtils		= require('../Utils/dataValidator'),
-			userUtils		= require('../Utils/userDataValidator');
+			userUtils		= require('../Utils/userDataValidator'),
+			bcrypt			= require('bcrypt-nodejs');
 
 function isAuthenticated(req,res,next)
 {
@@ -160,29 +161,6 @@ module.exports = function (app, passport, con)
 	})
 
 	// =====================================
-	// LOGIN ===============================
-	// =====================================
-	app.post('/sign_in', (req, res, next) =>
-	{
-		passport.authenticate('local-signin', (err, user, info)=>
-		{
-			if (err)
-				return (res.status(401).json({sucess: false, message: err}));
-
-			let new_user = userUtils.cleanNewUser(user),
-				token = jwt.generateToken(new_user);
-			console.log(token)
-
-			res.json({
-				sucess: true,
-				user: new_user,
-				token: token
-			})
-		})(req, res, next);
-	})
-
-
-	// =====================================
 	// LOGOUT ==============================
 	// =====================================
 	app.get('/logout', function(req, res)
@@ -272,6 +250,28 @@ module.exports = function (app, passport, con)
 	// =====================================
 
 
+		// =====================================
+		// LOGIN ===============================
+		// =====================================
+
+		app.post('/sign_in', (req, res, next) =>
+		{
+			passport.authenticate('local-signin', (err, user, errMessage)=>
+			{
+				if (err)
+					return (res.status(401).json({sucess: false, err}));
+
+				let new_user = userUtils.cleanNewUser(user),
+					token = jwt.generateToken(new_user);
+
+				res.json({
+					sucess: true,
+					user: new_user,
+					token: token
+				})
+			})(req, res, next);
+		})
+
 	// =====================================
 	// USER CRUD (with login links) ========
 	// =====================================
@@ -315,13 +315,15 @@ module.exports = function (app, passport, con)
 
 
 		User.findByLoginOrEmail(new_user.login, new_user.email, con)
-		.then((err)=>
+		.then((user)=>
 		{
+			if (new_user.password)
+				new_user.password = bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8));
+
 			User.update(new_user, con)
 			.then((user)=>
 			{
-				User.findByLoginOrEmail(new_user.login, new_user.email, con)
-				.then((u)=>console.log(u))
+				console.log(user)
 				res.json({sucess: true, message: 'User updated'})
 			})
 			.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))

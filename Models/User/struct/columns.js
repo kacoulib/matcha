@@ -13,7 +13,7 @@ module.exports =
     profile_image:  {default: null},
     bio:            {default: ''},
     status:         {value: ['online','offline'], default: 'offline'},
-    is_lock:        {default: false},
+    is_lock:        {default: 'false'},
     reset_pass:     {default: null}
   }
 }
