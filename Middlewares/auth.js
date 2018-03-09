@@ -40,15 +40,24 @@ module.exports = function (passport, con)
 		User.findByLoginOrEmail(loginOrEmail, loginOrEmail, con)
 		.then((user)=>
 		{
-			if (!user)
+			if (!user || !user[0])
 				return next(null, false, { message: 'Incorrect login or email.' });
 
-				bcrypt.hashSync(new_user.password, bcrypt.genSaltSync(8), null)
-			if (!(user[0].password == password))
-				return next(null, false, 'Oops! Wrong password.');
-			return next(null, user[0]);
+			if (user[0].is_lock)
+				return next(null, false, { message: 'Sorry but your account is lock.' });
+
+			bcrypt.compare(password, user[0].password, (err, res)=>
+			{
+				if (err)
+					return next(null, false, { message: 'Error.' });
+
+				if (res == false)
+					return next(null, false, 'Oops! Wrong password.');
+
+				return next(null, user[0]);
+			})
 		})
-		.catch((err)=>next(err))
+		.catch((err)=>next(err, null, {message: 'Incorrect login or email.'}))
 	}));
 
     // =========================================================================
@@ -74,7 +83,7 @@ module.exports = function (passport, con)
 			if (!dataUtils.is_new_user_valid(new_user))
 				return next(null, false, 'Invalid data');
 
-			console.log(new_user)
+			//console.log(new_user)
 
 			User.findByLoginOrEmail(new_user.login, new_user.email, con)
 			.then((err)=>{next(null, false, { message: 'The email or login provided is already taken.' })})
@@ -97,7 +106,11 @@ module.exports = function (passport, con)
 
 						return next(null, new_user);
 					})
-					.catch((e)=> next(null, false, { message: 'User insertion Error.' }));
+					.catch((err)=>
+					{
+						console.log(err)
+						next(err, false, { message: 'User insertion Error.' })
+					});
 				})
 			})
 		});

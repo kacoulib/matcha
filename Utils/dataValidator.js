@@ -45,6 +45,11 @@ function is_valid_status(status)
 	return (user_struct.single.status.value.indexOf(status) >= 0);
 }
 
+function is_boolean(bool)
+{
+	return (bool == 'true' || bool == 'false');
+}
+
 function check_user_field_data(user, required_fields)
 {
 	let  min_len = 4,
@@ -88,6 +93,10 @@ function check_user_field_data(user, required_fields)
 					if (!is_valid_status(user[key]))
 						return (false);
 					break;
+				case 'is_lock':
+						if (!is_boolean(user[key]))
+							return (false);
+						break;
 				default:
 					break;
 			}

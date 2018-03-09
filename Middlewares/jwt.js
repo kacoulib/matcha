@@ -2,13 +2,15 @@
 
 let jwt		= require('jsonwebtoken'),
 	dotenv	= require('dotenv').config(),
-	utils	= require('../Utils/userDataValidator');
+	userUtils	= require('../Utils/userDataValidator');
 
 
 module.exports =
 {
 	generateToken: (user)=>
 	{
+		user  = userUtils.tokenazableUser(user);
+
 		return (jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '24h'}));
 	},
 

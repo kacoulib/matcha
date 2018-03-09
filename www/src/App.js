@@ -22,6 +22,7 @@ class App extends Component
 
     this.state =
     {
+      is_login: false,
       current_user: {},
       direct_message_friend: {},
       direct_message_is_open: false

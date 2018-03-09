@@ -73,6 +73,7 @@ module.exports =
 
 		return new Promise((resolve, reject)=>
 		{
+			console.log(new_user)
 			con.query('UPDATE User SET ? WHERE login = ?', [new_user, new_user.login], (err, user)=> (err ? reject(err) : resolve(user.insertId)));
 		})
 	},

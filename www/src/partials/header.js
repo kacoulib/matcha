@@ -12,6 +12,7 @@ class Header extends Component
 	{
 		super(props);
 
+		this.handleLogout = this.handleLogout.bind(this);
 		this.state =
 		{};
 
@@ -20,6 +21,12 @@ class Header extends Component
 		{
 			console.log('socket connected')
 		});
+	}
+
+	handleLogout()
+	{
+		window.sessionStorage.removeItem('token');
+		this.props.history.push(null, 'register');
 	}
 
 	render()
@@ -45,7 +52,7 @@ class Header extends Component
 						<Avatar />
 						<span className='top_profile_arrow'></span>
 						<ul className='sub_menu blue_btn'>
-							<Link to='/logout'>Logout</Link>
+							<Link to='#' onClick={this.handleLogout}>Logout</Link>
 						</ul>
 					</div>
 				</div>

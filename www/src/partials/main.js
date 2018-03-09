@@ -17,7 +17,7 @@ function check_token()
 }
 
 
-const AuthRoute = ({ component: Component, ...rest }) => 
+const AuthRoute = ({ component: Component, ...rest }) =>
 {
 	var isAuth = sessionStorage.getItem('token');
 	// var isAuth = await check_token();
@@ -31,7 +31,7 @@ const AuthRoute = ({ component: Component, ...rest }) =>
 }
 
 
-const NotAuthRoute = ({ component: Component, ...rest }) => 
+const NotAuthRoute = ({ component: Component, ...rest }) =>
 {
 	var notIsAuth = sessionStorage.getItem('token');
 
@@ -42,14 +42,6 @@ const NotAuthRoute = ({ component: Component, ...rest }) =>
 		)} />)
 }
 
-function requireAuth(props, replace)
-{
-	if (true)
-		window.location = '/register';
-	console.log('ok')
-	// else
-	// 	window.location = '/register';
-}
 
 					// <Route exact path='/' render={(props) => (<Home {...props} appProps={appProps}/>)} />
 class main extends Component

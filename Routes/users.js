@@ -167,13 +167,9 @@ module.exports = function (app, passport, con)
 		passport.authenticate('local-signin', (err, user, info)=>
 		{
 			if (err)
-				throw err;
+				return (res.status(401).json({sucess: false, message: err}));
 
-			if (info)
-				return (res.status(401).json({sucess: false, message: info}));
-
-			console.log('ok')
-			let new_user = userUtils.getCleanUser(user),
+			let new_user = userUtils.cleanNewUser(user),
 				token = jwt.generateToken(new_user);
 			console.log(token)
 
@@ -282,13 +278,10 @@ module.exports = function (app, passport, con)
 
 	app.post('/user', (req, res, next) =>
 	{
-			passport.authenticate('local-signup', (err, user, info) =>
+			passport.authenticate('local-signup', (err, user, errMessage) =>
 			{
-				if (err)
-					throw err;
-
-				if (info)
-					return (res.status(401).json({sucess: false, message: info}));
+				if (err || errMessage)
+					return (res.status(401).json({sucess: false, errMessage}));
 
 				let new_user = userUtils.tokenazableUser(user),
 				token = jwt.generateToken(new_user);
@@ -317,16 +310,20 @@ module.exports = function (app, passport, con)
 	{
 		let new_user = userUtils.cleanUpdateUser(req.body);
 
-
 		if (!dataUtils.is_update_user_valid(new_user))
-			return next(null, false, 'Invalid data');
+			return (res.status(401).json({sucess: false, message: 'Invalid data'}));
 
 
 		User.findByLoginOrEmail(new_user.login, new_user.email, con)
 		.then((err)=>
 		{
 			User.update(new_user, con)
-			.then((user)=>res.json({sucess: true, message: 'User updated'}))
+			.then((user)=>
+			{
+				User.findByLoginOrEmail(new_user.login, new_user.email, con)
+				.then((u)=>console.log(u))
+				res.json({sucess: true, message: 'User updated'})
+			})
 			.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))
 		})
 		.catch((user)=>(res.status(401).json({sucess: false, message: 'User not found.' })))
