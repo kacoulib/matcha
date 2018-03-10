@@ -32,12 +32,15 @@ class App extends Component
 
   get_current_user()
   {
-    axios.get('http://localhost:3000/me')
-    .then((res)=>
-    {
-      this.setState({data: res.data})
-      console.log(res.data)
-    })
+    let token = sessionStorage.getItem('token');
+
+    if (!token)
+      return;
+
+    let base64Url = token.split('.')[1],
+        base64 = base64Url.replace('-', '+').replace('_', '/');
+
+    this.setState({data: JSON.parse(window.atob(base64))})
   }
 
   close_direct_message(friend)

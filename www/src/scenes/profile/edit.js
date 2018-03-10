@@ -55,6 +55,7 @@ class Edit extends Component
 		axios.get('http://localhost:3000/me')
 		.then((res)=>
 		{
+			console.log(res)
 			if (!res.data.sucess)
 				return ;
 

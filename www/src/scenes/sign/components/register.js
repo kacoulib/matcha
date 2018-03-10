@@ -11,7 +11,6 @@ import FirstStep from './steps/first.js';
 import SecondStep from './steps/second.js';
 import ThirdStep from './steps/third.js';
 import AppRequest from '../../../helpers/appRequest';
-import axios from 'axios';
 
 import Login from './login.js';
 

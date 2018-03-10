@@ -84,7 +84,7 @@ class EditBasic extends Component
 
 							</ul>
 						</div>
-
+						<div className='clear_fix'></div>
 						<div className='submit_container'>
 							<button className='flat_button'>Save</button>
 						</div>

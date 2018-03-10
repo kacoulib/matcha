@@ -68,9 +68,7 @@ class Home extends Component
 function ListItem(props)
 {
 	const user 	= props.user,
-		first = user.name ? user.name.first: 'test',
-		last = user.name ? user.name.last: 'test',
-		info 	= {first: first, last: last, address: 'paris'},
+		info 	= {first_name: user.first_name, last_name: user.last_name, address: 'paris'},
 		styles	=
 		{
 			avatar:
@@ -102,7 +100,7 @@ function Info(props)
 {
 	return (
 		<div>
-			<h3>{ucfirst(props.data.first)} {ucfirst(props.data.last)}</h3>
+			<h3>{ucfirst(props.data.first_name)} {ucfirst(props.data.last_name)}</h3>
 			<h4>{ucfirst(props.data.address)}</h4>
 		</div>
 	);

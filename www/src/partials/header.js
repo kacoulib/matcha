@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, BrowserRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import Avatar from '../components/avatar.js';
 import io from 'socket.io-client';
@@ -26,6 +26,8 @@ class Header extends Component
 	handleLogout()
 	{
 		window.sessionStorage.removeItem('token');
+		window.location = '/register';
+
 	}
 
 	render()

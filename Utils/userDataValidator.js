@@ -6,7 +6,7 @@ let  dataValidator = require('../Utils/dataValidator'),
 
 module.exports =
 {
-	tokenazableUser: (user)=> dataValidator.exclude_data(user_struct , user, ['id', 'password']),
+	tokenazableUser: (user)=> dataValidator.exclude_data(user_struct , user, ['id', 'password', 'is_lock', 'reset_pass', 'status']),
 
 	cleanNewUser: (user)=> dataValidator.exclude_data(user_struct , user, ['id']),
 
