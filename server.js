@@ -49,7 +49,7 @@ con.connect(function(err)
 
 	// set up our express application
 	app.use(bodyParser.json())
-	app.use(bodyParser.urlencoded({extended: true}));
+	app.use(bodyParser.urlencoded({extended: true, limit: '550mb'}));
 	app.use(cookieParser());
 
 	// required for passport

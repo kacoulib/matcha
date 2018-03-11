@@ -65,6 +65,12 @@ class Requests
 	{
 		return axios.post(this.url + '/send_password_reset_mail', {email: email});
 	}
+
+	update_user(user_id, data)
+	{
+		return axios.put('http://localhost:3000/me/'+user_id, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+	}
+
 }
 
 export default Requests;

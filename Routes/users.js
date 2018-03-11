@@ -8,6 +8,7 @@ const nodemailer	= require('nodemailer'),
 			jwt 				= require('../Middlewares/jwt.js'),
 			dataUtils		= require('../Utils/dataValidator'),
 			userUtils		= require('../Utils/userDataValidator'),
+			uploadUtils	= require('../Utils/upload'),
 			bcrypt			= require('bcrypt-nodejs');
 
 function isAuthenticated(req,res,next)
@@ -39,16 +40,36 @@ module.exports = function (app, passport, con)
 
 	})
 	// =====================================
-	app.get(['/', '/me'], (req, res) =>
+	app.get(['/', '/me'], upload.array('pictures', 5), (req, res) =>
 	{
+		console.log(req.files)
+		console.log(req.file)
+		//console.log(req.files)
 			res.json({sucess: true, user: req.user});
 	})
-	.put('/me/:id', (req, res, next) =>
+	.post('/me/:id', upload.array('pictures', 5), (req, res, next) =>
 	{
-		upload.array('pictures')
-		const client_data = req.body;
+		console.log('files = ')
+		console.log(req.files)
+		console.log('file = ')
+		console.log(req.file)
+		console.log('body = ')
+		console.log(req.body)
+	})
+	.put('/me/:id', upload.any('pictures'), (req, res, next) =>
+	{
+		console.log('new Request: ')
+		console.log(req.files)
 		console.log(req.file)
 		console.log(req.body)
+
+
+
+
+
+
+		return (res.json({sucess: true, message: 'user updated'}));
+
 		User.findById(req.params.id, (err, user) =>
 		{
 			if (err)
@@ -314,7 +335,7 @@ module.exports = function (app, passport, con)
 			return (res.status(401).json({sucess: false, message: 'Invalid data'}));
 
 
-		User.findByLoginOrEmail(new_user.login, new_user.email, con)
+		User.findByLogin(new_user.login, con)
 		.then((user)=>
 		{
 			if (new_user.password)

@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import EditBasic from './editPartials/basic.js';
 import EditPublic from './editPartials/basic.js';
+import AppRequest from '../../helpers/appRequest';
+
 
 
 
 class Edit extends Component
 {
 	constructor(props)
-  	{
-	    super(props);
+  {
+	  super(props);
 		this.get_current_user = this.get_current_user.bind(this);
 		this.set_input_data = this.set_input_data.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,6 +38,7 @@ class Edit extends Component
 
 			likers : [],
 			location : '',
+			post_pictures : [],
 			pictures : [],
 			tags : [],
 			viewers : [],
@@ -43,6 +46,9 @@ class Edit extends Component
 			form_has_been_modified: 0,
 			stepIndex : 0
 		}
+
+		this.appRequest = new AppRequest();
+
 	}
 
 	componentDidMount()
@@ -103,18 +109,21 @@ class Edit extends Component
 	set_upload_picture(index, files)
 	{
 		var reader = new FileReader(),
-			file = files[0],
-			data = this.state.pictures,
-			that = this;
+				file = files[0],
+				post_pictures = this.state.post_pictures,
+				pictures = this.state.pictures,
+				that = this;
+
 
 		reader.onload = function(e)
 		{
-			data[index] = e.target.result;
-			that.setState({pictures: data}, ()=>console.log(that.state))
+			pictures[index] = e.target.result;
+			post_pictures[index] = file;
+			that.setState({post_pictures, pictures}, ()=>console.log(that.state))
 		}
 		reader.readAsDataURL(file);
 
-		return (console.log(index, file))
+		return;
 	}
 
 	handleSubmit(e)
@@ -140,15 +149,41 @@ class Edit extends Component
 		if (is_not_ok)
 			return ;
 
-		axios.put('http://localhost:3000/me/'+this.state._id, data)
+		delete data.pictures;
+		delete data.form_has_been_modified;
+		delete data.nb_image;
+		delete data.stepIndex;
+
+		let tmp = new FormData(),
+			tmpData = this.state;
+
+			for (var key2 in tmpData)
+				if (tmpData.hasOwnProperty(key2))
+					if (key != 'post_pictures')
+						tmp.append(key2, tmpData[key2]);
+
+		data.post_pictures.forEach((el, i)=>
+		{
+			if (el)
+				tmp.append('pictures_'+i, el)
+		})
+
+		//tmp.append('img', this.state.pictures[0])
+//		tmp.append('pictures', this.state.pictures)
+		console.log('tmp = ')
+		console.log(tmp)
+
+		this.appRequest.update_user(this.state._id, tmp)
 		.then(res=>
 		{
 			console.log(res)
-			console.log(this.context.history)
+			console.log(tmpData)
 		})
-		.catch(error => {
+		.catch(error =>
+		{
 			console.log(error.response)
 		});
+
 	}
 
 	getComponent()

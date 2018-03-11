@@ -169,9 +169,7 @@ module.exports =
 	{
 		let required_fields = Object.keys(user);
 
-		if (required_fields.length < 2)
-			return (false);
-		else if (required_fields.indexOf('login') < 0 && required_fields.indexOf('email') < 0)
+		if (required_fields.length < 2 || required_fields.indexOf('login') < 0)
 			return (false);
 
 		return (check_user_field_data(user, required_fields));
