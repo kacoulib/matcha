@@ -4,12 +4,42 @@ const nodemailer	= require('nodemailer'),
 			User				= require('../Models/User/user'),
 			crypto			= require('crypto'),
 			multer  		= require('multer'),
-			upload 			= multer({dest: './'}),
 			jwt 				= require('../Middlewares/jwt.js'),
 			dataUtils		= require('../Utils/dataValidator'),
 			userUtils		= require('../Utils/userDataValidator'),
 			uploadUtils	= require('../Utils/upload'),
 			bcrypt			= require('bcrypt-nodejs');
+
+
+var storage = multer.diskStorage({
+
+  destination: function (req, file, cb)
+	{
+		if (!req.user || !req.user.login)
+			return (false);
+
+    cb(null, process.cwd() + '/www/src/public/img/profiles/'+req.user.login)
+  },
+  filename: function (req, file, cb)
+	{
+		let tmp = file.originalname.split('.'),
+				len = tmp.length;
+
+    cb(null, file.fieldname+'.'+tmp[len - 1])
+  }
+})
+
+var upload = multer({ storage: storage, fileFilter: (req, file, cb)=>
+{
+	let tmp = file.originalname.split('.'),
+			len = tmp ? tmp.length : 0;
+
+
+	if (!tmp || isNaN(file.fieldname))
+		return (cb(null, false));
+
+	return (cb(null, true));
+} })
 
 function isAuthenticated(req,res,next)
 {
@@ -42,31 +72,16 @@ module.exports = function (app, passport, con)
 	// =====================================
 	app.get(['/', '/me'], upload.array('pictures', 5), (req, res) =>
 	{
-		console.log(req.files)
-		console.log(req.file)
 		//console.log(req.files)
 			res.json({sucess: true, user: req.user});
 	})
 	.post('/me/:id', upload.array('pictures', 5), (req, res, next) =>
 	{
-		console.log('files = ')
-		console.log(req.files)
-		console.log('file = ')
-		console.log(req.file)
-		console.log('body = ')
-		console.log(req.body)
 	})
-	.put('/me/:id', upload.any('pictures'), (req, res, next) =>
+	.put('/me/:id', uploadUtils.upload.any('pictures'), (req, res, next) =>
 	{
-		console.log('new Request: ')
-		console.log(req.files)
 		console.log(req.file)
-		console.log(req.body)
-
-
-
-
-
+		console.log(req.files)
 
 		return (res.json({sucess: true, message: 'user updated'}));
 

@@ -30,8 +30,6 @@ con.connect(function(err)
 	if (err)
 		throw err;
 
-	console.log('Database connected');
-
 	// configuration ===============================================================
 
 	require('./Middlewares/auth.js')(passport, con);
@@ -116,4 +114,4 @@ con.connect(function(err)
 
 
 // Launch ======================================================================
-server.listen(3000, () => console.log('listening 3000.....'))
+server.listen(3000)

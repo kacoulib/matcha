@@ -1,46 +1,70 @@
 'use strict'
 
 let dataValidator = require('./dataValidator'),
-    fs = require('fs'),
-    dest = './';
+    mkdirp        = require('mkdirp'),
+    multer  		  = require('multer'),
+    profile_path   = process.cwd() + '/www/public/img/profiles/',
+    fs            = require('fs'),
+    storage,
+    fileFilter,
+    tmp,
+    len;
 
-function store(pic, id)
+
+
+fileFilter = (req, file, cb)=>
 {
-  return ;
-  console.log(pic)
-  //pic = pic.replace(/^data:image\/png;base64,/, "")
-  fs.writeFile(dest + "out.png", pic, 'base64', function(err)
-  {
-    if (err)
-      console.log(err);
+  tmp = file.originalname.split('.'),
+  len = tmp ? tmp.length : 0;
 
-      console.log('ok')
-      return (false);
-    fs.readFile(__dirname + "/upload/out.png", function(err, data) {
-        if (err) throw err;
-        console.log('reading file...', data.toString('base64'));
-        res.send(data);
-    });
-  });
+	if (!tmp || isNaN(file.fieldname) || !req.user || !req.user.login)
+		return (cb(null, false));
+
+  fs.access(profile_path + req.user.login, fs.constants.R_OK | fs.constants.W_OK, (err)=>
+  {
+      if (err)
+        return (cb(null, false));
+
+      return (cb(null, true));
+  })
 }
+
+storage = multer.diskStorage(
+{
+    destination: function (req, file, cb)
+  	{
+      cb(null, profile_path + req.user.login)
+    },
+
+    filename: function (req, file, cb)
+  	{
+  		tmp = file.originalname.split('.');
+			len = tmp.length;
+
+      cb(null, file.fieldname+'.'+tmp[len - 1])
+    }
+})
+
+
 
 module.exports =
 {
-  save: (pictures, user_id)=>
+  upload: multer({fileFilter, storage}),
+
+  createUserFolder: (login)=>
   {
-    if (!dataValidator.is_valid_db_id(user_id))
-      return (false);
+    return new Promise((resolve, reject)=>
+    {
+        if (!login)
+          return (reject('no login provided'));
 
-    pictures.forEach((pic)=> (pic) ? store(pic, user_id) : '');
-  },
+        mkdirp(profile_path + login, (err)=>
+        {
+          if (err)
+            return (reject('no login provided'));
 
-  delete: (user)=>
-  {
-
-  },
-
-  update: (user)=>
-  {
-
+          return (resolve());
+        })
+    })
   }
 }

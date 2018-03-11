@@ -149,23 +149,19 @@ class Edit extends Component
 		if (is_not_ok)
 			return ;
 
-		delete data.pictures;
-		delete data.form_has_been_modified;
-		delete data.nb_image;
-		delete data.stepIndex;
-
 		let tmp = new FormData(),
-			tmpData = this.state;
+			tmpData = this.state,
+			filter = ['pictures', 'form_has_been_modified', 'nb_image', 'stepIndex'];
 
 			for (var key2 in tmpData)
 				if (tmpData.hasOwnProperty(key2))
-					if (key != 'post_pictures')
+					if (filter.indexOf(key) < 0)
 						tmp.append(key2, tmpData[key2]);
 
 		data.post_pictures.forEach((el, i)=>
 		{
 			if (el)
-				tmp.append('pictures_'+i, el)
+				tmp.append(i, el)
 		})
 
 		//tmp.append('img', this.state.pictures[0])

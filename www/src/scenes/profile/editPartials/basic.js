@@ -75,7 +75,7 @@ class EditBasic extends Component
 									return (
 										<li key={i}>
 											{pictures[i] ? <span onClick={this.props.remove_pic}>x</span> : ''}
-											<img src={pictures[i] || '/img/sprites/camera_50.png'} alt="" />
+											<img src={pictures[i] || `/img/profiles/${user.login}/${i}.jpeg` || '/img/sprites/camera_50.png'} alt="" />
 											<input type="file" name="myfile" onChange={this.add_pic.bind(this, i)}/>
 										</li>
 									)

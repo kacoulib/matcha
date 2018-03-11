@@ -4,7 +4,8 @@ let localStrategy	= require('passport-local').Strategy,
 		User = require('../Models/User/user.js'),
 		userUtils			= require('../Utils/userDataValidator'),
 		dataUtils			= require('../Utils/dataValidator'),
-		bcrypt				= require('bcrypt-nodejs');
+		bcrypt				= require('bcrypt-nodejs'),
+		uploadUtils	= require('../Utils/upload');
 
 
 module.exports = function (passport, con)
@@ -96,19 +97,20 @@ module.exports = function (passport, con)
 
 						new_user.password = salt;
 
-					// save the new user
-					User.add(new_user, con)
-					.then((new_user_id)=>
-					{
-						new_user.id = new_user_id;
+						uploadUtils.createUserFolder(new_user.login).then(()=>
+						{
+							// save the new user
+							User.add(new_user, con)
+							.then((new_user_id)=>
+							{
+								new_user.id = new_user_id;
 
-						return next(null, new_user);
-					})
-					.catch((err)=>
-					{
-						console.log(err)
-						next(err, false, { message: 'User insertion Error.' })
-					});
+								return next(null, new_user);
+							})
+							.catch((err)=> next(err, false, { message: 'User insertion Error.' }));
+						})
+						.catch((err)=>(next({err: false, message: err})))
+
 				})
 			})
 		});
