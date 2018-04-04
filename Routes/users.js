@@ -55,21 +55,6 @@ module.exports = function (app, passport, con)
 
 
 	// =====================================
-	// HOME PAGE (with login links) ========
-
-	// =====================================
-	app.get('/test', (req, res) =>
-	{
-		let r;
-
-		if (req.session.user)
-			r = req.session.user.name.first + ' already set';
-		else
-			r = 'session user not set';
-		res.send(r);
-
-	})
-	// =====================================
 	app.get(['/', '/me'], upload.array('pictures', 5), (req, res) =>
 	{
 		//console.log(req.files)
@@ -196,17 +181,9 @@ module.exports = function (app, passport, con)
 		})
 	})
 
-	// =====================================
-	// LOGOUT ==============================
-	// =====================================
-	app.get('/logout', function(req, res)
-	{
-		console.log((req.session.user ? req.session.user.name.first : '...') + ' logout')
-		delete req.session.user;
-		req.logout();
-		// res.redirect('/');
-		res.send('user logout successfuly');
-	});
+	/*	====================================
+ 		============= EMAIL ================
+ 		====================================  */
 
 	app.post('/send_password_reset_mail', (req, res) =>
 	{
@@ -277,40 +254,41 @@ module.exports = function (app, passport, con)
 	})
 
 
-	// =====================================
-	// PROFILE SECTION =====================
-	// =====================================
+	/*	====================================
+ 		SIGN IN =================== SIGN out
+		====================================  */
 
-	// =====================================
-	// LOGOUT ==============================
-	// =====================================
-
-
-		// =====================================
-		// LOGIN ===============================
-		// =====================================
-
-		app.post('/sign_in', (req, res, next) =>
+	app.post('/sign_in', (req, res, next) =>
+	{
+		passport.authenticate('local-signin', (err, user, errMessage)=>
 		{
-			passport.authenticate('local-signin', (err, user, errMessage)=>
-			{
-				if (err)
-					return (res.status(401).json({sucess: false, err}));
+			if (err)
+				return (res.status(401).json({sucess: false, err}));
 
-				let new_user = userUtils.cleanNewUser(user),
-					token = jwt.generateToken(new_user);
+			let new_user = userUtils.cleanNewUser(user),
+				token = jwt.generateToken(new_user);
 
-				res.json({
-					sucess: true,
-					user: new_user,
-					token: token
-				})
-			})(req, res, next);
-		})
+			res.json({
+				sucess: true,
+				user: new_user,
+				token: token
+			})
+		})(req, res, next);
+	})
 
-	// =====================================
-	// USER CRUD (with login links) ========
-	// =====================================
+	
+	app.get('/logout', function(req, res)
+	{
+		console.log((req.session.user ? req.session.user.name.first : '...') + ' logout')
+		delete req.session.user;
+		req.logout();
+		// res.redirect('/');
+		res.send('user logout successfuly');
+	});
+
+	/*	====================================
+		============= USER CRUD ============
+		====================================  */
 
 	app.post('/user', (req, res, next) =>
 	{
