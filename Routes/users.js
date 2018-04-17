@@ -57,7 +57,6 @@ module.exports = function (app, passport, con)
 	// =====================================
 	app.get(['/', '/me'], upload.array('pictures', 5), (req, res) =>
 	{
-		//console.log(req.files)
 			res.json({sucess: true, user: req.user});
 	})
 	.post('/me/:id', upload.array('pictures', 5), (req, res, next) =>
@@ -102,7 +101,7 @@ module.exports = function (app, passport, con)
 
 	app.get('/user/all/', (req, res) =>
 	{
-		User.all(req.query.limit, req.query.offset, con).then((users)=>
+		User.all(req.user, req.query.limit, req.query.offset, con).then((users)=>
 		{
 				return (res.json({sucess: true, users: users}));
 		})
@@ -265,7 +264,7 @@ module.exports = function (app, passport, con)
 			if (err)
 				return (res.status(401).json({sucess: false, err}));
 
-			let new_user = userUtils.cleanNewUser(user),
+			let new_user = userUtils.cleanSignInUser(user),
 				token = jwt.generateToken(new_user);
 
 			res.json({
@@ -276,7 +275,7 @@ module.exports = function (app, passport, con)
 		})(req, res, next);
 	})
 
-	
+
 	app.get('/logout', function(req, res)
 	{
 		console.log((req.session.user ? req.session.user.name.first : '...') + ' logout')
@@ -294,6 +293,7 @@ module.exports = function (app, passport, con)
 	{
 			passport.authenticate('local-signup', (err, user, errMessage) =>
 			{
+
 				if (err || errMessage)
 					return (res.status(401).json({sucess: false, errMessage}));
 
@@ -309,8 +309,10 @@ module.exports = function (app, passport, con)
 	})
 	.get('/user/:id', (req, res, next) =>
 	{
+		console.log('user id = ',req.params.id)
 			User.findById(req.params.id, con).then((user)=>
 			{
+				console.log('found user = ',user)
 					return (res.json({sucess: true, user: user}));
 			})
 			.catch((err)=>
@@ -339,12 +341,18 @@ module.exports = function (app, passport, con)
 			{
 				User.findById(user[0].id, con).then((updated_user)=>
 				{
-					updated_user = userUtils.tokenazableUser(updated_user);
+					// console.log('before = ', updated_user)
+					updated_user = userUtils.tokenazableUser(updated_user[0]);
 					let token = jwt.generateToken(updated_user);
 
-					res.json({sucess: true, message: 'User updated', token})
+					res.json({
+						sucess: true,
+						user: updated_user,
+						message: 'User updated',
+						token: token
+					})
 				})
-				.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))
+				.catch((err)=>{console.log(err);(res.status(401).json({sucess: false, message: 'Error while updating user.' }))})
 			})
 			.catch((err)=>(res.status(401).json({sucess: false, message: 'Error while updating user.' })))
 		})

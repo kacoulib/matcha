@@ -27,7 +27,6 @@ class Header extends Component
 	{
 		window.sessionStorage.removeItem('token');
 		window.location = '/register';
-
 	}
 
 	render()

@@ -33,7 +33,7 @@ class SecondStep extends React.Component
            <RaisedButton label="homosexual" onClick={this.handleValid.bind(this, "homosexual")}/>
           </div>
           <div>
-           <RaisedButton label="Heterosexual" onClick={this.handleValid.bind(this, "beterosexual")}/>
+           <RaisedButton label="Heterosexual" onClick={this.handleValid.bind(this, "heterosexual")}/>
           </div>
         </div>
       </div>

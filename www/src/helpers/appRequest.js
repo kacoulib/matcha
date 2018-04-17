@@ -13,6 +13,11 @@ class Requests
 		return axios.get(this.url + '/me');
 	}
 
+	getUser (user_id)
+	{
+		return axios.get(this.url + '/user/'+ user_id);
+	}
+
 	all_users (limit, offset = 0)
 	{
 		axios.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem('token');
@@ -47,7 +52,7 @@ class Requests
 			if (!data || !data.token)
 				return ;
 
-			window.sessionStorage.setItem('token', res.data.token)
+			window.sessionStorage.setItem('token', data.token)
 			window.location = '/';
 
 			return res;
@@ -68,7 +73,21 @@ class Requests
 
 	update_user(user_id, data)
 	{
-		return axios.put('http://localhost:3000/me/'+user_id, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+		console.log('data = ', data)
+		axios.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem('token');
+
+		// return axios.put(this.url + '/user/', data, { headers: { 'Content-Type': 'multipart/form-data' }});
+		return axios.put(this.url + '/user/', data)
+		.then((res)=>
+		{
+			let data = res.data;
+
+			if (!data || !data.token)
+				return ;
+
+			window.sessionStorage.setItem('token', data.token)
+			return res;
+		})
 	}
 
 }

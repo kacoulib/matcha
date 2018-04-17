@@ -3,7 +3,7 @@
 
 module.exports =
 {
-  all: ['id', 'first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'],
+  all: ['id', 'first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'gender', 'orientation', 'bio', 'pic0', 'pic1', 'pic2', 'pic3', 'pic4', 'city', 'lng', 'lat', 'status', 'is_lock', 'reset_pass'],
 
   single:
   {

@@ -154,9 +154,16 @@ class Edit extends Component
 			filter = ['pictures', 'form_has_been_modified', 'nb_image', 'stepIndex'];
 
 			for (var key2 in tmpData)
+			{
 				if (tmpData.hasOwnProperty(key2))
+				{
 					if (filter.indexOf(key) < 0)
+					{
 						tmp.append(key2, tmpData[key2]);
+						console.log(key2,' = ',tmpData[key2])
+					}
+				}
+			}
 
 		data.post_pictures.forEach((el, i)=>
 		{
@@ -166,14 +173,15 @@ class Edit extends Component
 
 		//tmp.append('img', this.state.pictures[0])
 //		tmp.append('pictures', this.state.pictures)
-		console.log('tmp = ')
-		console.log(tmp)
+		console.log('tmp = ', tmp)
 
-		this.appRequest.update_user(this.state._id, tmp)
+		delete this.state.password;
+		delete this.state.status;
+		this.appRequest.update_user(this.state._id, this.state)
 		.then(res=>
 		{
-			console.log(res)
-			console.log(tmpData)
+			console.log('res = ', res)
+			// console.log(tmpData)
 		})
 		.catch(error =>
 		{

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import ucfirst from '../../helpers/ucfirst.js';
 import AppRequest from '../../helpers/appRequest.js';
 import Avatar from '../../components/avatar.js';
@@ -11,13 +10,13 @@ class Home extends Component
 {
 	constructor(props)
 	{
-	    super(props);
+	  super(props);
 		this.get_all_users = this.get_all_users.bind(this);
 		this.appRequest = new AppRequest();
 
 		this.state = {
 			recommendation: [],
-			limit : 2,
+			limit : 20,
 			offset : 0
 		}
 	}
@@ -68,7 +67,7 @@ class Home extends Component
 function ListItem(props)
 {
 	const user 	= props.user,
-		info 	= {first_name: user.first_name, last_name: user.last_name, address: 'paris'},
+		info 	= {first_name: user.first_name, last_name: user.last_name, address: user.city},
 		styles	=
 		{
 			avatar:
@@ -81,8 +80,8 @@ function ListItem(props)
 	return (
 		<li>
 	 		<div className='recommendation_header'>
-	 			<Link to={'/user/' + user._id}>
-	 				<Avatar data={{avatar: user.profil_picture, styles: styles.avatar}} />
+	 			<Link to={'/user/' + user.id}>
+	 				<Avatar data={{avatar: user.pic0, styles: styles.avatar}} />
 	 			</Link>
  				<Info data={info} />
  				<button className='right' onClick={(e)=>{props.appProps.open_new_direct_message(user)}}><span className='add_icon'></span><span>Message</span></button>

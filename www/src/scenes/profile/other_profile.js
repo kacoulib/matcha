@@ -3,21 +3,26 @@ import axios from 'axios';
 import Avatar from '../../components/avatar.js';
 import Ucfirst from '../../helpers/ucfirst.js';
 import Pics from '../../components/pics.js';
+import AppRequest from '../../helpers/appRequest';
+import { Link } from 'react-router-dom';
+
 
 
 
 class OtherProfile extends Component
 {
 	constructor(props)
-  	{
-	    super(props);
+	{
+    super(props);
 
 		this.get_current_user = this.get_current_user.bind(this);
 		this.open_direct_message = this.open_direct_message.bind(this);
+		this.appRequest = new AppRequest();
 
 		this.state =
 		{
-			name: {},
+			first_name : '',
+			last_name : '',
 			age : '',
 			email : '',
 			gender : '',
@@ -26,7 +31,7 @@ class OtherProfile extends Component
 			orientation : '',
 			password : '',
 			pictures : '',
-			profil_picture : '',
+			profile_image : '',
 			status : '',
 			tags : '',
 			viewers : '',
@@ -50,21 +55,39 @@ class OtherProfile extends Component
 		let user_id = this.props.match.params.id;
 
 		if (!user_id)
-			return ;
+			return (window.location = '/');
 
-		axios.get('http://localhost:3000/user/'+user_id)
+		this.appRequest.getUser(user_id)
 		.then((res)=>
 		{
-			this.setState(res.data)
+			let data = res.data;
+
+			if (!data.user || !data.user || !data.user[0])
+				return (window.location = '/');
+
+			this.setState(data.user[0]);
 		})
+		.catch((err)=>window.location = '/')
 	}
 
 	render()
 	{
-		const {profil_picture, pictures, email, age, location} = this.state,
-			full_name = Ucfirst(this.state.name.first) + ' '+ Ucfirst(this.state.name.last),
+		const {pic0, first_name, last_name, pic1, pic2, pic3, pic4, email, age, city} = this.state,
+			full_name = Ucfirst(first_name) + ' '+ Ucfirst(last_name),
 			date_format = new Date(age),
-			age_val = date_format.toLocaleDateString('en-EN', {day: 'numeric', month: 'long' });
+			pictures = [pic1, pic2, pic3, pic4],
+			age_val = date_format.toLocaleDateString('en-EN', {day: 'numeric', month: 'long' }),
+			styles =
+			{
+				position: 'relative',
+				display: 'inline-block',
+				borderRadius: 100,
+				height: 123,
+				width: 123,
+				backgroundSize: 'cover',
+				backgroundRepeat: 'no-repeat',
+				backgroundPosition: '50% 50%'
+			};
 
 			return (
 				<div className="Profile">
@@ -72,7 +95,7 @@ class OtherProfile extends Component
 						<div className='litle_row'>
 							<div className='white_tab with_padding'>
 								<div className='relative'>
-									<Avatar data={{avatar: profil_picture}} />
+									<Avatar data={{avatar: pic0}} />
 									<div className='flat_button bg_blue'  onClick={this.open_direct_message}>
 										Message
 									</div>
@@ -92,19 +115,23 @@ class OtherProfile extends Component
 									</li>
 									<li className='clear_fix'>
 											<span>Current city:</span>
-											<span>{location.name}</span>
+											<span>{city}</span>
 									</li>
 								</ul>
 							</div>
 							<footer>
-								my profile
+								<Link to='#'>LIKE</Link>
 							</footer>
 						</div>
-						
+
 						<div className='tab_content'>
-				  			<span>{Ucfirst(this.state.name.first)} pictures <span className='gray_color'>{this.state.pictures.length}</span></span>
+				  			<span>{Ucfirst(first_name)} pictures <span className='gray_color'>{this.state.pictures.length}</span></span>
 							<ul className='pic_list'>
-								<Pics data={{data: pictures, key: email}} />
+								<li style={styles} ><Link to='#'><img src={pic0} alt={first_name + ' picture 0'} /></Link></li>
+								<li style={styles} ><Link to='#'><img src={pic1} alt={first_name + ' picture 1'} /></Link></li>
+								<li style={styles} ><Link to='#'><img src={pic2} alt={first_name + ' picture 2'} /></Link></li>
+								<li style={styles} ><Link to='#'><img src={pic3} alt={first_name + ' picture 3'} /></Link></li>
+
 							</ul>
 						</div>
 					</div>

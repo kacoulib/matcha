@@ -47,7 +47,7 @@ function is_valid_status(status)
 
 function is_boolean(bool)
 {
-	if (typeof bool != 'string')
+	if (typeof bool != 'string' && typeof bool != 'boolean')
 		return (false);
 
 	bool = bool.toString().toLowerCase();
@@ -75,38 +75,60 @@ function check_user_field_data(user, required_fields)
 				case 'login':
 				case 'password':
 					if (user[key].length < min_len)
+					{
+						console.log('no user')
 						return (false);
+					}
 					break;
 				case 'age':
 					if (!is_major(user[key]))
+					{
+						console.log('no is_major')
 						return (false);
+					}
 					break;
 				case 'email':
 					if (!is_valid_email(user[key]))
+					{
+						console.log('no is_valid_email')
 						return (false);
+					}
 					break;
 				case 'gender':
 					if (!is_valid_gender(user[key]))
+					{
+						console.log('no is_valid_gender')
 						return (false);
+					}
 					break;
 				case 'orientation':
 					if (!is_valid_orientation(user[key]))
+					{
+						console.log('no is_valid_orientation')
 						return (false);
+					}
 					break;
 				case 'status':
 					if (!is_valid_status(user[key]))
+					{
+						console.log('no status');
 						return (false);
+					}
 					break;
 				case 'is_lock':
-						if (!is_boolean(user[key]))
-							return (false);
-						break;
+					if (!is_boolean(user[key]))
+					{
+						console.log('no is_lock');
+						return (false);
+					}
+					break;
 				default:
 					break;
 			}
 			required_fields_len--;
 		}
 	}
+	console.log(required_fields_len)
 	return (required_fields_len == 0);
 }
 
@@ -122,7 +144,7 @@ function extract_data_and_exclude(struct, data, excludes)
 		if (data.hasOwnProperty(keys[i]) &&  excludes.indexOf(keys[i]) < 0)
 					r[keys[i]] = data[keys[i]];
 
-	return r;
+	return (r);
 }
 
 function exclude_data(struct, data, excludes)
@@ -143,7 +165,7 @@ function exclude_data(struct, data, excludes)
 				r[keys[i]] = data[keys[i]];
 		}
 	}
-	return r;
+	return (r);
 }
 
 module.exports =
@@ -160,7 +182,7 @@ module.exports =
 
 	is_new_user_valid: (user) =>
 	{
-		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'profile_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
+		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
 
 		return (check_user_field_data(user, required_fields));
 	},

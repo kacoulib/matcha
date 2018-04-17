@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import io from 'socket.io-client';
-import axios from 'axios';
 
 import './App.css';
 import Header from './partials/header.js';
@@ -74,12 +73,16 @@ class App extends Component
       direct_message_friend: this.state.direct_message_friend,
       close_direct_message: this.close_direct_message,
       direct_message_is_open: this.state.direct_message_is_open
+    },
+
+    curUser={
+      current_user: this.current_user
     };
 
     return (
        <MuiThemeProvider>
         <div>
-          <Header />
+          <Header {...curUser}/>
 
           <div id="page_layout">
             <div id="aside">
