@@ -7,6 +7,7 @@ import Header from './partials/header.js';
 import Main from './partials/main.js';
 import Aside from './partials/aside.js';
 import Footer from './partials/footer.js';
+import AppRequest from './helpers/appRequest.js';
 
 
 class App extends Component
@@ -18,16 +19,19 @@ class App extends Component
     this.open_new_direct_message = this.open_new_direct_message.bind(this);
     this.close_direct_message = this.close_direct_message.bind(this);
     this.get_current_user = this.get_current_user.bind(this);
+    this.updateRecommendation = this.updateRecommendation.bind(this);
+
+    this.appRequest = new AppRequest();
 
     this.state =
     {
       is_login: false,
       current_user: {},
       direct_message_friend: {},
-      direct_message_is_open: false
+      direct_message_is_open: false,
+      recommendation: []
     }
   }
-
 
   get_current_user()
   {
@@ -54,6 +58,18 @@ class App extends Component
     this.setState({direct_message_friend: friend, direct_message_is_open: true});
   }
 
+  updateRecommendation(params)
+	{
+		this.appRequest.all_users(params)
+		.then((res)=>
+		{
+			this.setState({recommendation: res.data.users}, function()
+			{
+				console.log(this.state.recommendation)
+			})
+		}).catch((e)=>console.log(e))
+	}
+
   componentWillMount()
   {
     var socket = io('http://localhost:3000/');
@@ -64,18 +80,29 @@ class App extends Component
 
   render()
   {
-    const appProps={
+    const appProps =
+    {
       open_new_direct_message: this.open_new_direct_message,
-      current_user: this.current_user
+      current_user: this.current_user,
+      updateRecommendation: this.updateRecommendation,
+      recommendation: this.state.recommendation
     },
 
-    directMessageProps={
+    directMessageProps =
+    {
       direct_message_friend: this.state.direct_message_friend,
       close_direct_message: this.close_direct_message,
       direct_message_is_open: this.state.direct_message_is_open
     },
 
-    curUser={
+    recommendationProps =
+    {
+      updateRecommendation: this.updateRecommendation,
+      recommendation: this.state.recommendation
+    },
+
+    curUser =
+    {
       current_user: this.current_user
     };
 
@@ -86,7 +113,7 @@ class App extends Component
 
           <div id="page_layout">
             <div id="aside">
-              <Aside />
+              <Aside {...recommendationProps} />
             </div>
 
             <div id="main">

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ucfirst from '../../helpers/ucfirst.js';
-import AppRequest from '../../helpers/appRequest.js';
 import Avatar from '../../components/avatar.js';
 import Pics from '../../components/pics.js';
 
@@ -11,40 +10,29 @@ class Home extends Component
 	constructor(props)
 	{
 	  super(props);
-		this.get_all_users = this.get_all_users.bind(this);
-		this.appRequest = new AppRequest();
 
 		this.state = {
 			recommendation: [],
 			limit : 20,
-			offset : 0
+			offset : 0,
+			age: 18
 		}
 	}
 
 	componentDidMount()
 	{
-		this.get_all_users();
-	}
+		let params = this.state;
 
-	get_all_users()
-	{
-		let params = {limit: this.state.limit, offset: this.state.offset};
+		delete params.recommendation;
 
-		this.appRequest.all_users(params)
-		.then((res)=>
-		{
-			this.setState({recommendation: res.data.users}, function()
-			{
-				console.log(this.state.recommendation)
-			})
-		}).catch((e)=>console.log(e))
+		this.props.appProps.updateRecommendation(params);
 	}
 
 	render()
 	{
-		let data = this.state.recommendation,
+		let appProps = this.props.appProps,
+			data = appProps.recommendation,
 			pictures_len = data.pictures && data.pictures.length ? true : false;
-
 
 		return (
 			<div className='white_tab_container'>
@@ -54,7 +42,7 @@ class Home extends Component
 							{	data.map((data)=>
 								{
 									return (
-										<ListItem key={data.email} user={data} appProps={this.props.appProps}/>
+										<ListItem key={data.email} user={data} appProps={appProps}/>
 									);
 								})
 							}

@@ -12,9 +12,9 @@ import MenuItem from 'material-ui/MenuItem';
 
 class Filter extends Component
 {
-	constructor()
+	constructor(props)
 	{
-		super();
+		super(props);
 
 		this.handleFirstSlider = this.handleFirstSlider.bind(this);
 		this.handleTag = this.handleTag.bind(this);
@@ -73,14 +73,15 @@ class Filter extends Component
 	handleSubmit()
 	{
 		let data = this.state,
-			result = {age: data.age, distance: data.distance, popularity: data.popularity,  tags:[]};
+			params = {age: data.age, distance: data.distance, popularity: data.popularity, tags:[],
+			limit: 20, offset: 0};
 
-		data.tags.map((elem)=>(elem.checked) ? result.tags.push(elem.name): '');
+		data.tags.map((elem)=>(elem.checked) ? params.tags.push(elem.name): '');
 
 		if (data.sort)
-			result['sort'] = data['sort'];
+			params['sort'] = data['sort'];
 
-		console.log(result);
+		this.props.updateRecommendation(params)
 	}
 
 	render()
@@ -117,7 +118,7 @@ class Filter extends Component
 							onChange={this.handleFirstSlider.bind(this, 'distance')}
 							sliderStyle={styleSlider}
 						/>
-						
+
 					</div>
 
 					<div>
@@ -130,7 +131,7 @@ class Filter extends Component
 							onChange={this.handleFirstSlider.bind(this, 'age')}
 							sliderStyle={styleSlider}
 						/>
-						
+
 					</div>
 
 					<div>

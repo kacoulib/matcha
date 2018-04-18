@@ -33,29 +33,26 @@ function match_sex(user)
 
 module.exports =
 {
-	all: (user, limit, offset, con)=>
+	all: (user, params, con)=>
 	{
 		return new Promise((resolve, reject)=>
 		{
 			let tmp;
 
-			if (!dataValidator.is_valid_db_id(limit) || !dataValidator.is_valid_db_id(offset))
+			if (!dataValidator.is_valid_db_id(params.limit) || !dataValidator.is_valid_db_id(params.offset))
 				return (reject('Invalid limit or offset'));
 
-			limit	 = parseInt(limit);
-			offset = parseInt(offset);
+			limit	 = parseInt(params.limit);
+			offset = parseInt(params.offset);
 			let lat = user.lat,
 					lng = user.lng,
 					radius = 2000;
 
-					console.log(user)
-					console.log(user.lat, user.lng)
 					let sql = 'SELECT *, ( 3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ) AS distance FROM User HAVING distance < '+radius+' ORDER BY distance LIMIT 0 , 20';
 
 			// con.query('SELECT * FROM User WHERE gender IN (?) AND orientation IN (?) AND login != ? LIMIT ? OFFSET ?', [tmp[0], tmp[1], user.login, limit, offset], (err, user)=>
 			con.query(sql, (err, user)=>
 			{
-				console.log('sdsd');
 					if (err)
 					{
 						console.log(err)

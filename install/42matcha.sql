@@ -36,8 +36,9 @@ CREATE TABLE IF NOT EXISTS `Tag` (
 
 
 CREATE TABLE IF NOT EXISTS `Viewer` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`user_id` INT NOT NULL,
-	`viewed_user_id` INT NOT NULL
+	`viewed_user_id` INT NOT NULL,
 
 
     INDEX viewed_user (viewed_user_id),
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `Viewer` (
 
 CREATE TABLE IF NOT EXISTS `Block` (
 	`user_id` INT NOT NULL,
-	`bloked_user_id` INT NOT NULL
+	`bloked_user_id` INT NOT NULL,
 
 
     INDEX viewed_user (bloked_user_id),

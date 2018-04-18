@@ -13,11 +13,10 @@ import Requests from '../helpers/appRequest.js'
 const AuthRoute = ({ component: Component, ...rest }) =>
 {
 	var isAuth = sessionStorage.getItem('token');
-	// var isAuth = await check_token();
-		// console.log(await)
+
 		return (<Route {...rest} render={props => (
 			isAuth
-			? <Component {...props} />
+			? <Component {...rest} />
 			: <Redirect to={{ pathname: '/register', state: { from: props.location } }} />
 		)} />)
 }
@@ -29,24 +28,22 @@ const NotAuthRoute = ({ component: Component, ...rest }) =>
 
 		return (<Route {...rest} render={props => (
 			!notIsAuth
-			? <Component {...props} />
+			? <Component {...rest} />
 			: <Redirect to={{ pathname: '/', state: { from: props.location } }} />
 		)} />)
 }
 
 
-					// <Route exact path='/' render={(props) => (<Home {...props} appProps={appProps}/>)} />
 class main extends Component
 {
-
 	render()
 	{
 		const appProps = this.props;
-
+		// console.log(appProps)
 	    return (
 	        <div className="main">
 				<Switch>
-					<AuthRoute exact path='/' component={Home} appProps={appProps} />
+					<AuthRoute exact path='/' component={Home} appProps={appProps}/>
 					<AuthRoute path='/me' component={MyProfile} />
 					<AuthRoute path='/user/:id' component={OtherProfile} appProps={appProps} />
 					<AuthRoute path='/edit' component={Edit} appProps={appProps} />

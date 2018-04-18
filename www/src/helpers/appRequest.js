@@ -20,11 +20,11 @@ class Requests
 
 	all_users (params)
 	{
-		let path = '?', 
+		let path = '?',
 			key;
 
 		for (key in params)
-			path += key + '=' + params[key];
+			path += key + '=' + params[key] + '&';
 
 		path = path.slice(0, -1);
 

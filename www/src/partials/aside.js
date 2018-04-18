@@ -6,6 +6,12 @@ import Filter from '../modules/filter';
 
 class AsideLeft extends Component
 {
+	constructor(props)
+	{
+		super(props);
+	}
+
+
 	render()
 	{
 		const styles =
@@ -37,7 +43,7 @@ class AsideLeft extends Component
 					</ul>
 				</aside>
 
-				<Filter />
+				<Filter {...this.props}/>
 			</div>
 		);
 	}

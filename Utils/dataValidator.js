@@ -60,6 +60,7 @@ function check_user_field_data(user, required_fields)
 			required_fields_len = required_fields.length,
 			key;
 
+			console.log(required_fields_len)
 	for (key in user)
 	{
 		if (user.hasOwnProperty(key))
@@ -67,8 +68,11 @@ function check_user_field_data(user, required_fields)
 			switch (key)
 			{
 				case 'id':
-					if (!is_valid_db_id(user[key]))
-						return (false);
+						if (!is_valid_db_id(user[key]))
+						{
+							console.log('no id')
+							return (false);
+						}
 					break;
 				case 'first_name':
 				case 'last_name':
@@ -123,6 +127,7 @@ function check_user_field_data(user, required_fields)
 					}
 					break;
 				default:
+					console.log(key)
 					break;
 			}
 			required_fields_len--;
@@ -182,7 +187,7 @@ module.exports =
 
 	is_new_user_valid: (user) =>
 	{
-		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'gender', 'orientation', 'bio', 'status', 'is_lock', 'reset_pass'];
+		let required_fields = ['first_name', 'last_name', 'login', 'password', 'email', 'age', 'nb_image', 'gender', 'orientation', 'bio', 'popularity', 'status', 'is_lock', 'reset_pass'];
 
 		return (check_user_field_data(user, required_fields));
 	},

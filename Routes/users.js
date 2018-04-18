@@ -101,7 +101,17 @@ module.exports = function (app, passport, con)
 
 	app.get('/user/all/', (req, res) =>
 	{
-		User.all(req.user, req.query.limit, req.query.offset, con).then((users)=>
+		let params = {},
+			key,
+			queries = req.query;
+
+		for (key in queries)
+			params[key] = queries[key];
+
+
+
+		console.log(params)
+		User.all(req.user, params, con).then((users)=>
 		{
 				return (res.json({sucess: true, users: users}));
 		})
@@ -295,7 +305,11 @@ module.exports = function (app, passport, con)
 			{
 
 				if (err || errMessage)
+				{
+					console.log(err)
+					console.log(errMessage)
 					return (res.status(401).json({sucess: false, errMessage}));
+				}
 
 				let new_user = userUtils.tokenazableUser(user),
 				token = jwt.generateToken(new_user);
