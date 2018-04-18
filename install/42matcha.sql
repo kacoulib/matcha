@@ -31,19 +31,29 @@ CREATE TABLE IF NOT EXISTS `User` (
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS `Tag` (
-	`id` INT NOT NULL AUTO_INCREMENT PRIMARY key,
 	`tag_name` varchar(255) NOT NULL UNIQUE
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS `Viewer` (
-	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`user_id` INT NOT NULL,
 	`viewed_user_id` INT NOT NULL
 
 
     INDEX viewed_user (viewed_user_id),
     FOREIGN KEY (viewed_user_id)
+        REFERENCES User(id)
+        ON DELETE CASCADE
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `Block` (
+	`user_id` INT NOT NULL,
+	`bloked_user_id` INT NOT NULL
+
+
+    INDEX viewed_user (bloked_user_id),
+    FOREIGN KEY (bloked_user_id)
         REFERENCES User(id)
         ON DELETE CASCADE
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
