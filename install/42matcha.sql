@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 	`city` varchar(255),
 	`lat` FLOAT( 10, 6 ) NOT NULL,
 	`lng` FLOAT( 10, 6 ) NOT NULL,
+	`popularity` INT NOT NULL DEFAULT 0,
 	`status` enum('online','offline') NOT NULL DEFAULT 'offline',
 	`is_lock` enum('true','false') NOT NULL DEFAULT 'false',
 	`reset_pass` varchar(255) DEFAULT NULL
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `Tag` (
 CREATE TABLE IF NOT EXISTS `Viewer` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`user_id` INT NOT NULL,
-	`viewed_user_id` INT NOT NULL,
+	`viewed_user_id` INT NOT NULL
 
 
     INDEX viewed_user (viewed_user_id),
