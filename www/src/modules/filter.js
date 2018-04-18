@@ -23,7 +23,7 @@ class Filter extends Component
 
 		this.state =
 		{
-			distance: 1000,
+			distance: 5000,
 			age: 24,
 			popularity: 0,
 			tags: [],
@@ -112,7 +112,7 @@ class Filter extends Component
 						<p>Distance <span>{this.state.distance}</span></p>
 						 <Slider
 							min={100}
-							max={2000}
+							max={10000}
 							step={0.0000001}
 							value={this.state.distance}
 							onChange={this.handleFirstSlider.bind(this, 'distance')}

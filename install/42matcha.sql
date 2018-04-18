@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 
 CREATE TABLE IF NOT EXISTS `Tag` (
 	`user_id` INT NOT NULL,
-	`tag_name` varchar(255) NOT NULL UNIQUE
+	`tag_name` varchar(255) NOT NULL
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 

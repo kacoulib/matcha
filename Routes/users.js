@@ -108,9 +108,6 @@ module.exports = function (app, passport, con)
 		for (key in queries)
 			params[key] = queries[key];
 
-
-
-		console.log(params)
 		User.all(req.user, params, con).then((users)=>
 		{
 				return (res.json({sucess: true, users: users}));

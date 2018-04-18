@@ -1,35 +1,7 @@
 'USE STRICT'
 
-let dataValidator = require('../../Utils/dataValidator.js');
-
-function match_sex(user)
-{
-	let sql = '(';
-    if (user.gender === 'male')
-    {
-      if (user.orientation === 'heterosexual')
-        return ([['female', 'heterosexual'], ['female', 'heterosexual']]);
-      else if (user.orientation === 'homosexual')
-        return ([['male', 'homosexual'], ['male', 'homosexual']]);
-      else if (user.orientation === 'bisexual')
-        return ([['male', 'bisexual'], ['female', 'bisexual']]);
-    }
-    else if (user.gender === 'female')
-    {
-			if (user.orientation === 'heterosexual')
-				return ([['male', 'heterosexual'], ['male', 'heterosexual']]);
-			else if (user.orientation === 'homosexual')
-				return ([['female', 'homosexual'], ['female', 'homosexual']]);
-			else if (user.orientation === 'bisexual')
-			{
-				return ([['male', 'bisexual'], ['female', 'bisexual']]);
-			}
-    }
-		else
-		return false
-
-    return (false);
-}
+let dataValidator = require('../../Utils/dataValidator.js'),
+		queryValidator = require('../../Utils/queryValidator.js');
 
 module.exports =
 {
@@ -37,18 +9,32 @@ module.exports =
 	{
 		return new Promise((resolve, reject)=>
 		{
-			let tmp;
+			let { limit, offset, sort, distance } = params,
+				lat = user.lat,
+				lng = user.lng,
+				sex = queryValidator.match_sex(user);
 
-			if (!dataValidator.is_valid_db_id(params.limit) || !dataValidator.is_valid_db_id(params.offset))
+			sort = queryValidator.match_order(sort || '');
+			distance = distance || 10000;
+
+			if (!dataValidator.is_valid_db_id(limit) || !dataValidator.is_valid_db_id(offset))
 				return (reject('Invalid limit or offset'));
 
-			limit	 = parseInt(params.limit);
-			offset = parseInt(params.offset);
-			let lat = user.lat,
-					lng = user.lng,
-					radius = 2000;
+			limit	 = parseInt(limit);
+			offset = parseInt(offset);
 
-					let sql = 'SELECT *, ( 3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ) AS distance FROM User HAVING distance < '+radius+' ORDER BY distance LIMIT 0 , 20';
+			console.log(sex)
+			console.log(sort)
+			// console.log(user)
+
+					let sql = 'SELECT *, ( 3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ) AS distance FROM User HAVING distance < '+distance+' ';
+					// let sql = 'SELECT User.*, Tag.* FROM User ';
+
+					// sql += 'ORDER BY distance LIMIT 0 , 20 '
+
+					// sql += 'LEFT JOIN Tag ON User.id = Tag.user_id GROUP BY User.id AND User.gender IN ('+sex.gender+') ';
+					sql += 'ORDER BY ' + sort;
+					console.log(sql)
 
 			// con.query('SELECT * FROM User WHERE gender IN (?) AND orientation IN (?) AND login != ? LIMIT ? OFFSET ?', [tmp[0], tmp[1], user.login, limit, offset], (err, user)=>
 			con.query(sql, (err, user)=>

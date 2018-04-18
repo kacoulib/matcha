@@ -21,8 +21,7 @@ con.connect(function(err)
 
 let user_id = 1;
 let create_x_len = 100;
-	// add_new_tag();
-	// add_new_img();
+
 	add_new_user();
 
 	// add_new_location();
@@ -32,16 +31,16 @@ function get_random(max){ return Math.floor(Math.random() * Math.floor(max))};
 
 function add_new_user()
 {
-	console.log('Connected');
 	let val = [],
 		sql,
 		user,
 		first,
 		last,
-		tags = ['bio', 'geek', 'piercing', 'sport'],
+		tag_list = ['sport', 'love', 'kiss'],
+		tags = [],
 		j = 0,
 		orientation = ['heterosexual', 'bisexual', 'homosexual'],
-		gender = ['male', 'female', 'other'];
+		gender = ['male', 'female'];
 		status = ['online', 'offline'];
 
 
@@ -72,29 +71,44 @@ function add_new_user()
 			user[19] 	= 'false';																								// is_lock
 			user[20] 	= 'null';																									// reset_pass
 			val.push(user)
+
+			// tag_list
+			tags.push([i, tag_list[get_random(3)]]);
+
 		}
 		// lat FLOAT,
 		// long FLOAT,
 
 
-  	sql = "INSERT INTO User (first_name, last_name, login, password, email, age, nb_image, gender, orientation, bio, pic0, pic1, pic2, pic3, pic4, city, lng, lat, status, is_lock, reset_pass) VALUES ?";
-
+		sql = "INSERT INTO User (first_name, last_name, login, password, email, age, nb_image, gender, orientation, bio, pic0, pic1, pic2, pic3, pic4, city, lng, lat, status, is_lock, reset_pass) VALUES ?";
 		con.query(sql, [val], function (err, res)
 		{
 			if (err)
 				throw err;
-			console.log("user created");
-			console.log(res);
+			console.log(res.affectedRows, ' User created');
+
+
+			sql = "INSERT INTO Tag (user_id, tag_name) VALUES ?";
+			con.query(sql, [tags], function (err, res)
+			{
+				if (err)
+					throw err;
+					console.log(res.affectedRows, ' Tags created');
+
+			});
 		});
 }
 
 function add_new_tag(name)
 {
+	let tag_list = ['sport', 'love', 'kiss'],
+		tags = [];
 
-		console.log('Connected');
+	for (var i = 0; i < create_x_len; i++)
+		tags.push([i, tag_list[get_random(3)]]);
 
-    let tags = [['sortie'], ['fete']],
-			sql = "INSERT INTO Tag (tag_name) VALUES ?";
+
+		sql = "INSERT INTO Tag (user_id, tag_name) VALUES ?";
 
 		con.query(sql, [tags], function (err, res)
 		{
@@ -136,8 +150,5 @@ function add_new_location()
 			})
 }
 
-
-// add_new_user()
-// add_new_tag('hangout')
 
 // console.log(add_new_location(1))
