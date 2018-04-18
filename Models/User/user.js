@@ -9,13 +9,15 @@ module.exports =
 	{
 		return new Promise((resolve, reject)=>
 		{
-			let { limit, offset, sort, distance } = params,
+			let { limit, offset, sort, distance, age, popularity} = params,
 				lat = user.lat,
 				lng = user.lng,
 				sex = queryValidator.match_sex(user);
 
 			sort = queryValidator.match_order(sort || '');
-			distance = distance || 10000;
+			distance = distance || 1000;
+			age = age || 18;
+			popularity = popularity || 0;
 
 			if (!dataValidator.is_valid_db_id(limit) || !dataValidator.is_valid_db_id(offset))
 				return (reject('Invalid limit or offset'));
@@ -27,13 +29,13 @@ module.exports =
 			console.log(sort)
 			// console.log(user)
 
-					let sql = 'SELECT *, ( 3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ) AS distance FROM User HAVING distance < '+distance+' ';
+					let sql = 'SELECT *, t.tag_name FROM (SELECT *, ( 3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ) AS distance FROM User WHERE age >='+age+' AND popularity >='+popularity+' HAVING distance < '+ distance +') ';
 					// let sql = 'SELECT User.*, Tag.* FROM User ';
 
-					// sql += 'ORDER BY distance LIMIT 0 , 20 '
+					sql += 'as tmp	LEFT JOIN Tag as t ON t.user_id = tmp.id ';
 
 					// sql += 'LEFT JOIN Tag ON User.id = Tag.user_id GROUP BY User.id AND User.gender IN ('+sex.gender+') ';
-					sql += 'ORDER BY ' + sort;
+					// sql += 'ORDER BY ' + sort;
 					console.log(sql)
 
 			// con.query('SELECT * FROM User WHERE gender IN (?) AND orientation IN (?) AND login != ? LIMIT ? OFFSET ?', [tmp[0], tmp[1], user.login, limit, offset], (err, user)=>
