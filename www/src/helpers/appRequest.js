@@ -18,10 +18,18 @@ class Requests
 		return axios.get(this.url + '/user/'+ user_id);
 	}
 
-	all_users (limit, offset = 0)
+	all_users (params)
 	{
+		let path = '?', 
+			key;
+
+		for (key in params)
+			path += key + '=' + params[key];
+
+		path = path.slice(0, -1);
+
 		axios.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem('token');
-		return axios.get(`${this.url}/user/all/?limit=${limit}&offset=${offset}`);
+		return axios.get(`${this.url}/user/all/${path}`);
 	}
 
 	sign_in (loginOrEmail, password)

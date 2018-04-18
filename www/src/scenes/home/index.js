@@ -28,7 +28,9 @@ class Home extends Component
 
 	get_all_users()
 	{
-		this.appRequest.all_users(this.state.limit, this.state.offset)
+		let params = {limit: this.state.limit, offset: this.state.offset};
+
+		this.appRequest.all_users(params)
 		.then((res)=>
 		{
 			this.setState({recommendation: res.data.users}, function()
