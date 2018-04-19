@@ -15,7 +15,7 @@ class EditBasic extends Component
 
 		this.state = {
 			data: [],
-			default_tags: ['bio', 'geek', 'hangout', 'piercing', 'programming', 'vegan']
+			default_tags: ['sport', 'love', 'kiss']
 		}
 	}
 

@@ -33,7 +33,7 @@ module.exports =
 				sql += 'SELECT *, (';
 					sql += '3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ';
 					sql +=') AS distance ';
-				sql += 'FROM User WHERE age <=\''+ age +'\' AND popularity >='+ popularity +' AND '+ sex +' ';
+				sql += `FROM User WHERE age <= '${age}' AND popularity >= ${popularity} AND ${sex} `;
 				sql += `AND login != '${user.login}' `;
 				sql += 'HAVING distance <= '+ distance +' ';
 				sql += 'ORDER BY '+ sort +' ';

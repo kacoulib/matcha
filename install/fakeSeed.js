@@ -42,6 +42,7 @@ function add_new_user()
 		orientation = ['heterosexual', 'bisexual', 'homosexual'],
 		gender = ['male', 'female'];
 		status = ['online', 'offline'];
+		is_lock = ['false', 'true'];
 
 
 		for (var i = 0; i < create_x_len; i++)
@@ -68,7 +69,7 @@ function add_new_user()
 			user[16] 	= faker.address.longitude();															// long
 			user[17] 	= faker.address.latitude();																// lat
 			user[18] 	= status[get_random(2)];																	// status
-			user[19] 	= 'false';																								// is_lock
+			user[19] 	= status[get_random(2)];																	// is_lock
 			user[20] 	= 'null';																									// reset_pass
 			val.push(user)
 

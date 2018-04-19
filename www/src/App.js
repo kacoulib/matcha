@@ -53,7 +53,7 @@ class App extends Component
 
   open_new_direct_message(friend)
   {
-    if (!friend._id)
+    if (!friend.login)
       return;
     this.setState({direct_message_friend: friend, direct_message_is_open: true});
   }
@@ -65,7 +65,7 @@ class App extends Component
 		{
 			this.setState({recommendation: res.data.users}, function()
 			{
-				console.log(this.state.recommendation)
+				console.log(this.state.recommendation.length +' Recommandation. First: ', this.state.recommendation[0])
 			})
 		}).catch((e)=>console.log(e))
 	}

@@ -83,7 +83,7 @@ class ChatBox extends Component
 	render()
 	{
 		const {current_user, reduce_dialog, messages} = this.state,
-		full_name = this.state.friend.name ? Ucfirst(this.state.friend.name.first) + ' '+ Ucfirst(this.state.friend.name.last) : '';
+		full_name = this.state.friend.login ? Ucfirst(this.state.friend.first_name) + ' '+ Ucfirst(this.state.friend.last_name) : '';
 
 		return (
 			<div>
@@ -102,7 +102,7 @@ class ChatBox extends Component
 											<div>{message.text}</div>
 										</li>
 									)
-									
+
 								})}
 							</ul>
 						</div>

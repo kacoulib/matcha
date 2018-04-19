@@ -30,9 +30,23 @@ CREATE TABLE IF NOT EXISTS `User` (
 	`reset_pass` varchar(255) DEFAULT NULL
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
+
 CREATE TABLE IF NOT EXISTS `Tag` (
 	`user_id` INT NOT NULL,
 	`tag_name` varchar(255) NOT NULL
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `Friend` (
+	`user_id` INT NOT NULL,
+	`friend_id` varchar(255) NOT NULL
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
+
+
+CREATE TABLE IF NOT EXISTS `Message` (
+	`sender_id` INT NOT NULL,
+	`reciver_id` INT NOT NULL,
+	`message` varchar(255) NOT NULL
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 
@@ -40,22 +54,4 @@ CREATE TABLE IF NOT EXISTS `Viewer` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`user_id` INT NOT NULL,
 	`viewed_user_id` INT NOT NULL,
-
-
-    INDEX viewed_user (viewed_user_id),
-    FOREIGN KEY (viewed_user_id)
-        REFERENCES User(id)
-        ON DELETE CASCADE
-) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
-
-
-CREATE TABLE IF NOT EXISTS `Block` (
-	`user_id` INT NOT NULL,
-	`bloked_user_id` INT NOT NULL,
-
-
-    INDEX viewed_user (bloked_user_id),
-    FOREIGN KEY (bloked_user_id)
-        REFERENCES User(id)
-        ON DELETE CASCADE
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
