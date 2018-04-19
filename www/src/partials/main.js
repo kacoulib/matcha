@@ -6,7 +6,6 @@ import Home from '../scenes/home/index.js';
 import MyProfile from '../scenes/profile/my_profile.js';
 import Edit from '../scenes/profile/edit.js';
 import OtherProfile from '../scenes/profile/other_profile.js';
-import Requests from '../helpers/appRequest.js'
 
 
 

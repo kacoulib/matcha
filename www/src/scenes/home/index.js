@@ -15,7 +15,8 @@ class Home extends Component
 			recommendation: [],
 			limit : 20,
 			offset : 0,
-			age: 18
+			age: 18,
+			distance: 50000
 		}
 	}
 
@@ -39,10 +40,10 @@ class Home extends Component
 				<div className='white_tab'>
 					<div className='tab_content'>
 						<ul className={pictures_len ? 'recommendation_ul': ''}>
-							{	data.map((data)=>
+							{	data.map((data, i)=>
 								{
 									return (
-										<ListItem key={data.email} user={data} appProps={appProps}/>
+										<ListItem key={data.email + i} user={data} appProps={appProps}/>
 									);
 								})
 							}

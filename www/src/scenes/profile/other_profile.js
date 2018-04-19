@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Avatar from '../../components/avatar.js';
 import Ucfirst from '../../helpers/ucfirst.js';
-import Pics from '../../components/pics.js';
 import AppRequest from '../../helpers/appRequest';
 import { Link } from 'react-router-dom';
 
@@ -24,13 +22,13 @@ class OtherProfile extends Component
 			first_name : '',
 			last_name : '',
 			age : '',
-			email : '',
 			gender : '',
 			likers : '',
 			location : '',
 			orientation : '',
 			password : '',
-			pictures : '',
+			nb_image : 0,
+			pictures : [],
 			profile_image : '',
 			status : '',
 			tags : '',
@@ -52,7 +50,7 @@ class OtherProfile extends Component
 
 	get_current_user()
 	{
-		let user_id = this.props.match.params.id;
+		let user_id = this.props.computedMatch.params.id;
 
 		if (!user_id)
 			return (window.location = '/');
@@ -60,22 +58,33 @@ class OtherProfile extends Component
 		this.appRequest.getUser(user_id)
 		.then((res)=>
 		{
-			let data = res.data;
+			let data = res.data,
+				user = {},
+				tmp,
+				tmpState = this.state;
 
 			if (!data.user || !data.user || !data.user[0])
 				return (window.location = '/');
+			tmp = data.user[0];
 
-			this.setState(data.user[0]);
+			for (var key in tmpState)
+				if (tmp.hasOwnProperty(key))
+					user[key] = tmp[key];
+
+			user.profile_image = tmp.pic0;
+			user.pictures = [tmp.pic1, tmp.pic2, tmp.pic3, tmp.pic4];
+
+
+			this.setState(user);
 		})
 		.catch((err)=>window.location = '/')
 	}
 
 	render()
 	{
-		const {pic0, first_name, last_name, pic1, pic2, pic3, pic4, email, age, city} = this.state,
+		const {profile_image, first_name, last_name, age, city, pictures, nb_image} = this.state,
 			full_name = Ucfirst(first_name) + ' '+ Ucfirst(last_name),
 			date_format = new Date(age),
-			pictures = [pic1, pic2, pic3, pic4],
 			age_val = date_format.toLocaleDateString('en-EN', {day: 'numeric', month: 'long' }),
 			styles =
 			{
@@ -95,8 +104,8 @@ class OtherProfile extends Component
 						<div className='litle_row'>
 							<div className='white_tab with_padding'>
 								<div className='relative'>
-									<Avatar data={{avatar: pic0}} />
-									<div className='flat_button bg_blue'  onClick={this.open_direct_message}>
+									<Avatar data={{avatar: profile_image}} />
+									<div className='flat_button bg_blue' onClick={this.open_direct_message}>
 										Message
 									</div>
 								</div>
@@ -125,13 +134,12 @@ class OtherProfile extends Component
 						</div>
 
 						<div className='tab_content'>
-				  			<span>{Ucfirst(first_name)} pictures <span className='gray_color'>{this.state.pictures.length}</span></span>
+				  			<span>{Ucfirst(first_name)} pictures <span className='gray_color'>{nb_image}</span></span>
 							<ul className='pic_list'>
-								<li style={styles} ><Link to='#'><img src={pic0} alt={first_name + ' picture 0'} /></Link></li>
-								<li style={styles} ><Link to='#'><img src={pic1} alt={first_name + ' picture 1'} /></Link></li>
-								<li style={styles} ><Link to='#'><img src={pic2} alt={first_name + ' picture 2'} /></Link></li>
-								<li style={styles} ><Link to='#'><img src={pic3} alt={first_name + ' picture 3'} /></Link></li>
-
+							{	pictures.map((picture, i)=>
+										<li style={styles} key={picture+i}><Link to='#'><img src={picture} alt={`${first_name}  screenshot ${i}`} /></Link></li>
+								)
+							}
 							</ul>
 						</div>
 					</div>

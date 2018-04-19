@@ -7,19 +7,19 @@ function match_order(sort)
 	switch(sort)
 	{
 		case 'age':
-				res = 'User.age';
+				res = 'age';
 				break;
 
-		case 'location':
+		case 'distance':
 				res = 'distance';
 				break;
 
 		case 'popularity':
-				res = 'User.popularity';
+				res = 'popularity';
 				break;
 
 		case 'tags':
-				res = 'User.tag';
+				res = 'tag';
 				break;
 
 		default:
@@ -33,20 +33,20 @@ function match_sex(user)
     if (user.gender === 'male')
     {
       if (user.orientation === 'heterosexual')
-        return ({gender: "'female'", orientation: "'heterosexual'"});
+				return "gender IN ('female') AND orientation = 'heterosexual', 'bisexual')";
       else if (user.orientation === 'homosexual')
-        return ({gender: "'male'", orientation: "'homosexual'"});
+				return "gender IN ('male') AND orientation IN ('homosexual', 'bisexual)')";
       else if (user.orientation === 'bisexual')
-        return ({gender: "'male', 'female'", orientation: "'heterosexual', 'bisexual'"});
+				return "gender IN ('male', 'female', 'other') AND orientation IN ('homosexual', 'bisexual)')";
     }
     else if (user.gender === 'female')
     {
 			if (user.orientation === 'heterosexual')
-				return ({gender: "'male'", orientation: "'heterosexual'"});
+				return "gender IN ('male') AND orientation IN ('heterosexual', 'bisexual)')";
 			else if (user.orientation === 'homosexual')
-				return ({gender: "'female'", orientation: "'homosexual'"});
+				return "gender IN ('female') AND orientation IN ('homosexual', 'bisexual)')";
 			else if (user.orientation === 'bisexual')
-				return ({gender: "'male', 'female'", orientation: "'heterosexual', 'bisexual'"});
+				return "gender IN ('male', 'female', 'other') AND orientation IN ('homosexual', 'bisexual)')";
     }
     return ({genre: "", orientation: ""});
 }

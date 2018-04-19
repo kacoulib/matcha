@@ -1,6 +1,7 @@
 'USE STRICT'
 
 let dataValidator = require('../../Utils/dataValidator.js'),
+		userDataValidator = require('../../Utils/userDataValidator.js'),
 		queryValidator = require('../../Utils/queryValidator.js');
 
 module.exports =
@@ -10,33 +11,37 @@ module.exports =
 		return new Promise((resolve, reject)=>
 		{
 			let { limit, offset, sort, distance, age, popularity} = params,
-				lat = user.lat,
-				lng = user.lng,
-				sex = queryValidator.match_sex(user);
+				{ lat, lng } = user,
+				sex,
+				sql = '';
+			age = userDataValidator.convertAgeToDate(age || 18);
 
-			sort = queryValidator.match_order(sort || '');
-			distance = distance || 1000;
-			age = age || 18;
-			popularity = popularity || 0;
-
-			if (!dataValidator.is_valid_db_id(limit) || !dataValidator.is_valid_db_id(offset))
-				return (reject('Invalid limit or offset'));
+			if (!dataValidator.is_valid_db_id(limit) ||
+				!dataValidator.is_valid_db_id(offset) ||
+				!dataValidator.is_major(age))
+					return (reject('Invalid limit or offset'));
 
 			limit	 = parseInt(limit);
 			offset = parseInt(offset);
+			sort = queryValidator.match_order(sort || '');
+			sex = queryValidator.match_sex(user)
+			distance = distance || 50000;
+			popularity = popularity || 0;
 
-			console.log(sex)
-			console.log(sort)
-			// console.log(user)
+			console.log(user.login, age)
+			sql += 'SELECT *, t.tag_name FROM (';
+				sql += 'SELECT *, (';
+					sql += '3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ';
+					sql +=') AS distance ';
+				sql += 'FROM User WHERE age <=\''+ age +'\' AND popularity >='+ popularity +' AND '+ sex +' ';
+				sql += `AND login != '${user.login}' `;
+				sql += 'HAVING distance <= '+ distance +' ';
+				sql += 'ORDER BY '+ sort +' ';
+			sql += ')';
 
-					let sql = 'SELECT *, t.tag_name FROM (SELECT *, ( 3959 * acos( cos( radians('+lat+') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('+lng+') ) + sin( radians('+lat+') ) * sin( radians( lat ) ) ) ) AS distance FROM User WHERE age >='+age+' AND popularity >='+popularity+' HAVING distance < '+ distance +') ';
-					// let sql = 'SELECT User.*, Tag.* FROM User ';
+			sql += 'as tmpUser LEFT JOIN Tag as t ON t.user_id = tmpUser.id';
 
-					sql += 'as tmp	LEFT JOIN Tag as t ON t.user_id = tmp.id ';
-
-					// sql += 'LEFT JOIN Tag ON User.id = Tag.user_id GROUP BY User.id AND User.gender IN ('+sex.gender+') ';
-					// sql += 'ORDER BY ' + sort;
-					console.log(sql)
+			console.log(sql)
 
 			// con.query('SELECT * FROM User WHERE gender IN (?) AND orientation IN (?) AND login != ? LIMIT ? OFFSET ?', [tmp[0], tmp[1], user.login, limit, offset], (err, user)=>
 			con.query(sql, (err, user)=>

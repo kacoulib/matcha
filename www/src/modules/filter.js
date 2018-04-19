@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
 
 import Slider from 'material-ui/Slider';
 import Checkbox from 'material-ui/Checkbox';
@@ -29,7 +28,7 @@ class Filter extends Component
 			tags: [],
 			sort: 'Age',
 
-			sortTab: ["Age", "Localisation", "Popularity", "Tags"],
+			sortTab: ["distance", "Age", "Popularity", "Tags"],
 			sortNumber: 0
 		}
 	}
@@ -168,8 +167,8 @@ class Filter extends Component
 							value={this.state.sortNumber}
 							onChange={this.handleSort}
 						>
-							<MenuItem value={0} primaryText="Age" />
-							<MenuItem value={1} primaryText="Localisation" />
+							<MenuItem value={0} primaryText="distance" />
+							<MenuItem value={1} primaryText="Age" />
 							<MenuItem value={2} primaryText="Popularity" />
 							<MenuItem value={3} primaryText="Tags" />
 						</SelectField>
